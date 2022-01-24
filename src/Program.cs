@@ -1,10 +1,41 @@
+using Microsoft.EntityFrameworkCore;
+using Snap.Genshin.Website.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Environment Check
+#if DEBUG
+if (!builder.Environment.IsDevelopment())
+{
+    Console.WriteLine("panic: only in Development envirenment can you run DEBUG verison.");
+    Environment.Exit(Environment.ExitCode);
+}
+#endif
+#if RELEASE
+if (builder.Environment.IsDevelopment())
+{
+    Console.WriteLine("panic: only in Production envirenment can you run RELEASE verison.");
+    Environment.Exit(Environment.ExitCode);
+}
+#endif
+#endregion
+
+#region Service Injections
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddDbContext<ApplicationDbContext>(opt =>
+{
+    if (builder.Environment.IsDevelopment())
+        opt.UseMySql(builder.Configuration.GetConnectionString("LocalDb"), 
+            ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalDb")));
+    else
+        opt.UseMySql(builder.Configuration.GetConnectionString("ProductDb"), 
+            ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
+});
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(c =>
 {
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -12,9 +43,12 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+#endregion
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region Pipeline Configuration
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -26,5 +60,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+#endregion
 
 app.Run();
