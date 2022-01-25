@@ -159,34 +159,99 @@
             API调用者
             </summary>
         </member>
-        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Battle">
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.AvatarReliquarySet.Id">
             <summary>
-            表示一次战斗
+            套装Id
             </summary>
         </member>
-        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Floor">
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.AvatarReliquarySet.Count">
             <summary>
-            层
+            装备数量
             </summary>
         </member>
-        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.IconAvatar">
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.AvatarWeapon.Id">
             <summary>
-            仅包含头像的角色信息
+            武器Id
             </summary>
         </member>
-        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Level">
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.AvatarWeapon.Level">
             <summary>
-            间
+            武器等级
             </summary>
         </member>
-        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Rank">
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.AvatarWeapon.AffixLevel">
             <summary>
-            角色数值排行信息
+            精炼
             </summary>
         </member>
-        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.SpiralAbyss">
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerAvatar.Id">
             <summary>
-            深境螺旋信息
+            角色Id
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerAvatar.Level">
+            <summary>
+            角色等级
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerAvatar.ActivedConstellationNum">
+            <summary>
+            命座数
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerAvatar.Weapon">
+            <summary>
+            武器信息
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerAvatar.ReliquarySets">
+            <summary>
+            圣遗物配置
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerRecord.Uid">
+            <summary>
+            玩家Uid
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerRecord.PlayerAvatars">
+            <summary>
+            角色信息
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerRecord.PlayerSpiralAbyssesLevels">
+            <summary>
+            深渊信息
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerSpiralAbyssBattle.BattleIndex">
+            <summary>
+            第几次战斗
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerSpiralAbyssBattle.AvatarIds">
+            <summary>
+            出场角色Id列表
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerSpiralAbyssLevel.FloorIndex">
+            <summary>
+            第几层
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerSpiralAbyssLevel.LevelIndex">
+            <summary>
+            第几间
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerSpiralAbyssLevel.Star">
+            <summary>
+            星数
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.SnapGenshin.PlayerSpiralAbyssLevel.Battles">
+            <summary>
+            战斗详情
             </summary>
         </member>
     </members>
