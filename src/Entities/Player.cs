@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Snap.Genshin.Website.Entities.Record;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Snap.Genshin.Website.Entities
@@ -19,5 +20,7 @@ namespace Snap.Genshin.Website.Entities
         /// </summary>
         [Required]
         public string Uid { get; set; } = null!;
+
+        public IList<AvatarDetail> Avatars { get; set; } = null!;
     }
 }

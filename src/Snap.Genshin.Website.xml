@@ -4,5 +4,190 @@
         <name>Snap.Genshin.Website</name>
     </assembly>
     <members>
+        <member name="P:Snap.Genshin.Website.Configurations.TokenFactoryConfiguration.AccessTokenExpire">
+            <summary>
+            AccessToken有效期（分钟）
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Configurations.TokenFactoryConfiguration.RefreshTokenExpire">
+            <summary>
+            RefreshToken有效期（分钟）
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Configurations.TokenFactoryConfiguration.RefreshTokenBefore">
+            <summary>
+            在RefreshToken过期前多久自动刷新RefreshToken
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Entities.Player">
+            <summary>
+            玩家实体
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Player.InnerId">
+            <summary>
+            玩家Id (from database)
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Player.Uid">
+            <summary>
+            玩家uid (from Mohoyo)
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Entities.Record.AvatarDetail">
+            <summary>
+            角色详细信息实体
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.Player">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.AvatarId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.AvatarLevel">
+            <summary>
+            角色等级
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.ActivedConstellationNum">
+            <summary>
+            已激活命座数
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.WeaponId">
+            <summary>
+            角色武器Id
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.WeaponLevel">
+            <summary>
+            武器等级
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.AffixLevel">
+            <summary>
+            武器精炼等级
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.AvatarDetail.ReliquarySets">
+            <summary>
+            圣遗物配置信息
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.PlayerRecord.UploadTime">
+            <summary>
+            记录上传日期
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.PlayerRecord.Player">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Entities.Record.ReliquarySetDetail">
+            <summary>
+            圣遗物套装信息
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.ReliquarySetDetail.Id">
+            <summary>
+            套装Id (from Mihoyo)
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.ReliquarySetDetail.Count">
+            <summary>
+            装备该套装的数量
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.ReliquarySetDetail.AvatarInfo">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle.BattleIndex">
+            <summary>
+            第几次战斗
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle.AvatarIds">
+            <summary>
+            上场角色的Id
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle.AbyssLevel">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel">
+            <summary>
+            深渊关卡信息
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel.Record">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel.FloorIndex">
+            <summary>
+            层数
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel.LevelIndex">
+            <summary>
+            房间数
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel.Star">
+            <summary>
+            星数
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel.Battles">
+            <summary>
+            战斗详情
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Entities.User">
+            <summary>
+            API调用者
+            </summary>
+        </member>
+        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Battle">
+            <summary>
+            表示一次战斗
+            </summary>
+        </member>
+        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Floor">
+            <summary>
+            层
+            </summary>
+        </member>
+        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.IconAvatar">
+            <summary>
+            仅包含头像的角色信息
+            </summary>
+        </member>
+        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Level">
+            <summary>
+            间
+            </summary>
+        </member>
+        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.Rank">
+            <summary>
+            角色数值排行信息
+            </summary>
+        </member>
+        <member name="T:DGP.Genshin.MiHoYoAPI.Record.SpiralAbyss.SpiralAbyss">
+            <summary>
+            深境螺旋信息
+            </summary>
+        </member>
     </members>
 </doc>

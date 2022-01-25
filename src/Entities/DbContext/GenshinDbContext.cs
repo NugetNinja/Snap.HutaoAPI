@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Snap.Genshin.Website.Entities.Record;
 
 namespace Snap.Genshin.Website.Entities
 {
     public partial class ApplicationDbContext : DbContext
     {
         public DbSet<Player> Players { get; set; } = null!;
-        public DbSet<Avatar> Avatars { get; set; } = null!;
         public DbSet<AvatarDetail> AvatarDetails { get; set; } = null!;
-        public DbSet<Reliquary> Reliquarys { get; set; } = null!;
-        public DbSet<ReliquaryAffix> ReliquaryAffixes { get; set; } = null!;
-        public DbSet<ReliquaryDetail> ReliquaryDetails { get; set; } = null!;
-        public DbSet<ReliquarySet> ReliquarySets { get; set; } = null!;
-        public DbSet<Weapon> Weapons { get; set; } = null!;
-        public DbSet<WeaponDetail> WeaponsDetails { get; set; } = null!;
+        public DbSet<ReliquarySetDetail> ReliquarySetDetails { get; set; } = null!;
+        public DbSet<PlayerRecord> PlayerRecords { get; set; } = null!;
+        public DbSet<SpiralAbyssBattle> SpiralAbyssBattles { get; set; } = null!;
+        public DbSet<SpiralAbyssLevel> SpiralAbyssLevels { get; set; } = null!;
     }
 }
