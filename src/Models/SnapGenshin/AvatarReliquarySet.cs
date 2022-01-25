@@ -1,4 +1,4 @@
-﻿namespace DGP.Genshin.HutaoAPI.Model
+﻿namespace Snap.Genshin.Website.Models.SnapGenshin
 {
     public class AvatarReliquarySet
     {

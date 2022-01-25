@@ -1,0 +1,11 @@
+﻿namespace Snap.Genshin.Website.Models.SnapGenshin
+{
+    public class PlayerAvatar
+    {
+        public int Id { get; set; }
+        public int Level { get; set; }
+        public int ActivedConstellationNum { get; set; }
+        public AvatarWeapon Weapon { get; set; } = null!;
+        public List<AvatarReliquarySet> ReliquarySets { get; set; } = null!;
+    }
+}
