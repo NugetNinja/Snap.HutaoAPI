@@ -114,7 +114,7 @@
             第几次战斗
             </summary>
         </member>
-        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle.AvatarIds">
+        <member name="P:Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle.Avatars">
             <summary>
             上场角色的Id
             </summary>

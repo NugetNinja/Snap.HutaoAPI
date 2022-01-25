@@ -17,8 +17,7 @@ namespace Snap.Genshin.Website.Entities.Record
         /// <summary>
         /// 上场角色的Id
         /// </summary>
-        [Required]
-        public IList<int> AvatarIds { get; set; } = null!;
+        public IList<SpiralAbyssAvatar> Avatars { get; set; } = null!;
 
         /// <summary>
         /// 外键
