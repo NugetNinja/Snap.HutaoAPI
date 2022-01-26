@@ -133,7 +133,7 @@ namespace Snap.Genshin.Website.Services
             using var sha256 = SHA256.Create();
             using var aes = Aes.Create();
             using var ms = new MemoryStream();
-            var timeBytes = BitConverter.GetBytes(DateTime.Now.ToBinary());
+            var timeBytes = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
             using var salt = new MemoryStream();
             salt.Write(timeBytes);
             salt.Write(Encoding.ASCII.GetBytes(symmetricSalt));
