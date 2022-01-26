@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
 using Snap.Genshin.Website.Services.StatisticCalculation;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,6 +88,26 @@ builder.Services.AddUserSecretManager(options =>
 
 // TODO 此为测试用服务
 builder.Services.AddScoped<IMailService, TestMailSender>();
+
+// 鉴权策略
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(IdentityPolicyNames.CommonUser, policy =>
+    {
+        policy.RequireClaim(ClaimTypes.NameIdentifier);
+        policy.RequireClaim("TokenType", "AccessToken");
+    });
+    options.AddPolicy(IdentityPolicyNames.Administrator, policy =>
+    {
+        policy.RequireClaim(ClaimTypes.NameIdentifier);
+        policy.RequireClaim("Administrator", "sg-admin");
+    });
+    options.AddPolicy(IdentityPolicyNames.RefreshTokenOnly, policy =>
+    {
+        policy.RequireClaim(ClaimTypes.NameIdentifier);
+        policy.RequireClaim("TokenType", "RefreshToken");
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 
