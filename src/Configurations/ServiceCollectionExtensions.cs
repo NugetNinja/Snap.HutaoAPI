@@ -11,11 +11,17 @@ namespace Snap.Genshin.Website.Configurations
             GenshinStatisticsServiceConfiguration? config = new GenshinStatisticsServiceConfiguration();
             options.Invoke(config);
 
-            services.AddTransient(services =>
+            foreach(var type in config.CalculatorTypes)
+            {
+                services.AddScoped(type);
+            }
+
+            services.AddScoped(services =>
             {
                 ILogger<GenshinStatisticsService>? logger = services.GetRequiredService<ILogger<GenshinStatisticsService>>();
                 ApplicationDbContext? dbContext = services.GetRequiredService<ApplicationDbContext>();
-                return new GenshinStatisticsService(config, logger, dbContext);
+                IServiceProvider serviceProvider = services.GetRequiredService<IServiceProvider>();
+                return new GenshinStatisticsService(config, logger, dbContext, serviceProvider);
             });
 
             return services;

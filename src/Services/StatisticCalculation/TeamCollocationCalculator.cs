@@ -7,12 +7,14 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
     public class TeamCollocationCalculator : IStatisticCalculator
     {
-        public TeamCollocationCalculator(ApplicationDbContext dbContext)
+        public TeamCollocationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
+            this.statisticsProvider = statisticsProvider;
         }
 
         private readonly ApplicationDbContext dbContext;
+        private readonly IStatisticsProvider statisticsProvider;
 
         public async Task Calculate()
         {
@@ -59,21 +61,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 });
             }
 
-            // 新增或修改当期数据
-            var periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.Now);
-            var data = dbContext.Statistics.Where(s => s.Source == nameof(TeamCollocationCalculator))
-                                           .Where(s => s.Period == periodId)
-                                           .SingleOrDefault();
-            if (data is null)
-            {
-                data = new();
-                dbContext.Statistics.Add(data);
-            }
-            data.Period = periodId;
-            data.Source = nameof(TeamCollocationCalculator);
-            data.Value = JsonSerializer.Serialize(result);
-
-            await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            await statisticsProvider.SaveStatistics<TeamCollocationCalculator>(result);
         }
     }
 }

@@ -42,6 +42,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
 });
 
+builder.Services.AddScoped<IStatisticsProvider, StatisticsProvider>();
+
 builder.Services.AddGenshinStatisticsService(opt =>
 {
     opt.AddCalculator<OverviewDataCalculator>()

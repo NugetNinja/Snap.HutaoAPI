@@ -6,12 +6,14 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
     public class WeaponUsageCalculator : IStatisticCalculator
     {
-        public WeaponUsageCalculator(ApplicationDbContext dbContext)
+        public WeaponUsageCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
+            this.statisticsProvider = statisticsProvider;
         }
 
         private readonly ApplicationDbContext dbContext;
+        private readonly IStatisticsProvider statisticsProvider;
 
         public async Task Calculate()
         {
@@ -37,21 +39,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 result.Add(avatarWeaponUsage);
             }
 
-            // 新增或修改当期数据
-            var periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.Now);
-            var data = dbContext.Statistics.Where(s => s.Source == nameof(WeaponUsageCalculator))
-                                           .Where(s => s.Period == periodId)
-                                           .SingleOrDefault();
-            if (data is null)
-            {
-                data = new();
-                dbContext.Statistics.Add(data);
-            }
-            data.Period = periodId;
-            data.Source = nameof(WeaponUsageCalculator);
-            data.Value = JsonSerializer.Serialize(result);
-
-            await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            await statisticsProvider.SaveStatistics<WeaponUsageCalculator>(result);
         }
     }
 }

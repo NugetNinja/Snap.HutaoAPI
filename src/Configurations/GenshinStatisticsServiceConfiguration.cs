@@ -8,10 +8,11 @@ namespace Snap.Genshin.Website.Configurations
     {
         public GenshinStatisticsServiceConfiguration()
         {
-            CalculatorConstructors = new();
+            CalculatorTypes = new();
         }
 
-        public List<ConstructorInfo> CalculatorConstructors { get; private set; }
+        public List<Type> CalculatorTypes { get; private set; }
+
         private readonly Type[] calculatorConstructorFilter = new Type[] { typeof(ApplicationDbContext) };
 
         public GenshinStatisticsServiceConfiguration AddCalculator<T>() where T : IStatisticCalculator
@@ -24,11 +25,7 @@ namespace Snap.Genshin.Website.Configurations
             if (!calculatorType.IsAssignableTo(typeof(IStatisticCalculator)))
                 throw new InvalidCastException($"{nameof(calculatorType)}必须实现{nameof(IStatisticCalculator)}。");
 
-            ConstructorInfo? constructor = calculatorType.GetConstructor(calculatorConstructorFilter);
-            if (constructor is null)
-                throw new InvalidCastException($"{nameof(calculatorType)}必须存在接受{nameof(ApplicationDbContext)}的构造器。");
-
-            CalculatorConstructors.Add(constructor);
+            CalculatorTypes.Add(calculatorType);
 
             return this;
         }

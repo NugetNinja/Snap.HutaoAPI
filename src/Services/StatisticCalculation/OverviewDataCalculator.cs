@@ -6,12 +6,14 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
     public class OverviewDataCalculator : IStatisticCalculator
     {
-        public OverviewDataCalculator(ApplicationDbContext dbContext)
+        public OverviewDataCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
+            this.statisticsProvider = statisticsProvider;
         }
 
         private readonly ApplicationDbContext dbContext;
+        private readonly IStatisticsProvider statisticsProvider;
 
         public async Task Calculate()
         {
@@ -27,29 +29,12 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 select record.Record.PlayerId).Distinct();
             int fullStarPassedPlayerCount = floor12thPassedWithFullStarPlayers.Count();
 
-            // 新增或修改当期数据
-            int periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.Now);
-            Statistics? data = dbContext.Statistics
-                .Where(s => s.Source == nameof(OverviewDataCalculator))
-                .Where(s => s.Period == periodId)
-                .SingleOrDefault();
-
-            if (data is null)
-            {
-                data = new();
-                dbContext.Statistics.Add(data);
-            }
-
-            data.Period = periodId;
-            data.Source = nameof(OverviewDataCalculator);
-            data.Value = JsonSerializer.Serialize(new OverviewData
+            await statisticsProvider.SaveStatistics<OverviewDataCalculator>(new OverviewData
             {
                 CollectedPlayerCount = collectedPlayerCount,
                 TotalPlayerCount = totalPlayerCount,
                 FullStarPlayerCount = fullStarPassedPlayerCount
             });
-
-            await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

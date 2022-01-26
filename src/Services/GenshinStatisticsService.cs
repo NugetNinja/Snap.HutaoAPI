@@ -9,25 +9,27 @@ namespace Snap.Genshin.Website.Services
     {
         public GenshinStatisticsService(GenshinStatisticsServiceConfiguration options,
             ILogger<GenshinStatisticsService> logger,
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext,
+            IServiceProvider serviceProvider)
         {
             this.logger = logger;
             this.dbContext = dbContext;
-            calculatorConstructors = options.CalculatorConstructors;
+            this.calculatorTypes = options.CalculatorTypes;
+            this.serviceProvider = serviceProvider;
         }
 
         private readonly ILogger logger;
         private readonly ApplicationDbContext dbContext;
-        private readonly IEnumerable<ConstructorInfo> calculatorConstructors;
+        private readonly List<Type> calculatorTypes;
+        private readonly IServiceProvider serviceProvider;
 
         public async Task CaltulateStatistics()
         {
             logger.LogInformation("开始计算统计数据...");
 
             IEnumerable<IStatisticCalculator>? calculators = 
-                from constructor in calculatorConstructors
-                let parameters = new object[] { dbContext }
-                select constructor.Invoke(parameters) as IStatisticCalculator;
+                from type in calculatorTypes
+                select serviceProvider.GetRequiredService(type) as IStatisticCalculator;
 
             foreach (IStatisticCalculator? calculator in calculators)
             {
