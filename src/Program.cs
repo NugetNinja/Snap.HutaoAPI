@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Configurations;
+using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,10 +29,10 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     if (builder.Environment.IsDevelopment())
-        opt.UseMySql(builder.Configuration.GetConnectionString("LocalDb"), 
+        opt.UseMySql(builder.Configuration.GetConnectionString("LocalDb"),
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("LocalDb")));
     else
-        opt.UseMySql(builder.Configuration.GetConnectionString("ProductDb"), 
+        opt.UseMySql(builder.Configuration.GetConnectionString("ProductDb"),
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
 });
 

@@ -24,42 +24,48 @@ namespace Snap.Genshin.Website.Services
         public string CreateToken(IEnumerable<Claim> claims, IUser user, DateTime expires)
         {
             claims = claims.Append(new Claim(ClaimTypes.NameIdentifier, user.UniqueUserId.ToString()));
-            var credentials = new SigningCredentials
-                (
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.SigningKey)),
-                    SecurityAlgorithms.HmacSha256
-                );
-            var token = new JwtSecurityToken
-                (
+
+            SigningCredentials? credentials = new(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.SigningKey)),
+                SecurityAlgorithms.HmacSha256);
+
+            JwtSecurityToken? token = new(
                     issuer: configuration.Issuer,
                     audience: configuration.Audience,
                     notBefore: DateTime.Now,
                     expires: expires,
                     claims: claims,
-                    signingCredentials: credentials
-                );
+                    signingCredentials: credentials);
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public string CreateAccessToken(IUser user)
         {
-            var expires = DateTime.Now.AddMinutes(configuration.AccessTokenExpire);
-            var userInfoClaims = from info in user.GetUserInfo()
-                                 select new Claim(info.Key, info.Value);
+            DateTime expires = DateTime.Now.AddMinutes(configuration.AccessTokenExpire);
 
-            var authorizeClaims = (from claim in dbContext.UsersClaims
-                                   where claim.UserId == user.UniqueUserId
-                                   select new Claim(claim.ClaimType, claim.ClaimValue))
-                                  .ToList()
-                                  .Append(new Claim("TokenType", "AccessToken"));
+            IEnumerable<Claim>? userInfoClaims = 
+                from info in user.GetUserInfo()
+                select new Claim(info.Key, info.Value);
+
+            IEnumerable<Claim>? authorizeClaims = 
+                (from claim in dbContext.UsersClaims
+                where claim.UserId == user.UniqueUserId
+                select new Claim(claim.ClaimType, claim.ClaimValue))
+                .ToList()
+                .Append(new Claim("TokenType", "AccessToken"));
+
             return CreateToken(Enumerable.Concat(userInfoClaims, authorizeClaims), user, expires);
         }
 
         public string CreateRefreshToken(IUser user)
         {
-            var expires = DateTime.Now.AddMinutes(configuration.RefreshTokenExpire);
-            var claims = Enumerable.Empty<Claim>()
-                                   .Append(new Claim("TokenType", "RefreshToken"));
+            DateTime expires = DateTime.UtcNow.AddMinutes(configuration.RefreshTokenExpire);
+
+            IEnumerable<Claim>? claims = Enumerable
+                .Empty<Claim>()
+                .Append(new Claim("TokenType", "RefreshToken"));
+
             return CreateToken(claims, user, expires);
         }
     }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Entities.Record;
@@ -22,30 +21,39 @@ namespace Snap.Genshin.Website.Controllers
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
             #region 更新角色信息
-            var player = dbContext.Players.Where(player => player.Uid == record.Uid)
-                                          .Include(player=>player.Avatars)
-                                          .SingleOrDefault();
+            Player? player = dbContext.Players
+                .Where(player => player.Uid == record.Uid)
+                .Include(player => player.Avatars)
+                .SingleOrDefault();
+
             if (player is null)
             {
-                player = new Player() { Uid = record.Uid, Avatars = new List<AvatarDetail>() };
+                player = new Player()
+                {
+                    Uid = record.Uid,
+                    Avatars = new List<AvatarDetail>()
+                };
                 dbContext.Players.Add(player);
             }
             player.Avatars.Clear();
-            var newAvatars = record.PlayerAvatars.Select(avatar => new AvatarDetail()
-            {
-                AvatarId = avatar.Id,
-                AvatarLevel = avatar.Level,
-                WeaponId = avatar.Weapon.Id,
-                WeaponLevel = avatar.Weapon.Level,
-                AffixLevel = avatar.Weapon.AffixLevel,
-                ActivedConstellationNum = avatar.ActivedConstellationNum,
-                ReliquarySets = avatar.ReliquarySets.Select(r => new ReliquarySetDetail()
+
+            IEnumerable<AvatarDetail>? newAvatars = record.PlayerAvatars
+                .Select(avatar => new AvatarDetail()
                 {
-                    Id = r.Id,
-                    Count = r.Count,
-                    UnionId = $"{r.Id}-{r.Count}"
-                }).ToList()
-            });
+                    AvatarId = avatar.Id,
+                    AvatarLevel = avatar.Level,
+                    WeaponId = avatar.Weapon.Id,
+                    WeaponLevel = avatar.Weapon.Level,
+                    AffixLevel = avatar.Weapon.AffixLevel,
+                    ActivedConstellationNum = avatar.ActivedConstellationNum,
+                    ReliquarySets = avatar.ReliquarySets
+                    .Select(r => new ReliquarySetDetail()
+                    {
+                        Id = r.Id,
+                        Count = r.Count,
+                        UnionId = $"{r.Id}-{r.Count}"
+                    }).ToList()
+                });
             player.Avatars = newAvatars.ToList();
 
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
@@ -53,23 +61,30 @@ namespace Snap.Genshin.Website.Controllers
 
             #region 更新深渊数据
             // 删除旧记录
-            var oldPlayerRecord = dbContext.PlayerRecords.Where(record => record.PlayerId == player.InnerId)
-                                                         .FirstOrDefault();
+            PlayerRecord? oldPlayerRecord = dbContext.PlayerRecords
+                .Where(record => record.PlayerId == player.InnerId)
+                .FirstOrDefault();
+
             if (oldPlayerRecord is not null)
+            {
                 dbContext.PlayerRecords.Remove(oldPlayerRecord);
+            }
 
             // 插入新记录
             dbContext.PlayerRecords.Add(new PlayerRecord()
             {
                 PlayerId = player.InnerId,
-                SpiralAbyssLevels = record.PlayerSpiralAbyssesLevels.Select(level => new SpiralAbyssLevel
+                SpiralAbyssLevels = record.PlayerSpiralAbyssesLevels
+                .Select(level => new SpiralAbyssLevel
                 {
                     FloorIndex = level.FloorIndex,
                     LevelIndex = level.LevelIndex,
                     Star = level.Star,
-                    Battles = level.Battles.Select(battle => new SpiralAbyssBattle
+                    Battles = level.Battles
+                    .Select(battle => new SpiralAbyssBattle
                     {
-                        Avatars = battle.AvatarIds.Select(avatar => new SpiralAbyssAvatar
+                        Avatars = battle.AvatarIds
+                        .Select(avatar => new SpiralAbyssAvatar
                         {
                             AvatarId = avatar
                         }).ToList()
