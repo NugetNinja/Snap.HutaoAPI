@@ -104,6 +104,11 @@
             装备该套装的数量
             </summary>
         </member>
+        <member name="P:Snap.Genshin.Website.Entities.Record.ReliquarySetDetail.UnionId">
+            <summary>
+            格式：{Id}-{Count}
+            </summary>
+        </member>
         <member name="P:Snap.Genshin.Website.Entities.Record.ReliquarySetDetail.AvatarInfo">
             <summary>
             外键

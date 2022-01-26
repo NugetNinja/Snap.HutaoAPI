@@ -40,7 +40,8 @@ builder.Services.AddGenshinStatisticsService(opt =>
 {
     opt.AddCalculator<OverviewDataCalculator>()
        .AddCalculator<AvatorParticipationCaltulator>()
-       .AddCalculator<TeamCollocationCalculator>();
+       .AddCalculator<TeamCollocationCalculator>()
+       .AddCalculator<WeaponUsageCalculator>();
 });
 
 builder.Services.AddEndpointsApiExplorer();
