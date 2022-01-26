@@ -39,7 +39,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 builder.Services.AddGenshinStatisticsService(opt =>
 {
     opt.AddCalculator<OverviewDataCalculator>()
-       .AddCalculator<AvatorParticipationCaltulator>();
+       .AddCalculator<AvatorParticipationCaltulator>()
+       .AddCalculator<TeamCollocationCalculator>();
 });
 
 builder.Services.AddEndpointsApiExplorer();
