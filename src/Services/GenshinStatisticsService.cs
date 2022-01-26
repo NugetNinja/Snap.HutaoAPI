@@ -1,7 +1,6 @@
 ﻿using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Services.StatisticCalculation;
-using System.Reflection;
 
 namespace Snap.Genshin.Website.Services
 {
@@ -27,7 +26,7 @@ namespace Snap.Genshin.Website.Services
         {
             logger.LogInformation("开始计算统计数据...");
 
-            IEnumerable<IStatisticCalculator>? calculators = 
+            IEnumerable<IStatisticCalculator>? calculators =
                 from type in calculatorTypes
                 select serviceProvider.GetRequiredService(type) as IStatisticCalculator;
 

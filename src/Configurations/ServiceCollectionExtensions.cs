@@ -11,7 +11,7 @@ namespace Snap.Genshin.Website.Configurations
             GenshinStatisticsServiceConfiguration? config = new GenshinStatisticsServiceConfiguration();
             options.Invoke(config);
 
-            foreach(var type in config.CalculatorTypes)
+            foreach (var type in config.CalculatorTypes)
             {
                 services.AddScoped(type);
             }

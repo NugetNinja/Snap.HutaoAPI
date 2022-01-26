@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Utility;
@@ -108,7 +106,7 @@ namespace Snap.Genshin.Website.Controllers
             cache.Remove(verifyCodeKey);
 
             // 执行注册
-            var user = new User {  Name = appName };
+            var user = new User { Name = appName };
             dbContext.Users.Add(user);
             dbContext.SaveChanges();
 

@@ -1,6 +1,5 @@
 ﻿using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
-using System.Text.Json;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
@@ -24,9 +23,9 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             // 满星玩家
             IQueryable<Guid>? floor12thPassedWithFullStarPlayers =
                 (from record in dbContext.SpiralAbyssLevels
-                where record.FloorIndex == 12
-                where record.Star == 3
-                select record.Record.PlayerId).Distinct();
+                 where record.FloorIndex == 12
+                 where record.Star == 3
+                 select record.Record.PlayerId).Distinct();
             int fullStarPassedPlayerCount = floor12thPassedWithFullStarPlayers.Count();
 
             await statisticsProvider.SaveStatistics<OverviewDataCalculator>(new OverviewData

@@ -44,14 +44,14 @@ namespace Snap.Genshin.Website.Services
         {
             DateTime expires = DateTime.UtcNow.AddMinutes(configuration.AccessTokenExpire);
 
-            IEnumerable<Claim>? userInfoClaims = 
+            IEnumerable<Claim>? userInfoClaims =
                 from info in user.GetUserInfo()
                 select new Claim(info.Key, info.Value);
 
-            IEnumerable<Claim>? authorizeClaims = 
+            IEnumerable<Claim>? authorizeClaims =
                 (from claim in dbContext.UsersClaims
-                where claim.UserId == user.UniqueUserId
-                select new Claim(claim.ClaimType, claim.ClaimValue))
+                 where claim.UserId == user.UniqueUserId
+                 select new Claim(claim.ClaimType, claim.ClaimValue))
                 .ToList()
                 .Append(new Claim("TokenType", "AccessToken"));
 

@@ -1,6 +1,4 @@
-﻿using Snap.Genshin.Website.Services.StatisticCalculation;
-
-namespace Snap.Genshin.Website.Services
+﻿namespace Snap.Genshin.Website.Services
 {
     public interface IStatisticsProvider
     {

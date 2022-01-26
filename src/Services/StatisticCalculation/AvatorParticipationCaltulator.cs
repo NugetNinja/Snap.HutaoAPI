@@ -1,7 +1,6 @@
 ﻿using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models.Statistics;
-using System.Text.Json;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {

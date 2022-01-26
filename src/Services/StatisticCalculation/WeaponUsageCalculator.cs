@@ -1,6 +1,5 @@
 ﻿using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
-using System.Text.Json;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
@@ -21,14 +20,14 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
             var result = new List<WeaponUsage>(avatarGroup.Count());
 
-            foreach(var group in avatarGroup)
+            foreach (var group in avatarGroup)
             {
                 var weaponRateList = new List<Rate<int>>(32);
                 var avatarWeaponUsage = new WeaponUsage { Avatar = group.Key, Weapons = weaponRateList };
                 var count = avatarGroup.Count();
                 var weaponGroup = group.AsEnumerable().GroupBy(avatar => avatar.WeaponId);
                 // 取武器使用率前8
-                foreach(var weapon in weaponGroup.Take(8))
+                foreach (var weapon in weaponGroup.Take(8))
                 {
                     weaponRateList.Add(new()
                     {

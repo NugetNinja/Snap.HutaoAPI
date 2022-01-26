@@ -1,6 +1,5 @@
 ﻿using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Services.StatisticCalculation;
-using System.Reflection;
 
 namespace Snap.Genshin.Website.Configurations
 {

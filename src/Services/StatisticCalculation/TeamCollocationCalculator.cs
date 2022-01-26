@@ -1,7 +1,5 @@
 ﻿using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
-using System.Linq;
-using System.Text.Json;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
@@ -22,14 +20,14 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             var avatarBattleWithAnyCountDic = new Dictionary<int, int>(128);
             foreach (var battle in dbContext.SpiralAbyssBattles)
             {
-                foreach(var avatar in battle.Avatars)
+                foreach (var avatar in battle.Avatars)
                 {
                     if (!avatarBattleWithWhoCountDic.ContainsKey(avatar.AvatarId))
                     {
                         avatarBattleWithWhoCountDic.Add(avatar.AvatarId, new Dictionary<int, int>(128));
                         avatarBattleWithAnyCountDic.Add(avatar.AvatarId, 0);
                     }
-                    foreach(var otherAvatar in battle.Avatars)
+                    foreach (var otherAvatar in battle.Avatars)
                     {
                         if (avatar.AvatarId == otherAvatar.AvatarId) continue;
                         if (!avatarBattleWithWhoCountDic[avatar.AvatarId].ContainsKey(otherAvatar.AvatarId))
@@ -41,13 +39,13 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             }
             // 按照出现次数排序
             var avatarBattleWithWhoList = new Dictionary<int, IEnumerable<(int AvatarId, int Count)>>(128);
-            foreach(var pair in avatarBattleWithWhoCountDic)
+            foreach (var pair in avatarBattleWithWhoCountDic)
             {
                 avatarBattleWithWhoList.Add(pair.Key, from kv in pair.Value orderby kv.Value descending select (kv.Key, kv.Value));
             }
 
             var result = new List<TeamCollocation>(128);
-            foreach(var pair in avatarBattleWithWhoList)
+            foreach (var pair in avatarBattleWithWhoList)
             {
                 result.Add(new()
                 {
