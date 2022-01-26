@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Snap.Genshin.Website.Services
 {
-    public class TokenFactory
+    public class TokenFactory : ITokenFactory
     {
         public TokenFactory(ApplicationDbContext dbContext, TokenFactoryConfiguration configuration)
         {
