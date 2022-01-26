@@ -19,6 +19,36 @@
             在RefreshToken过期前多久自动刷新RefreshToken
             </summary>
         </member>
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Login(System.Guid,System.String)">
+            <summary>
+            用户登录
+            </summary>
+            <param name="appid">AppId</param>
+            <param name="secret">Secret</param>
+            <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Register(System.String,System.String,System.String)">
+            <summary>
+            用户注册
+            </summary>
+            <param name="appName">应用名称</param>
+            <param name="signature">验证码识别号</param>
+            <param name="code">验证码</param>
+            <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.EmailVerify(System.String)">
+            <summary>
+            发送验证邮件
+            </summary>
+            <param name="appName">应用名称</param>
+            <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.RefreshToken">
+            <summary>
+            刷新AccessToken及RefreshToken
+            </summary>
+            <returns>新的AccessToken</returns>
+        </member>
         <member name="T:Snap.Genshin.Website.Entities.Player">
             <summary>
             玩家实体
@@ -294,11 +324,98 @@
             武器使用数据
             </summary>
         </member>
+        <member name="M:Snap.Genshin.Website.Services.ISecretManager.Bind(System.Guid)">
+            <summary>
+            绑定
+            </summary>
+            <param name="key">要绑定的对象</param>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.ISecretManager.GetSymmetricSecret(System.String)">
+            <summary>
+            获取指定名称的密钥
+            </summary>
+            <param name="secretName">密钥名称</param>
+            <returns>密钥内容</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.ISecretManager.StorageSecret(System.String,System.String)">
+            <summary>
+            以对称加密方式存储密钥
+            </summary>
+            <param name="secretName">密钥名称</param>
+            <param name="secret">密钥内容</param>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.ISecretManager.HashSecret(System.String)">
+            <summary>
+            获取密钥哈希值
+            </summary>
+            <param name="secret">密钥内容</param>
+            <returns>密钥哈希</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.ISecretManager.HashCompare(System.String,System.String)">
+            <summary>
+            哈希对比
+            </summary>
+            <param name="rawSecret">明文密码</param>
+            <param name="hash">哈希值</param>
+            <returns>是否匹配</returns>
+        </member>
         <member name="M:Snap.Genshin.Website.Services.StatisticCalculation.IStatisticCalculator.GetSpiralPeriodId(System.DateTime)">
             <summary>
             获取深渊期数
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.#ctor(Snap.Genshin.Website.Entities.ApplicationDbContext,Microsoft.Extensions.Logging.ILogger{Snap.Genshin.Website.Services.UserSecretManager},Snap.Genshin.Website.Configurations.SecretManagerConfiguration)">
+            <summary>
+            初始化<see cref="T:Snap.Genshin.Website.Services.UserSecretManager"/>的新实例
+            </summary>
+            <param name="dbContext">数据库</param>
+            <param name="logger">日志</param>
+            <param name="configuration">配置</param>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.SetUser(System.Guid)">
+            <summary>
+            设置该密钥管理器的用户
+            </summary>
+            <param name="userId">用户ID</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.GetSymmetricSecret(System.String)">
+            <summary>
+            获取指定密钥
+            </summary>
+            <param name="secretKey">密钥名称</param>
+            <returns>指定的密钥</returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.HashSecret(System.String)">
+            <summary>
+            取密钥哈希
+            </summary>
+            <param name="secret">密钥原文</param>
+            <returns>密钥哈希</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.StorageSecret(System.String,System.String)">
+            <summary>
+            存储密钥
+            </summary>
+            <param name="secretKey">密钥名称</param>
+            <param name="secret">密钥原文</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.HashCompare(System.String,System.String)">
+            <summary>
+            比对密码与哈希
+            </summary>
+            <param name="rawSecret">密码</param>
+            <param name="hash">哈希</param>
+            <returns>是否匹配</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.UserSecretManager.Snap#Genshin#Website#Services#ISecretManager#Bind(System.Guid)">
+            <summary>
+            绑定用户
+            </summary>
+            <param name="userId">用户ID</param>
         </member>
     </members>
 </doc>

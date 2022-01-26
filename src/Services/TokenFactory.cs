@@ -32,7 +32,7 @@ namespace Snap.Genshin.Website.Services
             JwtSecurityToken? token = new(
                     issuer: configuration.Issuer,
                     audience: configuration.Audience,
-                    notBefore: DateTime.Now,
+                    notBefore: DateTime.UtcNow,
                     expires: expires,
                     claims: claims,
                     signingCredentials: credentials);
@@ -42,7 +42,7 @@ namespace Snap.Genshin.Website.Services
 
         public string CreateAccessToken(IUser user)
         {
-            DateTime expires = DateTime.Now.AddMinutes(configuration.AccessTokenExpire);
+            DateTime expires = DateTime.UtcNow.AddMinutes(configuration.AccessTokenExpire);
 
             IEnumerable<Claim>? userInfoClaims = 
                 from info in user.GetUserInfo()
