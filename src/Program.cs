@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Services;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Text;
 
@@ -74,6 +75,17 @@ builder.Services.AddTokenFactory(options =>
     options.RefreshTokenExpire = config.GetValue<int>("RefreshTokenExpire");
     options.RefreshTokenBefore = config.GetValue<int>("RefreshTokenBefore");
 });
+
+builder.Services.AddUserSecretManager(options =>
+{
+    var config = builder.Configuration.GetSection("UserSecret");
+    options.SymmetricKey = config.GetValue<string>("SymmetricKey");
+    options.SymmetricSalt = config.GetValue<string>("SymmetricSalt");
+    options.HashSalt = config.GetValue<string>("HashSalt");
+});
+
+// TODO 此为测试用服务
+builder.Services.AddScoped<IMailService, TestMailSender>();
 
 builder.Services.AddEndpointsApiExplorer();
 

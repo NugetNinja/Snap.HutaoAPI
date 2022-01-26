@@ -37,5 +37,23 @@ namespace Snap.Genshin.Website.Configurations
 
             return services;
         }
+
+        public static IServiceCollection AddUserSecretManager(this IServiceCollection services, Action<SecretManagerConfiguration> options)
+        {
+            var config = new SecretManagerConfiguration();
+            options(config);
+
+            if (config.SymmetricKey is null) throw new Exception(nameof(config.SymmetricKey));
+            if (config.HashSalt is null) throw new Exception(nameof(config.HashSalt));
+            if (config.SymmetricSalt is null) throw new Exception(nameof(config.SymmetricSalt));
+            services.AddTransient<ISecretManager, UserSecretManager>(services =>
+            {
+                var logger = services.GetRequiredService<ILogger<UserSecretManager>>();
+                var dbContext = services.GetRequiredService<ApplicationDbContext>();
+                return new UserSecretManager(dbContext, logger, config);
+            });
+
+            return services;
+        }
     }
 }
