@@ -1,4 +1,5 @@
 ﻿using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models.Statistics;
 using System.Text.Json;
 
@@ -15,24 +16,29 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            var count = dbContext.SpiralAbyssAvatars.Count();
+            int count = dbContext.SpiralAbyssAvatars.Count();
 
-            // 忽略十层以下数据
-            var floorGroup = dbContext.SpiralAbyssAvatars
-                .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 10)
+            // 忽略九层以下数据
+            IQueryable<IGrouping<int, SpiralAbyssAvatar>>? floorGroup = dbContext.SpiralAbyssAvatars
+                .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9)
                 .GroupBy(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex);
 
-            var result = new List<AvatarParticipation>();
+            List<AvatarParticipation>? result = new();
 
             // 处理每层数据
-            foreach (var floor in floorGroup)
+            foreach (IGrouping<int, SpiralAbyssAvatar>? floor in floorGroup)
             {
-                var avatarGroups = floor.AsEnumerable().GroupBy(avatar => avatar.AvatarId);
-                var currentFloorData = avatarGroups.Select(avararGroup => new Rate<int>
-                {
-                    Id = avararGroup.Key,
-                    Value = (double)avararGroup.Count() / count
-                });
+                IEnumerable<IGrouping<int, SpiralAbyssAvatar>>? avatarGroups = floor
+                    .AsEnumerable()
+                    .GroupBy(avatar => avatar.AvatarId);
+
+                IEnumerable<Rate<int>>? currentFloorData = avatarGroups
+                    .Select(avararGroup => new Rate<int>
+                    {
+                        Id = avararGroup.Key,
+                        Value = (double)avararGroup.Count() / count
+                    });
+
                 result.Add(new()
                 {
                     Floor = floor.Key,
@@ -41,10 +47,11 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             }
 
             // 新增或修改当期数据
-            var periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.Now);
-            var data = dbContext.Statistics.Where(s => s.Source == nameof(AvatorParticipationCaltulator))
-                                           .Where(s => s.Period == periodId)
-                                           .SingleOrDefault();
+            int periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.UtcNow);
+            Statistics? data = dbContext.Statistics
+                .Where(s => s.Source == nameof(AvatorParticipationCaltulator))
+                .Where(s => s.Period == periodId)
+                .SingleOrDefault();
             if (data is null)
             {
                 data = new();

@@ -5,16 +5,16 @@ namespace Snap.Genshin.Website.Configurations
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddGenshinStatisticsService(this IServiceCollection services, 
+        public static IServiceCollection AddGenshinStatisticsService(this IServiceCollection services,
             Action<GenshinStatisticsServiceConfiguration> options)
         {
-            var config = new GenshinStatisticsServiceConfiguration();
+            GenshinStatisticsServiceConfiguration? config = new GenshinStatisticsServiceConfiguration();
             options.Invoke(config);
 
             services.AddTransient(services =>
             {
-                var logger = services.GetRequiredService<ILogger<GenshinStatisticsService>>();
-                var dbContext = services.GetRequiredService<ApplicationDbContext>();
+                ILogger<GenshinStatisticsService>? logger = services.GetRequiredService<ILogger<GenshinStatisticsService>>();
+                ApplicationDbContext? dbContext = services.GetRequiredService<ApplicationDbContext>();
                 return new GenshinStatisticsService(config, logger, dbContext);
             });
 
