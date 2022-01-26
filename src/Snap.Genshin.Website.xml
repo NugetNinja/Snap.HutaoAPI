@@ -49,6 +49,36 @@
             </summary>
             <returns>新的AccessToken</returns>
         </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetAvatarParticipation">
+            <summary>
+            获取角色出场数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetOverviewData">
+            <summary>
+            获取总览数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetAvatarReliquaryUsage">
+            <summary>
+            获取圣遗物数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetTeamCollocation">
+            <summary>
+            获取组队数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetWeaponUsage">
+            <summary>
+            获取武器数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Snap.Genshin.Website.Entities.Player">
             <summary>
             玩家实体
