@@ -7,13 +7,13 @@ namespace Snap.Genshin.Website.Services
 {
     public class GenshinStatisticsService
     {
-        public GenshinStatisticsService(GenshinStatisticsServiceConfiguration options, 
+        public GenshinStatisticsService(GenshinStatisticsServiceConfiguration options,
             ILogger<GenshinStatisticsService> logger,
             ApplicationDbContext dbContext)
         {
             this.logger = logger;
             this.dbContext = dbContext;
-            this.calculatorConstructors = options.CalculatorConstructors;
+            calculatorConstructors = options.CalculatorConstructors;
         }
 
         private readonly ILogger logger;
@@ -23,10 +23,13 @@ namespace Snap.Genshin.Website.Services
         public async Task CaltulateStatistics()
         {
             logger.LogInformation("开始计算统计数据...");
-            var calculators = from constructor in calculatorConstructors
-                              let parameters = new object[] { dbContext }
-                              select constructor.Invoke(parameters) as IStatisticCalculator;
-            foreach (var calculator in calculators)
+
+            IEnumerable<IStatisticCalculator>? calculators = 
+                from constructor in calculatorConstructors
+                let parameters = new object[] { dbContext }
+                select constructor.Invoke(parameters) as IStatisticCalculator;
+
+            foreach (IStatisticCalculator? calculator in calculators)
             {
                 logger.LogInformation("正在计算: {type}", calculator.GetType().Name);
                 await calculator.Calculate();

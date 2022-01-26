@@ -8,24 +8,27 @@ namespace Snap.Genshin.Website.Configurations
     {
         public GenshinStatisticsServiceConfiguration()
         {
-            this.CalculatorConstructors = new();
+            CalculatorConstructors = new();
         }
 
         public List<ConstructorInfo> CalculatorConstructors { get; private set; }
         private readonly Type[] calculatorConstructorFilter = new Type[] { typeof(ApplicationDbContext) };
 
-        public GenshinStatisticsServiceConfiguration AddCalculator<T>() where T : IStatisticCalculator => AddCalculator(typeof(T));
+        public GenshinStatisticsServiceConfiguration AddCalculator<T>() where T : IStatisticCalculator
+        {
+            return AddCalculator(typeof(T));
+        }
 
         public GenshinStatisticsServiceConfiguration AddCalculator(Type calculatorType)
         {
             if (!calculatorType.IsSubclassOf(typeof(IStatisticCalculator)))
                 throw new InvalidCastException($"{nameof(calculatorType)}必须实现{nameof(IStatisticCalculator)}。");
 
-            var constructor = calculatorType.GetConstructor(this.calculatorConstructorFilter);
+            ConstructorInfo? constructor = calculatorType.GetConstructor(calculatorConstructorFilter);
             if (constructor is null)
                 throw new InvalidCastException($"{nameof(calculatorType)}必须存在接受{nameof(ApplicationDbContext)}的构造器。");
 
-            this.CalculatorConstructors.Add(constructor);
+            CalculatorConstructors.Add(constructor);
 
             return this;
         }
