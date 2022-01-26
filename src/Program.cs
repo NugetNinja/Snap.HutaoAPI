@@ -47,7 +47,7 @@ builder.Services.AddScoped<IStatisticsProvider, StatisticsProvider>();
 builder.Services.AddGenshinStatisticsService(opt =>
 {
     opt.AddCalculator<OverviewDataCalculator>()
-       .AddCalculator<AvatorParticipationCaltulator>()
+       .AddCalculator<AvatorParticipationCalculator>()
        .AddCalculator<TeamCollocationCalculator>()
        .AddCalculator<WeaponUsageCalculator>();
 });

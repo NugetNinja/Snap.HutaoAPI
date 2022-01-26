@@ -4,9 +4,9 @@ using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
-    public class AvatorParticipationCaltulator : IStatisticCalculator
+    public class AvatorParticipationCalculator : IStatisticCalculator
     {
-        public AvatorParticipationCaltulator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+        public AvatorParticipationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
             this.statisticsProvider = statisticsProvider;
@@ -47,7 +47,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 });
             }
 
-            await statisticsProvider.SaveStatistics<AvatorParticipationCaltulator>(result);
+            await statisticsProvider.SaveStatistics<AvatorParticipationCalculator>(result);
         }
     }
 }

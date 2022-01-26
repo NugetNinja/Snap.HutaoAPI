@@ -29,7 +29,7 @@ namespace Snap.Genshin.Website.Controllers
         [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         public async Task<IActionResult> GetAvatarParticipation()
         {
-            var data = await statisticsProvider.ReadStatistics<AvatorParticipationCaltulator>()
+            var data = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
                                                .ConfigureAwait(false);
             if (data is null) return this.Fail("未找到该数据");
 
