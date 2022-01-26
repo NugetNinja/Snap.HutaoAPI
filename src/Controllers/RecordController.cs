@@ -43,6 +43,7 @@ namespace Snap.Genshin.Website.Controllers
                 {
                     Id = r.Id,
                     Count = r.Count,
+                    UnionId = $"{r.Id}-{r.Count}"
                 }).ToList()
             });
             player.Avatars = newAvatars.ToList();

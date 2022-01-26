@@ -24,6 +24,12 @@ namespace Snap.Genshin.Website.Entities.Record
         public int Count { get; set; }
 
         /// <summary>
+        /// 格式：{Id}-{Count}
+        /// </summary>
+        [Required]
+        public string UnionId { get; set; } = null!;
+
+        /// <summary>
         /// 外键
         /// </summary>
         [ForeignKey(nameof(AvatarDetailId))]
