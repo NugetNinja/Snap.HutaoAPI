@@ -3,6 +3,6 @@
     public interface IStatisticsProvider
     {
         public Task SaveStatistics<TSource>(object dataObject);
-        public Task<object?> ReadStatistics<TSource>();
+        public Task<string?> ReadStatistics<TSource>();
     }
 }

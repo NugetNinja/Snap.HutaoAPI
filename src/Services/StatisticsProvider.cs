@@ -35,7 +35,7 @@ namespace Snap.Genshin.Website.Services
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task<object?> ReadStatistics<TSource>()
+        public async Task<string?> ReadStatistics<TSource>()
         {
             var source = typeof(TSource).Name;
 
@@ -45,7 +45,7 @@ namespace Snap.Genshin.Website.Services
                                                  .Where(s => s.Period == periodId)
                                                  .SingleOrDefaultAsync();
             if (data is null) return null;
-            return Newtonsoft.Json.JsonConvert.DeserializeObject(data.Value);
+            return data.Value;
         }
     }
 }

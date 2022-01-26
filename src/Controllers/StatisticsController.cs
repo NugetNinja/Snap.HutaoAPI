@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Models;
+using Snap.Genshin.Website.Models.Statistics;
 using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
 using Snap.Genshin.Website.Services.StatisticCalculation;
+using System.Text.Json;
 
 namespace Snap.Genshin.Website.Controllers
 {
@@ -27,13 +29,14 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("AvatarParticipation")]
         [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
-            var data = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
+            var json = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
                                                .ConfigureAwait(false);
-            if (data is null) return this.Fail("未找到该数据");
+            if (json is null) return this.Fail("未找到该数据");
 
-            return this.Success("出场率数据获取成功", data);
+            return this.Success("出场率数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarParticipation>>(json));
         }
 
         /// <summary>
@@ -42,13 +45,14 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("Overview")]
         [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
-            var data = await statisticsProvider.ReadStatistics<OverviewDataCalculator>()
+            var json = await statisticsProvider.ReadStatistics<OverviewDataCalculator>()
                                                .ConfigureAwait(false);
-            if (data is null) return this.Fail("未找到该数据");
+            if (json is null) return this.Fail("未找到该数据");
 
-            return this.Success("出场率数据获取成功", data);
+            return this.Success("总览数据获取成功", JsonSerializer.Deserialize<OverviewData>(json));
         }
 
         /// <summary>
@@ -57,13 +61,14 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("AvatarReliquaryUsage")]
         [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
-            var data = await statisticsProvider.ReadStatistics<AvatarReliquaryUsageCalculator>()
+            var json = await statisticsProvider.ReadStatistics<AvatarReliquaryUsageCalculator>()
                                                .ConfigureAwait(false);
-            if (data is null) return this.Fail("未找到该数据");
+            if (json is null) return this.Fail("未找到该数据");
 
-            return this.Success("出场率数据获取成功", data);
+            return this.Success("圣遗物数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarReliquaryUsage>>(json));
         }
 
         /// <summary>
@@ -72,13 +77,14 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("TeamCollocation")]
         [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
-            var data = await statisticsProvider.ReadStatistics<TeamCollocationCalculator>()
+            var json = await statisticsProvider.ReadStatistics<TeamCollocationCalculator>()
                                                .ConfigureAwait(false);
-            if (data is null) return this.Fail("未找到该数据");
+            if (json is null) return this.Fail("未找到该数据");
 
-            return this.Success("出场率数据获取成功", data);
+            return this.Success("组队数据获取成功", JsonSerializer.Deserialize<IEnumerable<TeamCollocation>>(json));
         }
 
         /// <summary>
@@ -87,13 +93,14 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("WeaponUsage")]
         [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
-            var data = await statisticsProvider.ReadStatistics<WeaponUsageCalculator>()
+            var json = await statisticsProvider.ReadStatistics<WeaponUsageCalculator>()
                                                .ConfigureAwait(false);
-            if (data is null) return this.Fail("未找到该数据");
+            if (json is null) return this.Fail("未找到该数据");
 
-            return this.Success("出场率数据获取成功", data);
+            return this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
         }
     }
 }
