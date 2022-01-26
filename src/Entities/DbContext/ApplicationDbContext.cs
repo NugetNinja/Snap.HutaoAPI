@@ -9,6 +9,8 @@ namespace Snap.Genshin.Website.Entities
         {
         }
 
+        public DbSet<Statistics> Statistics { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Configurations;
+using Snap.Genshin.Website.Services.StatisticCalculation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 
 builder.Services.AddGenshinStatisticsService(opt =>
 {
-
+    opt.AddCalculator<OverviewDataCalculator>();
 });
 
 builder.Services.AddEndpointsApiExplorer();

@@ -254,5 +254,46 @@
             战斗详情
             </summary>
         </member>
+        <member name="T:Snap.Genshin.Website.Models.Statistics.AvatarParticipation">
+            <summary>
+            出场数据
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Models.Statistics.AvatarReliquaryUsage">
+            <summary>
+            圣遗物配置数据
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.Statistics.OverviewData.TotalPlayerCount">
+            <summary>
+            所有用户数量
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.Statistics.OverviewData.CollectedPlayerCount">
+            <summary>
+            当期提交深渊数据用户数量
+            </summary>
+        </member>
+        <member name="P:Snap.Genshin.Website.Models.Statistics.OverviewData.FullStarPlayerCount">
+            <summary>
+            当期满星用户数量
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Models.Statistics.TeamCollocation">
+            <summary>
+            组队数据
+            </summary>
+        </member>
+        <member name="T:Snap.Genshin.Website.Models.Statistics.WeaponUsage">
+            <summary>
+            武器使用数据
+            </summary>
+        </member>
+        <member name="M:Snap.Genshin.Website.Services.StatisticCalculation.IStatisticCalculator.GetSpiralPeriodId(System.DateTime)">
+            <summary>
+            获取深渊期数
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>
