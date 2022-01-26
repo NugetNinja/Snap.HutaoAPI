@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     else
         opt.UseMySql(builder.Configuration.GetConnectionString("ProductDb"), 
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
+});
+
+builder.Services.AddGenshinStatisticsService(opt =>
+{
+
 });
 
 builder.Services.AddEndpointsApiExplorer();
