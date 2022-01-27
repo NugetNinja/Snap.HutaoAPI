@@ -8,6 +8,6 @@ namespace Snap.Genshin.Website.Models.Statistics
     public class AvatarReliquaryUsage
     {
         public int Avatar { get; set; }
-        public IEnumerable<Rate<AvatarReliquarySet>> ReliquaryUsage { get; set; } = null!;
+        public IEnumerable<Rate<string>> ReliquaryUsage { get; set; } = null!;
     }
 }

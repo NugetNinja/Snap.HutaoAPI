@@ -22,34 +22,42 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             foreach (var avatar in dbContext.AvatarDetails.Include(avatar => avatar.ReliquarySets))
             {
                 var sets = avatar.ReliquarySets.Where(set => set.Count >= 4);
-                if (!sets.Any()) sets = avatar.ReliquarySets.Where(set => set.Count >= 2);
-                    
+                if (!sets.Any()) sets = avatar.ReliquarySets.Where(set => set.Count >= 2)
+                                                            .OrderBy(set => set.Id);
+
+                // 全是散件或没装圣遗物，不统计
+                if (!sets.Any()) continue;
+
+                // 标准化装备数量
+                foreach (var set in sets)
+                {
+                    if (set.Count >= 4) set.Count = 4;
+                    else if (set.Count >= 2) set.Count = 2;
+                    // TODO 该逻辑可否移动到Controller
+                    set.UnionId = $"{set.Id}-{set.Count}";
+                }
+
+                var setString = string.Join(';', sets.Select(set => set.UnionId));
+
                 if (!ansDic.ContainsKey(avatar.AvatarId))
                 {
                     ansDic.Add(avatar.AvatarId, new Dictionary<string, int>(32));
                     countDic.Add(avatar.AvatarId, 0);
                 }
-                    
-                foreach(var set in sets)
-                {
-                    if (!ansDic[avatar.AvatarId].ContainsKey(set.UnionId))
-                        ansDic[avatar.AvatarId].Add(set.UnionId, 0);
-                    ansDic[avatar.AvatarId][set.UnionId]++;
-                    countDic[avatar.AvatarId]++;
-                }
+
+                if (!ansDic[avatar.AvatarId].ContainsKey(setString))
+                    ansDic[avatar.AvatarId].Add(setString, 0);
+                ansDic[avatar.AvatarId][setString]++;
+                countDic[avatar.AvatarId]++;
             }
 
             var result = from kv in ansDic
                          select new AvatarReliquaryUsage
                          {
                              Avatar = kv.Key,
-                             ReliquaryUsage = kv.Value.Select(kvp => new Rate<Models.SnapGenshin.AvatarReliquarySet>
+                             ReliquaryUsage = kv.Value.Select(kvp => new Rate<string>
                              {
-                                 Id = new Models.SnapGenshin.AvatarReliquarySet
-                                 {
-                                     Id = Convert.ToInt32(kvp.Key.Split('-')[0]),
-                                     Count = Convert.ToInt32(kvp.Key.Split('-')[1])
-                                 },
+                                 Id = kvp.Key,
                                  Value = (double)kvp.Value / countDic[kv.Key]
                              })
                          };
