@@ -16,7 +16,8 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            IQueryable<IGrouping<int, Entities.Record.AvatarDetail>>? avatarGroup = dbContext.AvatarDetails.GroupBy(avatar => avatar.AvatarId);
+            // TODO AsEnumerable可能带来性能问题
+            var avatarGroup = dbContext.AvatarDetails.AsEnumerable().GroupBy(avatar => avatar.AvatarId);
 
             List<WeaponUsage>? result = new List<WeaponUsage>(avatarGroup.Count());
 

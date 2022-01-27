@@ -1,4 +1,5 @@
-﻿using Snap.Genshin.Website.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
@@ -18,7 +19,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
         {
             var ansDic = new Dictionary<int, Dictionary<string, int>>(128);
             var countDic = new Dictionary<int, int>(128);
-            foreach (var avatar in dbContext.AvatarDetails)
+            foreach (var avatar in dbContext.AvatarDetails.Include(avatar => avatar.ReliquarySets))
             {
                 var sets = avatar.ReliquarySets.Where(set => set.Count >= 4);
                 if (!sets.Any()) sets = avatar.ReliquarySets.Where(set => set.Count >= 2);

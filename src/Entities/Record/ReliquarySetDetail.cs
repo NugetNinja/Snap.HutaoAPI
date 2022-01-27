@@ -26,7 +26,6 @@ namespace Snap.Genshin.Website.Entities.Record
         /// <summary>
         /// 格式：{Id}-{Count}
         /// </summary>
-        [Required]
         public string UnionId { get; set; } = null!;
 
         /// <summary>

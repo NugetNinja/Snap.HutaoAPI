@@ -1,4 +1,5 @@
-﻿using Snap.Genshin.Website.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
@@ -18,7 +19,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
         {
             Dictionary<int, IDictionary<int, int>>? avatarBattleWithWhoCountDic = new Dictionary<int, IDictionary<int, int>>(128);
             Dictionary<int, int>? avatarBattleWithAnyCountDic = new Dictionary<int, int>(128);
-            foreach (Entities.Record.SpiralAbyssBattle? battle in dbContext.SpiralAbyssBattles)
+            foreach (Entities.Record.SpiralAbyssBattle? battle in dbContext.SpiralAbyssBattles.Include(battle=>battle.Avatars))
             {
                 foreach (Entities.Record.SpiralAbyssAvatar? avatar in battle.Avatars)
                 {

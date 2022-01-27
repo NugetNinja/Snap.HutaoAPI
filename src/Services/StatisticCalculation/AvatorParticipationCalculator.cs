@@ -1,4 +1,5 @@
-﻿using Snap.Genshin.Website.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models.Statistics;
 
@@ -20,8 +21,11 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             int count = dbContext.SpiralAbyssAvatars.Count();
 
             // 忽略九层以下数据
-            IQueryable<IGrouping<int, SpiralAbyssAvatar>>? floorGroup = dbContext.SpiralAbyssAvatars
+            var floorGroup = dbContext.SpiralAbyssAvatars
                 .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9)
+                .Include(avatar => avatar.SpiralAbyssBattle)
+                .ThenInclude(battle => battle.AbyssLevel)
+                .AsEnumerable()
                 .GroupBy(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex);
 
             List<AvatarParticipation>? result = new();
