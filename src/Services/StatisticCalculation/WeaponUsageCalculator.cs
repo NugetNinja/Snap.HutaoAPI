@@ -16,18 +16,18 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            var avatarGroup = dbContext.AvatarDetails.GroupBy(avatar => avatar.AvatarId);
+            IQueryable<IGrouping<int, Entities.Record.AvatarDetail>>? avatarGroup = dbContext.AvatarDetails.GroupBy(avatar => avatar.AvatarId);
 
-            var result = new List<WeaponUsage>(avatarGroup.Count());
+            List<WeaponUsage>? result = new List<WeaponUsage>(avatarGroup.Count());
 
-            foreach (var group in avatarGroup)
+            foreach (IGrouping<int, Entities.Record.AvatarDetail>? group in avatarGroup)
             {
-                var weaponRateList = new List<Rate<int>>(32);
-                var avatarWeaponUsage = new WeaponUsage { Avatar = group.Key, Weapons = weaponRateList };
-                var count = avatarGroup.Count();
-                var weaponGroup = group.AsEnumerable().GroupBy(avatar => avatar.WeaponId);
+                List<Rate<int>>? weaponRateList = new List<Rate<int>>(32);
+                WeaponUsage? avatarWeaponUsage = new WeaponUsage { Avatar = group.Key, Weapons = weaponRateList };
+                int count = avatarGroup.Count();
+                IEnumerable<IGrouping<int, Entities.Record.AvatarDetail>>? weaponGroup = group.AsEnumerable().GroupBy(avatar => avatar.WeaponId);
                 // 取武器使用率前8
-                foreach (var weapon in weaponGroup.Take(8))
+                foreach (IGrouping<int, Entities.Record.AvatarDetail>? weapon in weaponGroup.Take(8))
                 {
                     weaponRateList.Add(new()
                     {

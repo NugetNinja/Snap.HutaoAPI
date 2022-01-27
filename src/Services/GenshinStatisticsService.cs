@@ -13,7 +13,7 @@ namespace Snap.Genshin.Website.Services
         {
             this.logger = logger;
             this.dbContext = dbContext;
-            this.calculatorTypes = options.CalculatorTypes;
+            calculatorTypes = options.CalculatorTypes;
             this.serviceProvider = serviceProvider;
         }
 
