@@ -17,7 +17,7 @@ namespace Snap.Genshin.Website.Controllers
 
         private readonly ApplicationDbContext dbContext;
 
-        [HttpPost]
+        [HttpPost("Upload")]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
             #region 更新角色信息
