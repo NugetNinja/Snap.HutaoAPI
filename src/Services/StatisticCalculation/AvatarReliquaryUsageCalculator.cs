@@ -25,7 +25,11 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 if (!sets.Any()) sets = avatar.ReliquarySets.Where(set => set.Count >= 2);
                     
                 if (!ansDic.ContainsKey(avatar.AvatarId))
+                {
                     ansDic.Add(avatar.AvatarId, new Dictionary<string, int>(32));
+                    countDic.Add(avatar.AvatarId, 0);
+                }
+                    
                 foreach(var set in sets)
                 {
                     if (!ansDic[avatar.AvatarId].ContainsKey(set.UnionId))

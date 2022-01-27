@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models;
+using Snap.Genshin.Website.Models.Utility;
 
 namespace Snap.Genshin.Website.Controllers
 {
@@ -18,6 +20,7 @@ namespace Snap.Genshin.Website.Controllers
         private readonly ApplicationDbContext dbContext;
 
         [HttpPost("Upload")]
+        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
             #region 更新角色信息

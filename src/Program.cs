@@ -50,8 +50,8 @@ builder.Services.AddGenshinStatisticsService(opt =>
     opt.AddCalculator<OverviewDataCalculator>()
        .AddCalculator<AvatorParticipationCalculator>()
        .AddCalculator<TeamCollocationCalculator>()
-       .AddCalculator<WeaponUsageCalculator>();
-       //.AddCalculator<AvatarReliquaryUsageCalculator>();
+       .AddCalculator<WeaponUsageCalculator>()
+       .AddCalculator<AvatarReliquaryUsageCalculator>();
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

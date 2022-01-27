@@ -41,7 +41,7 @@ namespace Snap.Genshin.Website.Services
         public async Task<string?> ReadStatistics<TSource>()
         {
             // 正在计算统计数据时拒绝请求
-            var isBusy = cache.Get<bool>("_STATISTICS_BUSY");
+            var isBusy = cache.TryGetValue("_STATISTICS_BUSY", out _);
             if (isBusy) return null;
 
             string? source = typeof(TSource).Name;
