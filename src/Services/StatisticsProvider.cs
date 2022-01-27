@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Text.Json;
@@ -7,12 +8,14 @@ namespace Snap.Genshin.Website.Services
 {
     public class StatisticsProvider : IStatisticsProvider
     {
-        public StatisticsProvider(ApplicationDbContext dbContext)
+        public StatisticsProvider(ApplicationDbContext dbContext, IMemoryCache cache)
         {
             this.dbContext = dbContext;
+            this.cache = cache;
         }
 
         private readonly ApplicationDbContext dbContext;
+        private readonly IMemoryCache cache;
 
         public async Task SaveStatistics<TSource>(object dataObject)
         {
@@ -37,6 +40,10 @@ namespace Snap.Genshin.Website.Services
 
         public async Task<string?> ReadStatistics<TSource>()
         {
+            // 正在计算统计数据时拒绝请求
+            var isBusy = cache.Get<bool>("_STATISTICS_BUSY");
+            if (isBusy) return null;
+
             string? source = typeof(TSource).Name;
 
             // 查询当期数据
