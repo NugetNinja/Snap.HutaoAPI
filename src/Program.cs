@@ -5,6 +5,7 @@ using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
+using Snap.Genshin.Website.Services.Hosts;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Security.Claims;
 using System.Text;
@@ -31,7 +32,7 @@ if (builder.Environment.IsDevelopment())
 #region Service Injections
 
 builder.Services.AddControllers();
-
+builder.Services.AddMemoryCache();
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     if (builder.Environment.IsDevelopment())
@@ -49,7 +50,8 @@ builder.Services.AddGenshinStatisticsService(opt =>
     opt.AddCalculator<OverviewDataCalculator>()
        .AddCalculator<AvatorParticipationCalculator>()
        .AddCalculator<TeamCollocationCalculator>()
-       .AddCalculator<WeaponUsageCalculator>();
+       .AddCalculator<WeaponUsageCalculator>()
+       .AddCalculator<AvatarReliquaryUsageCalculator>();
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -118,7 +120,14 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
+
 });
+
+#endregion
+
+#region Background Workers
+
+builder.Services.AddHostedService<StatisticsRunner>();
 
 #endregion
 

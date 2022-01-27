@@ -16,10 +16,11 @@ namespace Snap.Genshin.Website.Configurations
                 services.AddScoped(type);
             }
 
-            services.AddScoped(services =>
+            services.AddTransient(services =>
             {
+                var scope = services.CreateScope();
                 ILogger<GenshinStatisticsService>? logger = services.GetRequiredService<ILogger<GenshinStatisticsService>>();
-                ApplicationDbContext? dbContext = services.GetRequiredService<ApplicationDbContext>();
+                ApplicationDbContext? dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 IServiceProvider serviceProvider = services.GetRequiredService<IServiceProvider>();
                 return new GenshinStatisticsService(config, logger, dbContext, serviceProvider);
             });
