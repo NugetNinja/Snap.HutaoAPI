@@ -25,7 +25,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             {
                 List<Rate<int>>? weaponRateList = new List<Rate<int>>(32);
                 WeaponUsage? avatarWeaponUsage = new WeaponUsage { Avatar = group.Key, Weapons = weaponRateList };
-                int count = avatarGroup.Count();
+                int count = group.Count();
                 IEnumerable<IGrouping<int, Entities.Record.AvatarDetail>>? weaponGroup = group.AsEnumerable().GroupBy(avatar => avatar.WeaponId);
                 // 取武器使用率前8
                 foreach (IGrouping<int, Entities.Record.AvatarDetail>? weapon in weaponGroup.Take(8))

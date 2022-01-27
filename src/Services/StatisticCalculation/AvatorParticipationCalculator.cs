@@ -18,8 +18,6 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            int count = dbContext.SpiralAbyssAvatars.Count();
-
             // 忽略九层以下数据
             var floorGroup = dbContext.SpiralAbyssAvatars
                 .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9)
@@ -41,7 +39,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                     .Select(avararGroup => new Rate<int>
                     {
                         Id = avararGroup.Key,
-                        Value = (double)avararGroup.Count() / count
+                        Value = (double)avararGroup.Count() / floor.Count()
                     });
 
                 result.Add(new()
