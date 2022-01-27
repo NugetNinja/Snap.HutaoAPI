@@ -47,14 +47,17 @@ namespace Snap.Genshin.Website.Controllers
         public IActionResult Login([FromForm][Required] Guid appid,
                                    [Required][FromForm] string secret)
         {
-            var userQuery = dbContext.Users.Where(u => appid == u.AppId);
+            IQueryable<User>? userQuery = dbContext.Users.Where(u => appid == u.AppId);
 
             // 用户不存在
-            if (!userQuery.Any()) return BadRequest();
+            if (!userQuery.Any())
+            {
+                return BadRequest();
+            }
 
-            var user = userQuery.First();
+            User? user = userQuery.First();
             secretManager.Bind(user.UniqueUserId);
-            var savedSecret = secretManager.GetSymmetricSecret("app-secret");
+            string? savedSecret = secretManager.GetSymmetricSecret("app-secret");
 
             // 密码不存在
             if (string.IsNullOrEmpty(savedSecret))
@@ -63,8 +66,8 @@ namespace Snap.Genshin.Website.Controllers
                 return NotFound();
             }
 
-            var accessToken = tokenFactory.CreateAccessToken(user);
-            var refreshToken = tokenFactory.CreateRefreshToken(user);
+            string? accessToken = tokenFactory.CreateAccessToken(user);
+            string? refreshToken = tokenFactory.CreateRefreshToken(user);
 
             return secretManager.HashCompare(secret, savedSecret) ?
                 Ok(new
@@ -88,8 +91,8 @@ namespace Snap.Genshin.Website.Controllers
                                       [FromForm, Required] string signature,
                                       [FromForm, Required, RegularExpression(@"\d{6}")] string code)
         {
-            var userQuery = dbContext.Users.Where(u => appName == u.Name);
-            var verifyCodeKey = $"_VERIFY_CODE_{signature}_{appName}";
+            IQueryable<User>? userQuery = dbContext.Users.Where(u => appName == u.Name);
+            string? verifyCodeKey = $"_VERIFY_CODE_{signature}_{appName}";
 
             // 名称已注册
             if (userQuery.Any())
@@ -99,20 +102,23 @@ namespace Snap.Genshin.Website.Controllers
             }
 
             // 验证验证码
-            var codeExists = cache.TryGetValue<string>(verifyCodeKey, out var storedCode);
-            if (!codeExists || code != storedCode) return Unauthorized(new { Message = "验证码不正确" });
+            bool codeExists = cache.TryGetValue<string>(verifyCodeKey, out string? storedCode);
+            if (!codeExists || code != storedCode)
+            {
+                return Unauthorized(new { Message = "验证码不正确" });
+            }
 
             // 清除验证码缓存
             cache.Remove(verifyCodeKey);
 
             // 执行注册
-            var user = new User { Name = appName };
+            User? user = new User { Name = appName };
             dbContext.Users.Add(user);
             dbContext.SaveChanges();
 
             // 生成AppSecret
-            var secretBase = Guid.NewGuid().ToString();
-            var secret = secretManager.HashSecret(secretBase);
+            string? secretBase = Guid.NewGuid().ToString();
+            string? secret = secretManager.HashSecret(secretBase);
 
             secretManager.Bind(user.AppId);
             secretManager.StorageSecret("app-secret", secretManager.HashSecret(secret));
@@ -130,14 +136,17 @@ namespace Snap.Genshin.Website.Controllers
         public IActionResult EmailVerify([FromForm, EmailAddress, MaxLength(40)] string appName)
         {
             // 判断是否请求频繁
-            var timeoutFlagKey = $"_MAIL_BUSY_{appName}";
-            var isBusy = cache.TryGetValue<int>(timeoutFlagKey, out _);
-            if (isBusy) return BadRequest(new { Message = "请求过于频繁" });
+            string? timeoutFlagKey = $"_MAIL_BUSY_{appName}";
+            bool isBusy = cache.TryGetValue<int>(timeoutFlagKey, out _);
+            if (isBusy)
+            {
+                return BadRequest(new { Message = "请求过于频繁" });
+            }
             // 生成验证码Key
-            var guid = Guid.NewGuid().ToString();
-            var verifyCodeKey = $"_VERIFY_CODE_{guid}_{appName}";
+            string? guid = Guid.NewGuid().ToString();
+            string? verifyCodeKey = $"_VERIFY_CODE_{guid}_{appName}";
             // 缓存验证码，10分钟有效
-            var code = GenerateVerifyCode();
+            string? code = GenerateVerifyCode();
             cache.Set(verifyCodeKey, code, TimeSpan.FromMinutes(10));
             // 发送邮件
             mailService.SendEmail(new VerifyCodeMail(code, 10));
@@ -155,34 +164,39 @@ namespace Snap.Genshin.Website.Controllers
         [Authorize(Policy = IdentityPolicyNames.RefreshTokenOnly)]
         public IActionResult RefreshToken()
         {
-            var userIdQuery = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier);
+            IEnumerable<Claim>? userIdQuery = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier);
 
-            var user = new User { AppId = Guid.Parse(userIdQuery.Single().Value) };
-            var accessToken = tokenFactory.CreateAccessToken(user);
+            User? user = new User { AppId = Guid.Parse(userIdQuery.Single().Value) };
+            string? accessToken = tokenFactory.CreateAccessToken(user);
 
             // 计算RefreshToken剩余有效期
-            var expireTime = User.Claims.Where(c => c.Type == JwtRegisteredClaimNames.Exp)
+            DateTime expireTime = User.Claims.Where(c => c.Type == JwtRegisteredClaimNames.Exp)
                                          .Select(c => Convert.ToInt32(c.Value).ToDateTime())
                                          .Single();
-            var remainMinutes = (int)(expireTime - DateTime.UtcNow).TotalMinutes;
+            int remainMinutes = (int)(expireTime - DateTime.UtcNow).TotalMinutes;
 
             // RefreshToken即将过期，则同时刷新AccessToken和RefreshToken
             if (remainMinutes < tokenFactory.RefreshTokenExpireBefore)
+            {
                 return Ok(new
                 {
                     AccessToken = accessToken,
                     RefreshToken = tokenFactory.CreateRefreshToken(user)
                 });
+            }
             // 只刷新AccessToken
-            else return Ok(new
+            else
             {
-                AccessToken = accessToken
-            });
+                return Ok(new
+                {
+                    AccessToken = accessToken
+                });
+            }
         }
 
         private static string GenerateVerifyCode()
         {
-            var code = Random.Shared.Next(100000, 999999);
+            int code = Random.Shared.Next(100000, 999999);
             return code.ToString();
         }
     }

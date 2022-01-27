@@ -16,36 +16,43 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            var avatarBattleWithWhoCountDic = new Dictionary<int, IDictionary<int, int>>(128);
-            var avatarBattleWithAnyCountDic = new Dictionary<int, int>(128);
-            foreach (var battle in dbContext.SpiralAbyssBattles)
+            Dictionary<int, IDictionary<int, int>>? avatarBattleWithWhoCountDic = new Dictionary<int, IDictionary<int, int>>(128);
+            Dictionary<int, int>? avatarBattleWithAnyCountDic = new Dictionary<int, int>(128);
+            foreach (Entities.Record.SpiralAbyssBattle? battle in dbContext.SpiralAbyssBattles)
             {
-                foreach (var avatar in battle.Avatars)
+                foreach (Entities.Record.SpiralAbyssAvatar? avatar in battle.Avatars)
                 {
                     if (!avatarBattleWithWhoCountDic.ContainsKey(avatar.AvatarId))
                     {
                         avatarBattleWithWhoCountDic.Add(avatar.AvatarId, new Dictionary<int, int>(128));
                         avatarBattleWithAnyCountDic.Add(avatar.AvatarId, 0);
                     }
-                    foreach (var otherAvatar in battle.Avatars)
+                    foreach (Entities.Record.SpiralAbyssAvatar? otherAvatar in battle.Avatars)
                     {
-                        if (avatar.AvatarId == otherAvatar.AvatarId) continue;
+                        if (avatar.AvatarId == otherAvatar.AvatarId)
+                        {
+                            continue;
+                        }
+
                         if (!avatarBattleWithWhoCountDic[avatar.AvatarId].ContainsKey(otherAvatar.AvatarId))
+                        {
                             avatarBattleWithWhoCountDic[avatar.AvatarId].Add(otherAvatar.AvatarId, 0);
+                        }
+
                         avatarBattleWithWhoCountDic[avatar.AvatarId][otherAvatar.AvatarId]++;
                         avatarBattleWithAnyCountDic[avatar.AvatarId]++;
                     }
                 }
             }
             // 按照出现次数排序
-            var avatarBattleWithWhoList = new Dictionary<int, IEnumerable<(int AvatarId, int Count)>>(128);
-            foreach (var pair in avatarBattleWithWhoCountDic)
+            Dictionary<int, IEnumerable<(int AvatarId, int Count)>>? avatarBattleWithWhoList = new Dictionary<int, IEnumerable<(int AvatarId, int Count)>>(128);
+            foreach (KeyValuePair<int, IDictionary<int, int>> pair in avatarBattleWithWhoCountDic)
             {
                 avatarBattleWithWhoList.Add(pair.Key, from kv in pair.Value orderby kv.Value descending select (kv.Key, kv.Value));
             }
 
-            var result = new List<TeamCollocation>(128);
-            foreach (var pair in avatarBattleWithWhoList)
+            List<TeamCollocation>? result = new List<TeamCollocation>(128);
+            foreach (KeyValuePair<int, IEnumerable<(int AvatarId, int Count)>> pair in avatarBattleWithWhoList)
             {
                 result.Add(new()
                 {

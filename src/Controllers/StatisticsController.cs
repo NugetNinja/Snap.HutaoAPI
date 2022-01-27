@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Models;
 using Snap.Genshin.Website.Models.Statistics;
@@ -32,9 +31,12 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
-            var json = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
+            string? json = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
                                                .ConfigureAwait(false);
-            if (json is null) return this.Fail("未找到该数据");
+            if (json is null)
+            {
+                return this.Fail("未找到该数据");
+            }
 
             return this.Success("出场率数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarParticipation>>(json));
         }
@@ -48,9 +50,12 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
-            var json = await statisticsProvider.ReadStatistics<OverviewDataCalculator>()
+            string? json = await statisticsProvider.ReadStatistics<OverviewDataCalculator>()
                                                .ConfigureAwait(false);
-            if (json is null) return this.Fail("未找到该数据");
+            if (json is null)
+            {
+                return this.Fail("未找到该数据");
+            }
 
             return this.Success("总览数据获取成功", JsonSerializer.Deserialize<OverviewData>(json));
         }
@@ -64,9 +69,12 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
-            var json = await statisticsProvider.ReadStatistics<AvatarReliquaryUsageCalculator>()
+            string? json = await statisticsProvider.ReadStatistics<AvatarReliquaryUsageCalculator>()
                                                .ConfigureAwait(false);
-            if (json is null) return this.Fail("未找到该数据");
+            if (json is null)
+            {
+                return this.Fail("未找到该数据");
+            }
 
             return this.Success("圣遗物数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarReliquaryUsage>>(json));
         }
@@ -80,9 +88,12 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
-            var json = await statisticsProvider.ReadStatistics<TeamCollocationCalculator>()
+            string? json = await statisticsProvider.ReadStatistics<TeamCollocationCalculator>()
                                                .ConfigureAwait(false);
-            if (json is null) return this.Fail("未找到该数据");
+            if (json is null)
+            {
+                return this.Fail("未找到该数据");
+            }
 
             return this.Success("组队数据获取成功", JsonSerializer.Deserialize<IEnumerable<TeamCollocation>>(json));
         }
@@ -96,9 +107,12 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
-            var json = await statisticsProvider.ReadStatistics<WeaponUsageCalculator>()
+            string? json = await statisticsProvider.ReadStatistics<WeaponUsageCalculator>()
                                                .ConfigureAwait(false);
-            if (json is null) return this.Fail("未找到该数据");
+            if (json is null)
+            {
+                return this.Fail("未找到该数据");
+            }
 
             return this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
         }

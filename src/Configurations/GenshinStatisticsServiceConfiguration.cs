@@ -22,7 +22,9 @@ namespace Snap.Genshin.Website.Configurations
         public GenshinStatisticsServiceConfiguration AddCalculator(Type calculatorType)
         {
             if (!calculatorType.IsAssignableTo(typeof(IStatisticCalculator)))
+            {
                 throw new InvalidCastException($"{nameof(calculatorType)}必须实现{nameof(IStatisticCalculator)}。");
+            }
 
             CalculatorTypes.Add(calculatorType);
 
