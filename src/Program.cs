@@ -128,6 +128,7 @@ builder.Services.AddSwaggerGen(c =>
 #region Background Workers
 
 builder.Services.AddHostedService<StatisticsRunner>();
+builder.Services.AddHostedService<StatisticsCleaner>();
 
 #endregion
 

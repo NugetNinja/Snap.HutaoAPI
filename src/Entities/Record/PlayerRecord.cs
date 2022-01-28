@@ -14,6 +14,8 @@ namespace Snap.Genshin.Website.Entities.Record
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime UploadTime { get; set; }
 
+        // TODO: 记录上传用户
+
         /// <summary>
         /// 外键
         /// </summary>
