@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Models;
 using Snap.Genshin.Website.Models.ApiRequest;
 using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
@@ -52,7 +53,7 @@ namespace Snap.Genshin.Website.Controllers
             // 用户不存在
             if (!userQuery.Any())
             {
-                return BadRequest();
+                return this.Fail("登陆失败，用户不存在");
             }
 
             User? user = userQuery.First();
@@ -69,11 +70,11 @@ namespace Snap.Genshin.Website.Controllers
             string? accessToken = tokenFactory.CreateAccessToken(user);
 
             return secretManager.HashCompare(request.Secret, savedSecret) ?
-                Ok(new
+                this.Success("登录成功", new
                 {
                     AccessToken = accessToken,
                 }) :
-                Unauthorized();
+                this.Fail("登陆失败，密码错误");
         }
 
         /// <summary>
