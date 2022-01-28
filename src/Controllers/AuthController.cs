@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Models.ApiRequest;
 using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
 using System.ComponentModel.DataAnnotations;
@@ -44,10 +45,9 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
-        public IActionResult Login([FromForm][Required] Guid appid,
-                                   [Required][FromForm] string secret)
+        public IActionResult Login([FromBody]LoginModel request)
         {
-            IQueryable<User>? userQuery = dbContext.Users.Where(u => appid == u.AppId);
+            IQueryable<User>? userQuery = dbContext.Users.Where(u => request.AppId == u.AppId);
 
             // 用户不存在
             if (!userQuery.Any())
@@ -67,13 +67,11 @@ namespace Snap.Genshin.Website.Controllers
             }
 
             string? accessToken = tokenFactory.CreateAccessToken(user);
-            string? refreshToken = tokenFactory.CreateRefreshToken(user);
 
-            return secretManager.HashCompare(secret, savedSecret) ?
+            return secretManager.HashCompare(request.Secret, savedSecret) ?
                 Ok(new
                 {
                     AccessToken = accessToken,
-                    RefreshToken = refreshToken
                 }) :
                 Unauthorized();
         }
@@ -87,12 +85,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
-        public IActionResult Register([FromForm, Required] string appName,
-                                      [FromForm, Required] string signature,
-                                      [FromForm, Required, RegularExpression(@"\d{6}")] string code)
+        public IActionResult Register([FromBody] RegisterModel request)
         {
-            IQueryable<User>? userQuery = dbContext.Users.Where(u => appName == u.Name);
-            string? verifyCodeKey = $"_VERIFY_CODE_{signature}_{appName}";
+            IQueryable<User>? userQuery = dbContext.Users.Where(u => request.AppName == u.Name);
+            string? verifyCodeKey = $"_VERIFY_CODE_{request.Signature}_{request.AppName}";
 
             // 名称已注册
             if (userQuery.Any())
@@ -103,7 +99,7 @@ namespace Snap.Genshin.Website.Controllers
 
             // 验证验证码
             bool codeExists = cache.TryGetValue<string>(verifyCodeKey, out string? storedCode);
-            if (!codeExists || code != storedCode)
+            if (!codeExists || request.Code != storedCode)
             {
                 return Unauthorized(new { Message = "验证码不正确" });
             }
@@ -112,7 +108,7 @@ namespace Snap.Genshin.Website.Controllers
             cache.Remove(verifyCodeKey);
 
             // 执行注册
-            User? user = new User { Name = appName };
+            User? user = new User { Name = request.AppName };
             dbContext.Users.Add(user);
             dbContext.SaveChanges();
 
@@ -133,10 +129,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
-        public IActionResult EmailVerify([FromForm, EmailAddress, MaxLength(40)] string appName)
+        public IActionResult EmailVerify([FromBody]EmailVerifyModel request)
         {
             // 判断是否请求频繁
-            string? timeoutFlagKey = $"_MAIL_BUSY_{appName}";
+            string? timeoutFlagKey = $"_MAIL_BUSY_{request.AppName}";
             bool isBusy = cache.TryGetValue<int>(timeoutFlagKey, out _);
             if (isBusy)
             {
@@ -144,7 +140,7 @@ namespace Snap.Genshin.Website.Controllers
             }
             // 生成验证码Key
             string? guid = Guid.NewGuid().ToString();
-            string? verifyCodeKey = $"_VERIFY_CODE_{guid}_{appName}";
+            string? verifyCodeKey = $"_VERIFY_CODE_{guid}_{request.AppName}";
             // 缓存验证码，10分钟有效
             string? code = GenerateVerifyCode();
             cache.Set(verifyCodeKey, code, TimeSpan.FromMinutes(10));
@@ -154,44 +150,6 @@ namespace Snap.Genshin.Website.Controllers
             cache.Set(timeoutFlagKey, 1, TimeSpan.FromSeconds(60));
 
             return Ok(new { Signature = guid });
-        }
-
-        /// <summary>
-        /// 刷新AccessToken及RefreshToken
-        /// </summary>
-        /// <returns>新的AccessToken</returns>
-        [HttpGet("[Action]")]
-        [Authorize(Policy = IdentityPolicyNames.RefreshTokenOnly)]
-        public IActionResult RefreshToken()
-        {
-            IEnumerable<Claim>? userIdQuery = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier);
-
-            User? user = new User { AppId = Guid.Parse(userIdQuery.Single().Value) };
-            string? accessToken = tokenFactory.CreateAccessToken(user);
-
-            // 计算RefreshToken剩余有效期
-            DateTime expireTime = User.Claims.Where(c => c.Type == JwtRegisteredClaimNames.Exp)
-                                         .Select(c => Convert.ToInt32(c.Value).ToDateTime())
-                                         .Single();
-            int remainMinutes = (int)(expireTime - DateTime.UtcNow).TotalMinutes;
-
-            // RefreshToken即将过期，则同时刷新AccessToken和RefreshToken
-            if (remainMinutes < tokenFactory.RefreshTokenExpireBefore)
-            {
-                return Ok(new
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = tokenFactory.CreateRefreshToken(user)
-                });
-            }
-            // 只刷新AccessToken
-            else
-            {
-                return Ok(new
-                {
-                    AccessToken = accessToken
-                });
-            }
         }
 
         private static string GenerateVerifyCode()

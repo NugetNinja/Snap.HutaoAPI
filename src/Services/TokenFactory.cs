@@ -19,8 +19,6 @@ namespace Snap.Genshin.Website.Services
         private readonly TokenFactoryConfiguration configuration;
         private readonly ApplicationDbContext dbContext;
 
-        public int RefreshTokenExpireBefore => configuration.RefreshTokenBefore;
-
         public string CreateToken(IEnumerable<Claim> claims, IUser user, DateTime expires)
         {
             claims = claims.Append(new Claim(ClaimTypes.NameIdentifier, user.UniqueUserId.ToString()));
@@ -52,21 +50,9 @@ namespace Snap.Genshin.Website.Services
                 (from claim in dbContext.UsersClaims
                  where claim.UserId == user.UniqueUserId
                  select new Claim(claim.ClaimType, claim.ClaimValue))
-                .ToList()
-                .Append(new Claim("TokenType", "AccessToken"));
+                .ToList();
 
             return CreateToken(Enumerable.Concat(userInfoClaims, authorizeClaims), user, expires);
-        }
-
-        public string CreateRefreshToken(IUser user)
-        {
-            DateTime expires = DateTime.UtcNow.AddMinutes(configuration.RefreshTokenExpire);
-
-            IEnumerable<Claim>? claims = Enumerable
-                .Empty<Claim>()
-                .Append(new Claim("TokenType", "RefreshToken"));
-
-            return CreateToken(claims, user, expires);
         }
     }
 }

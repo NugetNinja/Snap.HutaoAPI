@@ -43,12 +43,6 @@
             <param name="appName">应用名称</param>
             <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
         </member>
-        <member name="M:Snap.Genshin.Website.Controllers.AuthController.RefreshToken">
-            <summary>
-            刷新AccessToken及RefreshToken
-            </summary>
-            <returns>新的AccessToken</returns>
-        </member>
         <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetAvatarParticipation">
             <summary>
             获取角色出场数据
