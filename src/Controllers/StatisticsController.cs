@@ -31,6 +31,7 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             string? json = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
                                                .ConfigureAwait(false);
             if (json is null)
@@ -50,6 +51,7 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             string? json = await statisticsProvider.ReadStatistics<OverviewDataCalculator>()
                                                .ConfigureAwait(false);
             if (json is null)
@@ -69,6 +71,7 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             string? json = await statisticsProvider.ReadStatistics<AvatarReliquaryUsageCalculator>()
                                                .ConfigureAwait(false);
             if (json is null)
@@ -88,6 +91,7 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             string? json = await statisticsProvider.ReadStatistics<TeamCollocationCalculator>()
                                                .ConfigureAwait(false);
             if (json is null)
@@ -107,6 +111,7 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             string? json = await statisticsProvider.ReadStatistics<WeaponUsageCalculator>()
                                                .ConfigureAwait(false);
             if (json is null)

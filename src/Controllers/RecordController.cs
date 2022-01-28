@@ -23,6 +23,7 @@ namespace Snap.Genshin.Website.Controllers
         // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             #region 更新角色信息
             Player? player = dbContext.Players
                 .Where(player => player.Uid == record.Uid)

@@ -19,7 +19,7 @@
             在RefreshToken过期前多久自动刷新RefreshToken
             </summary>
         </member>
-        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Login(System.Guid,System.String)">
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Login(Snap.Genshin.Website.Models.ApiRequest.LoginModel)">
             <summary>
             用户登录
             </summary>
@@ -27,7 +27,7 @@
             <param name="secret">Secret</param>
             <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
         </member>
-        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Register(System.String,System.String,System.String)">
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Register(Snap.Genshin.Website.Models.ApiRequest.RegisterModel)">
             <summary>
             用户注册
             </summary>
@@ -36,7 +36,7 @@
             <param name="code">验证码</param>
             <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
         </member>
-        <member name="M:Snap.Genshin.Website.Controllers.AuthController.EmailVerify(System.String)">
+        <member name="M:Snap.Genshin.Website.Controllers.AuthController.EmailVerify(Snap.Genshin.Website.Models.ApiRequest.EmailVerifyModel)">
             <summary>
             发送验证邮件
             </summary>
