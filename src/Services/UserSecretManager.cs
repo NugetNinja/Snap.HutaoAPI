@@ -47,7 +47,7 @@ namespace Snap.Genshin.Website.Services
             {
                 throw new InvalidOperationException("不可重复绑定用户");
             }
-            IQueryable<User>? userQuery = users.Where(u => u.UniqueUserId == userId);
+            IQueryable<User>? userQuery = users.Where(u => u.AppId == userId);
 
             if (!userQuery.Any())
             {
