@@ -12,5 +12,8 @@ namespace Snap.Genshin.Website.Models
 
         public static IActionResult Fail(this ControllerBase _, string msg)
             => new JsonResult(new ApiResponse<object>(ApiCode.Fail, msg, Array.Empty<object>()));
+
+        public static IActionResult Fail(this ControllerBase _, ApiCode code, string msg)
+            => new JsonResult(new ApiResponse<object>(code, msg, Array.Empty<object>()));
     }
 }

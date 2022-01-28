@@ -98,7 +98,7 @@ namespace Snap.Genshin.Website.Controllers
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
             #endregion
 
-            return this.Success("数据上传成功");
+            return this.Success($"{record.Uid}-数据上传成功");
         }
     }
 }

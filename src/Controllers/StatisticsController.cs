@@ -35,7 +35,7 @@ namespace Snap.Genshin.Website.Controllers
                                                .ConfigureAwait(false);
             if (json is null)
             {
-                return this.Fail("未找到该数据");
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
             }
 
             return this.Success("出场率数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarParticipation>>(json));
@@ -54,7 +54,7 @@ namespace Snap.Genshin.Website.Controllers
                                                .ConfigureAwait(false);
             if (json is null)
             {
-                return this.Fail("未找到该数据");
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
             }
 
             return this.Success("总览数据获取成功", JsonSerializer.Deserialize<OverviewData>(json));
@@ -73,7 +73,7 @@ namespace Snap.Genshin.Website.Controllers
                                                .ConfigureAwait(false);
             if (json is null)
             {
-                return this.Fail("未找到该数据");
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
             }
 
             return this.Success("圣遗物数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarReliquaryUsage>>(json));
@@ -92,7 +92,7 @@ namespace Snap.Genshin.Website.Controllers
                                                .ConfigureAwait(false);
             if (json is null)
             {
-                return this.Fail("未找到该数据");
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
             }
 
             return this.Success("组队数据获取成功", JsonSerializer.Deserialize<IEnumerable<TeamCollocation>>(json));
@@ -111,7 +111,7 @@ namespace Snap.Genshin.Website.Controllers
                                                .ConfigureAwait(false);
             if (json is null)
             {
-                return this.Fail("未找到该数据");
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
             }
 
             return this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
