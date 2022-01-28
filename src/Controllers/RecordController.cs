@@ -20,7 +20,7 @@ namespace Snap.Genshin.Website.Controllers
         private readonly ApplicationDbContext dbContext;
 
         [HttpPost("Upload")]
-        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
             #region 更新角色信息

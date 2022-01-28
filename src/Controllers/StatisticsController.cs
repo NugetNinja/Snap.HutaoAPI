@@ -27,7 +27,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("AvatarParticipation")]
-        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
@@ -46,7 +46,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Overview")]
-        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
@@ -65,7 +65,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("AvatarReliquaryUsage")]
-        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
@@ -84,7 +84,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("TeamCollocation")]
-        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
@@ -103,7 +103,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("WeaponUsage")]
-        [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
