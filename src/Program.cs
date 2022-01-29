@@ -5,7 +5,6 @@ using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
-using Snap.Genshin.Website.Services.Hosts;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Security.Claims;
 using System.Text;
@@ -122,13 +121,6 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 
 });
-
-#endregion
-
-#region Background Workers
-
-builder.Services.AddHostedService<StatisticsRunner>();
-builder.Services.AddHostedService<StatisticsCleaner>();
 
 #endregion
 
