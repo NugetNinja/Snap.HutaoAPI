@@ -79,6 +79,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.TeamCombination">
+            <summary>
+            获取队伍使用数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Snap.Genshin.Website.Entities.Player">
             <summary>
             玩家实体

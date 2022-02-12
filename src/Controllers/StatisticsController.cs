@@ -131,7 +131,7 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationNum>>))]
         public async Task<IActionResult> GetConstellation()
         {
-            //if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
+            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
             string? json = await statisticsProvider.ReadStatistics<ActivedConstellationNumCalculator>()
                                                .ConfigureAwait(false);
             if (json is null)
@@ -140,6 +140,26 @@ namespace Snap.Genshin.Website.Controllers
             }
 
             return this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationNum>>(json));
+        }
+
+        /// <summary>
+        /// 获取队伍使用数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("TeamCombination")]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<LevelTeamUsage>>))]
+        public async Task<IActionResult> TeamCombination()
+        {
+            // if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
+            string? json = await statisticsProvider.ReadStatistics<TeamCombinationCalculator>()
+                                               .ConfigureAwait(false);
+            if (json is null)
+            {
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+            }
+
+            return this.Success("队伍使用数据获取成功", JsonSerializer.Deserialize<IEnumerable<LevelTeamUsage>>(json));
         }
     }
 }
