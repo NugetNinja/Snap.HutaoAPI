@@ -44,7 +44,7 @@ namespace Snap.Genshin.Website.Controllers
         public IActionResult Weapons() => this.Success("武器数据查询成功", ReadItemsFromDb(WeaponKey));
 
         [HttpGet("[action]")]
-        public IActionResult Reliuqyaries() => this.Success("圣遗物数据查询成功", ReadItemsFromDb(ReliquaryKey));
+        public IActionResult Reliquaries() => this.Success("圣遗物数据查询成功", ReadItemsFromDb(ReliquaryKey));
 
         private void AddItemToDb(IEnumerable<ItemInfo> items, string type)
         {
