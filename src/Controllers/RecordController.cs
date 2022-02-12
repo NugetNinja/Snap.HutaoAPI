@@ -91,7 +91,8 @@ namespace Snap.Genshin.Website.Controllers
                         .Select(avatar => new SpiralAbyssAvatar
                         {
                             AvatarId = avatar
-                        }).ToList()
+                        }).ToList(),
+                        BattleIndex = battle.BattleIndex,
                     }).ToList()
                 }).ToList()
             });
