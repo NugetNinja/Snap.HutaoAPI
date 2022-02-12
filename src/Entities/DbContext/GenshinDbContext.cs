@@ -12,5 +12,7 @@ namespace Snap.Genshin.Website.Entities
         public DbSet<SpiralAbyssBattle> SpiralAbyssBattles { get; set; } = null!;
         public DbSet<SpiralAbyssLevel> SpiralAbyssLevels { get; set; } = null!;
         public DbSet<SpiralAbyssAvatar> SpiralAbyssAvatars { get; set; } = null!;
+
+        public DbSet<ItemInfo> GenshinItems { get; set; } = null!;
     }
 }
