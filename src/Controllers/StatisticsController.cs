@@ -121,5 +121,25 @@ namespace Snap.Genshin.Website.Controllers
 
             return this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
         }
+
+        /// <summary>
+        /// 获取命座数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Constellation")]
+        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationNum>>))]
+        public async Task<IActionResult> GetConstellation()
+        {
+            //if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
+            string? json = await statisticsProvider.ReadStatistics<ActivedConstellationNumCalculator>()
+                                               .ConfigureAwait(false);
+            if (json is null)
+            {
+                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+            }
+
+            return this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationNum>>(json));
+        }
     }
 }

@@ -73,6 +73,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetConstellation">
+            <summary>
+            获取命座数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Snap.Genshin.Website.Entities.Player">
             <summary>
             玩家实体
