@@ -23,6 +23,8 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
             foreach (IGrouping<int, Entities.Record.AvatarDetail>? group in avatarGroup)
             {
+                // 跳过从未出现在深渊中的角色
+                if (!dbContext.SpiralAbyssAvatars.Any(avatar => avatar.AvatarId == group.Key)) continue;
                 List<Rate<int>>? weaponRateList = new List<Rate<int>>(32);
                 WeaponUsage? avatarWeaponUsage = new WeaponUsage { Avatar = group.Key, Weapons = weaponRateList };
                 int count = group.Count();
