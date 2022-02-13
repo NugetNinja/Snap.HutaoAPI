@@ -17,7 +17,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            var battles = dbContext.SpiralAbyssBattles.Include(battle => battle.AbyssLevel).ToList();
+            var battles = dbContext.SpiralAbyssBattles.Where(battle => battle.AbyssLevel.FloorIndex >= 9).Include(battle => battle.AbyssLevel).ToList();
             var groups = battles.GroupBy(battle => $"{battle.AbyssLevel.FloorIndex}-{battle.AbyssLevel.LevelIndex}");
 
             var result = new List<LevelTeamUsage>(12);
