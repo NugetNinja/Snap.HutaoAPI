@@ -55,7 +55,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                          select new AvatarReliquaryUsage
                          {
                              Avatar = kv.Key,
-                             ReliquaryUsage = kv.Value.Select(kvp => new Rate<string>
+                             ReliquaryUsage = kv.Value.OrderByDescending(kv=>kv.Value).Take(8).Select(kvp => new Rate<string>
                              {
                                  Id = kvp.Key,
                                  Value = (double)kvp.Value / countDic[kv.Key]
