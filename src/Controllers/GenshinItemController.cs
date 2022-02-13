@@ -50,7 +50,7 @@ namespace Snap.Genshin.Website.Controllers
         {
             foreach (var item in items)
             {
-                if (dbContext.GenshinItems.Any(item => item.Id == item.Id && item.Type == type)) continue;
+                if (dbContext.GenshinItems.Any(x => item.Id == x.Id && x.Type == type)) continue;
                 dbContext.GenshinItems.Add(new()
                 {
                     Id = item.Id,
