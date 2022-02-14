@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Services;
 #if DEBUG
 namespace Snap.Genshin.Website.Controllers
@@ -18,8 +17,9 @@ namespace Snap.Genshin.Website.Controllers
         [HttpGet("RefreshStatistics")]
         public async Task<IActionResult> RefreshStatistics()
         {
-            var service = serviceProvider.GetRequiredService<GenshinStatisticsService>();
-            await service.CaltulateStatistics();
+            await serviceProvider
+                .GetRequiredService<GenshinStatisticsService>()
+                .CaltulateStatistics();
             return Ok();
         }
     }

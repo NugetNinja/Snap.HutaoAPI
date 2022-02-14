@@ -1,6 +1,4 @@
-﻿using Snap.Genshin.Website.Models.SnapGenshin;
-
-namespace Snap.Genshin.Website.Models.Statistics
+﻿namespace Snap.Genshin.Website.Models.Statistics
 {
     /// <summary>
     /// 圣遗物配置数据

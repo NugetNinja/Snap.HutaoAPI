@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
@@ -17,18 +18,18 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            Dictionary<int, IDictionary<int, int>>? avatarBattleWithWhoCountDic = new Dictionary<int, IDictionary<int, int>>(128);
-            Dictionary<int, int>? avatarBattleWithAnyCountDic = new Dictionary<int, int>(128);
-            foreach (Entities.Record.SpiralAbyssBattle? battle in dbContext.SpiralAbyssBattles.Include(battle=>battle.Avatars))
+            Dictionary<int, IDictionary<int, int>> avatarBattleWithWhoCountDic = new(128);
+            Dictionary<int, int> avatarBattleWithAnyCountDic = new(128);
+            foreach (SpiralAbyssBattle battle in dbContext.SpiralAbyssBattles.Include(battle => battle.Avatars))
             {
-                foreach (Entities.Record.SpiralAbyssAvatar? avatar in battle.Avatars)
+                foreach (SpiralAbyssAvatar avatar in battle.Avatars)
                 {
                     if (!avatarBattleWithWhoCountDic.ContainsKey(avatar.AvatarId))
                     {
                         avatarBattleWithWhoCountDic.Add(avatar.AvatarId, new Dictionary<int, int>(128));
                         avatarBattleWithAnyCountDic.Add(avatar.AvatarId, 0);
                     }
-                    foreach (Entities.Record.SpiralAbyssAvatar? otherAvatar in battle.Avatars)
+                    foreach (SpiralAbyssAvatar otherAvatar in battle.Avatars)
                     {
                         if (avatar.AvatarId == otherAvatar.AvatarId)
                         {
@@ -46,24 +47,26 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 }
             }
             // 按照出现次数排序
-            Dictionary<int, IEnumerable<(int AvatarId, int Count)>>? avatarBattleWithWhoList = new Dictionary<int, IEnumerable<(int AvatarId, int Count)>>(128);
+            Dictionary<int, IEnumerable<(int AvatarId, int Count)>> avatarBattleWithWhoList = new(128);
             foreach (KeyValuePair<int, IDictionary<int, int>> pair in avatarBattleWithWhoCountDic)
             {
-                avatarBattleWithWhoList.Add(pair.Key, from kv in pair.Value orderby kv.Value descending select (kv.Key, kv.Value));
+                avatarBattleWithWhoList.Add(pair.Key, 
+                    from kv in pair.Value orderby kv.Value descending select (kv.Key, kv.Value));
             }
 
-            List<TeamCollocation>? result = new List<TeamCollocation>(128);
+            List<TeamCollocation> result = new(128);
             foreach (KeyValuePair<int, IEnumerable<(int AvatarId, int Count)>> pair in avatarBattleWithWhoList)
             {
                 result.Add(new()
                 {
                     Avater = pair.Key,
-                    Collocations = (from count in pair.Value
-                                    select new Rate<int>()
-                                    {
-                                        Id = count.AvatarId,
-                                        Value = (double)count.Count / avatarBattleWithAnyCountDic[pair.Key]
-                                    }).Take(8)
+                    Collocations =
+                    (from count in pair.Value
+                     select new Rate<int>()
+                     {
+                         Id = count.AvatarId,
+                         Value = (double)count.Count / avatarBattleWithAnyCountDic[pair.Key]
+                     }).Take(8)
                 });
             }
 

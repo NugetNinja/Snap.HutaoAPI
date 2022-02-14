@@ -23,9 +23,10 @@ namespace Snap.Genshin.Website.Services
 
             // 新增或修改当期数据
             int periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.UtcNow);
-            Statistics? data = dbContext.Statistics.Where(s => s.Source == source)
-                                           .Where(s => s.Period == periodId)
-                                           .SingleOrDefault();
+            Statistics? data = dbContext.Statistics
+                .Where(s => s.Source == source)
+                .Where(s => s.Period == periodId)
+                .SingleOrDefault();
             if (data is null)
             {
                 data = new();
@@ -41,22 +42,22 @@ namespace Snap.Genshin.Website.Services
         public async Task<string?> ReadStatistics<TSource>()
         {
             // 正在计算统计数据时拒绝请求
-            var isBusy = cache.TryGetValue("_STATISTICS_BUSY", out _);
-            if (isBusy) return null;
+            bool isBusy = cache.TryGetValue("_STATISTICS_BUSY", out _);
+            if (isBusy)
+            {
+                return null;
+            }
 
             string? source = typeof(TSource).Name;
 
             // 查询当期数据
             int periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.UtcNow);
-            Statistics? data = await dbContext.Statistics.Where(s => s.Source == source)
-                                                 .Where(s => s.Period == periodId)
-                                                 .SingleOrDefaultAsync();
-            if (data is null)
-            {
-                return null;
-            }
+            Statistics? data = await dbContext.Statistics
+                .Where(s => s.Source == source)
+                .Where(s => s.Period == periodId)
+                .SingleOrDefaultAsync();
 
-            return data.Value;
+            return data?.Value;
         }
     }
 }

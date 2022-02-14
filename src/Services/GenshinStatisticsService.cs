@@ -6,7 +6,8 @@ namespace Snap.Genshin.Website.Services
 {
     public class GenshinStatisticsService
     {
-        public GenshinStatisticsService(GenshinStatisticsServiceConfiguration options,
+        public GenshinStatisticsService(
+            GenshinStatisticsServiceConfiguration options,
             ILogger<GenshinStatisticsService> logger,
             ApplicationDbContext dbContext,
             IServiceProvider serviceProvider)

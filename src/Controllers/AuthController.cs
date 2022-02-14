@@ -6,9 +6,6 @@ using Snap.Genshin.Website.Models;
 using Snap.Genshin.Website.Models.ApiRequest;
 using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Snap.Genshin.Website.Controllers
 {
@@ -41,14 +38,12 @@ namespace Snap.Genshin.Website.Controllers
         /// <summary>
         /// 用户登录
         /// </summary>
-        /// <param name="appid">AppId</param>
-        /// <param name="secret">Secret</param>
         /// <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
-        public IActionResult Login([FromBody]LoginModel request)
+        public IActionResult Login([FromBody] LoginModel request)
         {
-            IQueryable<User>? userQuery = dbContext.Users.Where(u => request.AppId == u.AppId);
+            IQueryable<User> userQuery = dbContext.Users.Where(u => request.AppId == u.AppId);
 
             // 用户不存在
             if (!userQuery.Any())
@@ -56,9 +51,9 @@ namespace Snap.Genshin.Website.Controllers
                 return this.Fail("登陆失败，用户不存在");
             }
 
-            User? user = userQuery.First();
+            User user = userQuery.First();
             secretManager.Bind(user.UniqueUserId);
-            string? savedSecret = secretManager.GetSymmetricSecret("app-secret");
+            string savedSecret = secretManager.GetSymmetricSecret("app-secret");
 
             // 密码不存在
             if (string.IsNullOrEmpty(savedSecret))
@@ -67,7 +62,7 @@ namespace Snap.Genshin.Website.Controllers
                 return NotFound();
             }
 
-            string? accessToken = tokenFactory.CreateAccessToken(user);
+            string accessToken = tokenFactory.CreateAccessToken(user);
 
             return secretManager.HashCompare(request.Secret, savedSecret) ?
                 this.Success("登录成功", new
@@ -80,16 +75,13 @@ namespace Snap.Genshin.Website.Controllers
         /// <summary>
         /// 用户注册
         /// </summary>
-        /// <param name="appName">应用名称</param>
-        /// <param name="signature">验证码识别号</param>
-        /// <param name="code">验证码</param>
         /// <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
         public IActionResult Register([FromBody] RegisterModel request)
         {
-            IQueryable<User>? userQuery = dbContext.Users.Where(u => request.AppName == u.Name);
-            string? verifyCodeKey = $"_VERIFY_CODE_{request.Signature}_{request.AppName}";
+            IQueryable<User> userQuery = dbContext.Users.Where(u => request.AppName == u.Name);
+            string verifyCodeKey = $"_VERIFY_CODE_{request.Signature}_{request.AppName}";
 
             // 名称已注册
             if (userQuery.Any())
@@ -109,13 +101,13 @@ namespace Snap.Genshin.Website.Controllers
             cache.Remove(verifyCodeKey);
 
             // 执行注册
-            User? user = new User { Name = request.AppName };
+            User user = new() { Name = request.AppName };
             dbContext.Users.Add(user);
             dbContext.SaveChanges();
 
             // 生成AppSecret
-            string? secretBase = Guid.NewGuid().ToString();
-            string? secret = secretManager.HashSecret(secretBase);
+            string secretBase = Guid.NewGuid().ToString();
+            string secret = secretManager.HashSecret(secretBase);
 
             secretManager.Bind(user.AppId);
             secretManager.StorageSecret("app-secret", secretManager.HashSecret(secret));
@@ -126,24 +118,23 @@ namespace Snap.Genshin.Website.Controllers
         /// <summary>
         /// 发送验证邮件
         /// </summary>
-        /// <param name="appName">应用名称</param>
         /// <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
-        public IActionResult EmailVerify([FromBody]EmailVerifyModel request)
+        public IActionResult EmailVerify([FromBody] EmailVerifyModel request)
         {
             // 判断是否请求频繁
-            string? timeoutFlagKey = $"_MAIL_BUSY_{request.AppName}";
+            string timeoutFlagKey = $"_MAIL_BUSY_{request.AppName}";
             bool isBusy = cache.TryGetValue<int>(timeoutFlagKey, out _);
             if (isBusy)
             {
                 return BadRequest(new { Message = "请求过于频繁" });
             }
             // 生成验证码Key
-            string? guid = Guid.NewGuid().ToString();
-            string? verifyCodeKey = $"_VERIFY_CODE_{guid}_{request.AppName}";
+            string guid = Guid.NewGuid().ToString();
+            string verifyCodeKey = $"_VERIFY_CODE_{guid}_{request.AppName}";
             // 缓存验证码，10分钟有效
-            string? code = GenerateVerifyCode();
+            string code = GenerateVerifyCode();
             cache.Set(verifyCodeKey, code, TimeSpan.FromMinutes(10));
             // 发送邮件
             mailService.SendEmail(new VerifyCodeMail(code, 10));

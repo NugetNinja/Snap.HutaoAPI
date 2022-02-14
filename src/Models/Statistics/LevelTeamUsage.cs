@@ -5,8 +5,8 @@
         public Team() { }
         public Team(string upHalf, string downHalf)
         {
-            this.UpHalf = upHalf;
-            this.DownHalf = downHalf;
+            UpHalf = upHalf;
+            DownHalf = downHalf;
         }
 
         public string UpHalf { get; set; } = null!;
@@ -14,8 +14,12 @@
 
         public override bool Equals(object? obj)
         {
-            if (obj is not Team other) return false;
-            return this.UpHalf == other.UpHalf && this.DownHalf == other.DownHalf;
+            if (obj is not Team other)
+            {
+                return false;
+            }
+
+            return UpHalf == other.UpHalf && DownHalf == other.DownHalf;
         }
         public override int GetHashCode()
         {

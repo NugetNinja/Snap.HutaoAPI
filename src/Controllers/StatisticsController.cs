@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Models;
 using Snap.Genshin.Website.Models.Statistics;
-using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Text.Json;
@@ -31,15 +29,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<AvatorParticipationCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("出场率数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarParticipation>>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<AvatorParticipationCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("出场率数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarParticipation>>(json));
         }
 
         /// <summary>
@@ -51,15 +51,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<OverviewDataCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("总览数据获取成功", JsonSerializer.Deserialize<OverviewData>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<OverviewDataCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("总览数据获取成功", JsonSerializer.Deserialize<OverviewData>(json));
         }
 
         /// <summary>
@@ -71,15 +73,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<AvatarReliquaryUsageCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("圣遗物数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarReliquaryUsage>>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<AvatarReliquaryUsageCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("圣遗物数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarReliquaryUsage>>(json));
         }
 
         /// <summary>
@@ -91,15 +95,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<TeamCollocationCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("组队数据获取成功", JsonSerializer.Deserialize<IEnumerable<TeamCollocation>>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<TeamCollocationCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("组队数据获取成功", JsonSerializer.Deserialize<IEnumerable<TeamCollocation>>(json));
         }
 
         /// <summary>
@@ -111,15 +117,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<WeaponUsageCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<WeaponUsageCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
         }
 
         /// <summary>
@@ -131,15 +139,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationNum>>))]
         public async Task<IActionResult> GetConstellation()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<ActivedConstellationNumCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationNum>>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<ActivedConstellationNumCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationNum>>(json));
         }
 
         /// <summary>
@@ -151,15 +161,17 @@ namespace Snap.Genshin.Website.Controllers
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<LevelTeamUsage>>))]
         public async Task<IActionResult> TeamCombination()
         {
-            // if (string.IsNullOrEmpty(Request.Headers.Authorization)) return Unauthorized();
-            string? json = await statisticsProvider.ReadStatistics<TeamCombinationCalculator>()
-                                               .ConfigureAwait(false);
-            if (json is null)
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
-                return this.Fail(ApiCode.ServiceConcurrent, "服务冲突");
+                return Unauthorized();
             }
 
-            return this.Success("队伍使用数据获取成功", JsonSerializer.Deserialize<IEnumerable<LevelTeamUsage>>(json));
+            string? json = await statisticsProvider
+                .ReadStatistics<TeamCombinationCalculator>()
+                .ConfigureAwait(false);
+            return json is null
+                ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")
+                : this.Success("队伍使用数据获取成功", JsonSerializer.Deserialize<IEnumerable<LevelTeamUsage>>(json));
         }
     }
 }

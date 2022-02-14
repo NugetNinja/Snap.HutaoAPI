@@ -19,7 +19,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
         public async Task Calculate()
         {
             // 忽略九层以下数据，忽略非满星数据
-            var floorGroup = dbContext.SpiralAbyssAvatars
+            IEnumerable<IGrouping<int, SpiralAbyssAvatar>>? floorGroup = dbContext.SpiralAbyssAvatars
                 .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9)
                 .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.Star == 3)
                 .Include(avatar => avatar.SpiralAbyssBattle)

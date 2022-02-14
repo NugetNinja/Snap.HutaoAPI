@@ -14,9 +14,10 @@ namespace Snap.Genshin.Website.Services
         /// <param name="dbContext">数据库</param>
         /// <param name="logger">日志</param>
         /// <param name="configuration">配置</param>
-        public UserSecretManager(ApplicationDbContext dbContext,
-                                 ILogger<UserSecretManager> logger,
-                                 SecretManagerConfiguration configuration)
+        public UserSecretManager(
+            ApplicationDbContext dbContext,
+            ILogger<UserSecretManager> logger,
+            SecretManagerConfiguration configuration)
         {
             symmetricKey = configuration.SymmetricKey;
             symmetricSalt = configuration.SymmetricSalt;
@@ -47,7 +48,8 @@ namespace Snap.Genshin.Website.Services
             {
                 throw new InvalidOperationException("不可重复绑定用户");
             }
-            IQueryable<User>? userQuery = users.Where(u => u.AppId == userId);
+            IQueryable<User> userQuery = users
+                .Where(u => u.AppId == userId);
 
             if (!userQuery.Any())
             {
@@ -69,7 +71,8 @@ namespace Snap.Genshin.Website.Services
                 throw new InvalidOperationException("未绑定用户");
             }
 
-            IQueryable<UserSecret>? secretQuery = secrets.Where(s => s.User == user && s.Name == secretKey)
+            IQueryable<UserSecret> secretQuery = secrets
+                .Where(s => s.User == user && s.Name == secretKey)
                 .AsNoTracking();
             if (!secretQuery.Any())
             {
@@ -78,7 +81,7 @@ namespace Snap.Genshin.Website.Services
 
             logger.LogInformation("trying to get {secretName} secret of {userName}..."
                 , secretKey, user.Name);
-            UserSecret? secret = secretQuery.Single();
+            UserSecret secret = secretQuery.Single();
             return AesDecryptString(secret.Content);
         }
 
@@ -89,10 +92,10 @@ namespace Snap.Genshin.Website.Services
         /// <returns>密钥哈希</returns>
         public string HashSecret(string secret)
         {
-            using SHA256? sha256 = SHA256.Create();
-            string? saltedSecret = $"{hashSalt}{secret}{hashSalt}";
-            byte[]? secretBytes = Encoding.ASCII.GetBytes(saltedSecret);
-            byte[]? hash = sha256.ComputeHash(secretBytes);
+            using SHA256 sha256 = SHA256.Create();
+            string saltedSecret = $"{hashSalt}{secret}{hashSalt}";
+            byte[] secretBytes = Encoding.ASCII.GetBytes(saltedSecret);
+            byte[] hash = sha256.ComputeHash(secretBytes);
             return Convert.ToBase64String(hash);
         }
 
@@ -109,12 +112,12 @@ namespace Snap.Genshin.Website.Services
                 throw new InvalidOperationException("未绑定用户");
             }
 
-            IQueryable<UserSecret>? secretQuery = secrets.Where(s => s.User == user && s.Name == secretKey);
-            string? encryptdSecret = AesEncryptString(secret);
+            IQueryable<UserSecret> secretQuery = secrets.Where(s => s.User == user && s.Name == secretKey);
+            string encryptdSecret = AesEncryptString(secret);
 
             if (secretQuery.Any())
             {
-                UserSecret? oldSecret = secretQuery.Single();
+                UserSecret oldSecret = secretQuery.Single();
                 oldSecret.Content = encryptdSecret;
             }
             else
@@ -142,16 +145,16 @@ namespace Snap.Genshin.Website.Services
 
         private string AesEncryptString(string content)
         {
-            using SHA256? sha256 = SHA256.Create();
-            using Aes? aes = Aes.Create();
-            using MemoryStream? ms = new MemoryStream();
-            byte[]? timeBytes = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
-            using MemoryStream? salt = new MemoryStream();
+            using SHA256 sha256 = SHA256.Create();
+            using Aes aes = Aes.Create();
+            using MemoryStream ms = new();
+            byte[] timeBytes = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            using MemoryStream salt = new();
             salt.Write(timeBytes);
             salt.Write(Encoding.ASCII.GetBytes(symmetricSalt));
-            byte[]? saltBytes = sha256.ComputeHash(salt.ToArray())[..16];
-            byte[]? rawKeyBytes = sha256.ComputeHash(Encoding.ASCII.GetBytes(symmetricKey))[..16];
-            byte[]? keyBytes = new byte[16];
+            byte[] saltBytes = sha256.ComputeHash(salt.ToArray())[..16];
+            byte[] rawKeyBytes = sha256.ComputeHash(Encoding.ASCII.GetBytes(symmetricKey))[..16];
+            byte[] keyBytes = new byte[16];
             for (int i = 0; i < 16; i++)
             {
                 keyBytes[i] = (byte)(saltBytes[i] ^ rawKeyBytes[i]);
@@ -160,8 +163,8 @@ namespace Snap.Genshin.Website.Services
             aes.Key = keyBytes;
             ms.Write(timeBytes);
             ms.Write(aes.IV, 0, aes.IV.Length);
-            using CryptoStream? cryptoStream = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
-            using StreamWriter? encryptWriter = new StreamWriter(cryptoStream);
+            using CryptoStream cryptoStream = new(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
+            using StreamWriter encryptWriter = new(cryptoStream);
             encryptWriter.Write(content);
             encryptWriter.Flush();
             encryptWriter.Close();
@@ -170,26 +173,26 @@ namespace Snap.Genshin.Website.Services
 
         private string AesDecryptString(string content)
         {
-            using SHA256? sha256 = SHA256.Create();
-            using Aes? aes = Aes.Create();
-            using MemoryStream? ms = new MemoryStream(Convert.FromBase64String(content));
+            using SHA256 sha256 = SHA256.Create();
+            using Aes aes = Aes.Create();
+            using MemoryStream ms = new(Convert.FromBase64String(content));
             byte[] timeBytes = new byte[8];
             byte[] ivBytes = new byte[aes.IV.Length];
             ms.Read(timeBytes, 0, timeBytes.Length);
             ms.Read(ivBytes, 0, ivBytes.Length);
-            using MemoryStream? salt = new MemoryStream();
+            using MemoryStream salt = new();
             salt.Write(timeBytes);
             salt.Write(Encoding.ASCII.GetBytes(symmetricSalt));
-            byte[]? saltBytes = sha256.ComputeHash(salt.ToArray())[..16];
-            byte[]? rawKeyBytes = sha256.ComputeHash(Encoding.ASCII.GetBytes(symmetricKey))[..16];
-            byte[]? keyBytes = new byte[16];
+            byte[] saltBytes = sha256.ComputeHash(salt.ToArray())[..16];
+            byte[] rawKeyBytes = sha256.ComputeHash(Encoding.ASCII.GetBytes(symmetricKey))[..16];
+            byte[] keyBytes = new byte[16];
             for (int i = 0; i < 16; i++)
             {
                 keyBytes[i] = (byte)(saltBytes[i] ^ rawKeyBytes[i]);
             }
 
-            using CryptoStream? cryptoStream = new CryptoStream(ms, aes.CreateDecryptor(keyBytes, ivBytes), CryptoStreamMode.Read);
-            using StreamReader? streamReader = new StreamReader(cryptoStream);
+            using CryptoStream cryptoStream = new(ms, aes.CreateDecryptor(keyBytes, ivBytes), CryptoStreamMode.Read);
+            using StreamReader streamReader = new(cryptoStream);
             return streamReader.ReadToEnd();
         }
 

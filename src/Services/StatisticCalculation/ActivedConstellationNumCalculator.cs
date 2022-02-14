@@ -1,4 +1,5 @@
 ﻿using Snap.Genshin.Website.Entities;
+using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
@@ -16,26 +17,28 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            var avatarGroup = dbContext.AvatarDetails.AsEnumerable().GroupBy(avatar => avatar.AvatarId);
+            IEnumerable<IGrouping<int, AvatarDetail>> avatarGroups = dbContext.AvatarDetails
+                .AsEnumerable()
+                .GroupBy(avatar => avatar.AvatarId);
 
-            var result = new List<AvatarConstellationNum>(64);
+            List<AvatarConstellationNum> result = new(128);
 
-            foreach (IGrouping<int, Entities.Record.AvatarDetail>? group in avatarGroup)
+            foreach (IGrouping<int, AvatarDetail>? avatarGroup in avatarGroups)
             {
-                // 跳过从未出现在深渊中的角色
-                // if (!dbContext.SpiralAbyssAvatars.Any(avatar => avatar.AvatarId == group.Key)) continue;
+                Dictionary<int, int> countDic = Enumerable
+                    .Range(0, 7)
+                    .ToDictionary(key => key, value => 0);
 
-                var countDic = new Dictionary<int, int>
-                {
-                    {0, 0},{1, 0},{2, 0},{3, 0},{4, 0},{5, 0},{6, 0}
-                };
-
-                foreach(var avatar in group)
+                foreach (AvatarDetail? avatar in avatarGroup)
                 {
                     countDic[avatar.ActivedConstellationNum]++;
                 }
-                var rate = from kv in countDic select new Rate<int> { Id = kv.Key, Value = (double)kv.Value / @group.Count() };
-                result.Add(new AvatarConstellationNum { Avatar = group.Key, Rate = rate });
+
+                IEnumerable<Rate<int>> rate = 
+                    from kv in countDic 
+                    select new Rate<int> { Id = kv.Key, Value = (double)kv.Value / avatarGroup.Count() };
+
+                result.Add(new AvatarConstellationNum { Avatar = avatarGroup.Key, Rate = rate });
             }
 
             await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(result);

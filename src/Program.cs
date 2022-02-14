@@ -46,13 +46,14 @@ builder.Services.AddScoped<IStatisticsProvider, StatisticsProvider>();
 
 builder.Services.AddGenshinStatisticsService(opt =>
 {
-    opt.AddCalculator<OverviewDataCalculator>()
-       .AddCalculator<AvatorParticipationCalculator>()
-       .AddCalculator<TeamCollocationCalculator>()
-       .AddCalculator<WeaponUsageCalculator>()
-       .AddCalculator<AvatarReliquaryUsageCalculator>()
-       .AddCalculator<ActivedConstellationNumCalculator>()
-       .AddCalculator<TeamCombinationCalculator>();
+    opt
+    .AddCalculator<OverviewDataCalculator>()
+    .AddCalculator<AvatorParticipationCalculator>()
+    .AddCalculator<TeamCollocationCalculator>()
+    .AddCalculator<WeaponUsageCalculator>()
+    .AddCalculator<AvatarReliquaryUsageCalculator>()
+    .AddCalculator<ActivedConstellationNumCalculator>()
+    .AddCalculator<TeamCombinationCalculator>();
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

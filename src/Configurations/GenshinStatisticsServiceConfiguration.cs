@@ -5,12 +5,7 @@ namespace Snap.Genshin.Website.Configurations
 {
     public class GenshinStatisticsServiceConfiguration
     {
-        public GenshinStatisticsServiceConfiguration()
-        {
-            CalculatorTypes = new();
-        }
-
-        public List<Type> CalculatorTypes { get; private set; }
+        public List<Type> CalculatorTypes { get; } = new();
 
         private readonly Type[] calculatorConstructorFilter = new Type[] { typeof(ApplicationDbContext) };
 
@@ -19,7 +14,7 @@ namespace Snap.Genshin.Website.Configurations
             return AddCalculator(typeof(T));
         }
 
-        public GenshinStatisticsServiceConfiguration AddCalculator(Type calculatorType)
+        private GenshinStatisticsServiceConfiguration AddCalculator(Type calculatorType)
         {
             if (!calculatorType.IsAssignableTo(typeof(IStatisticCalculator)))
             {
