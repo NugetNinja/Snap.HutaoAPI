@@ -1,6 +1,9 @@
-﻿namespace Snap.Genshin.Website.Models.Statistics
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Snap.Genshin.Website.Models.Statistics
 {
-    public class Team
+    [SuppressMessage("","CA1067")]
+    public class Team : IEquatable<Team>
     {
         public Team() { }
         public Team(string upHalf, string downHalf)
@@ -12,23 +15,13 @@
         public string UpHalf { get; set; } = null!;
         public string DownHalf { get; set; } = null!;
 
-        public override bool Equals(object? obj)
+        public bool Equals(Team? other)
         {
-            if (obj is not Team other)
-            {
-                return false;
-            }
-
-            return UpHalf == other.UpHalf && DownHalf == other.DownHalf;
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return other is not null && (UpHalf == other.UpHalf && DownHalf == other.DownHalf);
         }
     }
 
     public record LevelInfo(int Floor, int Index);
 
     public record LevelTeamUsage(LevelInfo Level, IEnumerable<Rate<Team>> Teams);
-
 }
