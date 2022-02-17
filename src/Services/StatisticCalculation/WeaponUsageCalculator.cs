@@ -18,6 +18,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
         public async Task Calculate()
         {
             // TODO AsEnumerable可能带来性能问题
+            // TODO 应该跳过玩家未上场的角色
             IEnumerable<IGrouping<int, AvatarDetail>> avatarGroups = dbContext.AvatarDetails
                 .AsEnumerable()
                 .GroupBy(avatar => avatar.AvatarId);
@@ -26,15 +27,15 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
             foreach (IGrouping<int, AvatarDetail>? avatarGroup in avatarGroups)
             {
-                //TODO 应该跳过某名玩家未上场的角色
                 if (!dbContext.SpiralAbyssAvatars.Any(avatar => avatar.AvatarId == avatarGroup.Key))
                 {
                     continue;
                 }
 
+                int count = avatarGroup.Count();
                 List<Rate<int>> weaponRateList = new(32);
                 WeaponUsage avatarWeaponUsage = new() { Avatar = avatarGroup.Key, Weapons = weaponRateList };
-                int count = avatarGroup.Count();
+
                 IEnumerable<IGrouping<int, AvatarDetail>> weaponGroup = avatarGroup
                     .AsEnumerable()
                     .GroupBy(avatar => avatar.WeaponId)
