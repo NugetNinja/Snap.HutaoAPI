@@ -17,6 +17,8 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
+            double totalPlayerCount = dbContext.Players.Count();
+
             IEnumerable<IGrouping<int, AvatarDetail>> avatarGroups = dbContext.AvatarDetails
                 .AsEnumerable()
                 .GroupBy(avatar => avatar.AvatarId);
@@ -38,7 +40,10 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                     from kv in countDic 
                     select new Rate<int> { Id = kv.Key, Value = (double)kv.Value / avatarGroup.Count() };
 
-                result.Add(new AvatarConstellationNum { Avatar = avatarGroup.Key, Rate = rate });
+                int avatarHolding = countDic.Sum(kv => kv.Value);
+                double holdingRate = avatarHolding / totalPlayerCount;
+
+                result.Add(new AvatarConstellationNum { Avatar = avatarGroup.Key, HoldingRate = holdingRate, Rate = rate });
             }
 
             await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(result);
