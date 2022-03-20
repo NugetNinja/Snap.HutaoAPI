@@ -50,7 +50,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             Dictionary<int, IEnumerable<(int AvatarId, int Count)>> avatarBattleWithWhoList = new(128);
             foreach (KeyValuePair<int, IDictionary<int, int>> pair in avatarBattleWithWhoCountDic)
             {
-                avatarBattleWithWhoList.Add(pair.Key, 
+                avatarBattleWithWhoList.Add(pair.Key,
                     from kv in pair.Value orderby kv.Value descending select (kv.Key, kv.Value));
             }
 

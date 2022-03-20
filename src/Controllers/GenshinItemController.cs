@@ -82,7 +82,7 @@ namespace Snap.Genshin.Website.Controllers
         {
             return dbContext.GenshinItems
                 .Where(item => item.Type == type)
-                .Select(item => new ItemInfo(item.Id, item.Name, item.Url)); 
+                .Select(item => new ItemInfo(item.Id, item.Name, item.Url));
         }
     }
 }

@@ -1,8 +1,7 @@
 # Snap.Genshin.Website
-Snap Genshin 的服务端
+胡桃API 的服务端实现
 
-
-## 部署
+## 内部部署
 
 ``` bash
 screen -r sg

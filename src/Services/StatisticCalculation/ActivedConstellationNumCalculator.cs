@@ -36,8 +36,8 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                     countDic[avatar.ActivedConstellationNum]++;
                 }
 
-                IEnumerable<Rate<int>> rate = 
-                    from kv in countDic 
+                IEnumerable<Rate<int>> rate =
+                    from kv in countDic
                     select new Rate<int> { Id = kv.Key, Value = (double)kv.Value / avatarGroup.Count() };
 
                 int avatarHolding = countDic.Sum(kv => kv.Value);

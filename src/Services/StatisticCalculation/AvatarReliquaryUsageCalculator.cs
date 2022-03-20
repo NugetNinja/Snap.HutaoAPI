@@ -69,7 +69,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 countDic[avatar.AvatarId]++;
             }
 
-            IEnumerable<AvatarReliquaryUsage> result = 
+            IEnumerable<AvatarReliquaryUsage> result =
                 from kv in ansDic
                 select new AvatarReliquaryUsage
                 {

@@ -10,7 +10,10 @@ namespace Snap.Genshin.Website.Entities
     public class User : IUser
     {
         [NotMapped]
-        public Guid UniqueUserId => AppId;
+        public Guid UniqueUserId
+        {
+            get => AppId;
+        }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
         public Guid AppId { get; set; }
@@ -19,9 +22,11 @@ namespace Snap.Genshin.Website.Entities
         public string Name { get; set; } = null!;
 
         public IDictionary<string, string> GetUserInfo()
-             => new Dictionary<string, string>
+        {
+            return new Dictionary<string, string>
                 {
                     { "name", Name },
                 };
+        }
     }
 }

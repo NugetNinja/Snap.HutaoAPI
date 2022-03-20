@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Snap.Genshin.Website.Models.Statistics
+﻿namespace Snap.Genshin.Website.Models.Statistics
 {
     //record 自动实现相等比较
     public record Team
