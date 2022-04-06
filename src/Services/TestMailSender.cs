@@ -17,10 +17,10 @@ namespace Snap.Genshin.Website.Services
             logger.LogInformation("Mail: {content}", mail.Content);
             try
             {
-                "http://1.13.172.42:25560/v1/LuaApiCaller?qq=2955881280&funcname=SendMsgV2"
+                "http://1.13.172.42:25560/v1/LuaApiCaller?qq=501604732&funcname=SendMsgV2"
                     .PostJsonAsync(new
                     {
-                        ToUserUid = 501604732,
+                        ToUserUid = 664120433,
                         SendToType = 2,
                         SendMsgType = "TextMsg",
                         Content = mail.Content
