@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
@@ -40,10 +41,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     else
         opt.UseMySql(builder.Configuration.GetConnectionString("ProductDb"),
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
-    opt.LogTo(msg =>
-    {
-        System.Diagnostics.Debug.WriteLine(msg);
-    });
+    opt.ConfigureWarnings(b => b.Log
+        (
+            (RelationalEventId.CommandExecuted, LogLevel.Debug)
+        ));
 });
 
 builder.Services.AddScoped<IStatisticsProvider, StatisticsProvider>();
