@@ -43,7 +43,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
     opt.ConfigureWarnings(b => b.Log
         (
-            (RelationalEventId.CommandExecuted, LogLevel.Debug)
+            (RelationalEventId.CommandExecuted, LogLevel.Debug),
+            (CoreEventId.ContextInitialized, LogLevel.Debug)
         ));
 });
 
