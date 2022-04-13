@@ -1,4 +1,5 @@
-﻿using Snap.Genshin.MapReduce;
+﻿using Microsoft.EntityFrameworkCore;
+using Snap.Genshin.MapReduce;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
 using Snap.Genshin.Website.Services.StatisticCalculation;
@@ -20,7 +21,7 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
         public async Task Calculate()
         {
             var totalPlayerCount = dbContext.Players.Count();
-            var avatars = from avatar in dbContext.AvatarDetails select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum);
+            var avatars = (from avatar in dbContext.AvatarDetails select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum)).AsNoTracking();
 
             var groupReducer = new Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>>((input, result) =>
             {
