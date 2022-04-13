@@ -1,6 +1,7 @@
 ﻿using Snap.Genshin.Website.Configurations;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Services.StatisticCalculation;
+using System.Diagnostics;
 
 namespace Snap.Genshin.Website.Services
 {
@@ -31,10 +32,15 @@ namespace Snap.Genshin.Website.Services
                 from type in calculatorTypes
                 select serviceProvider.GetRequiredService(type) as IStatisticCalculator;
 
+            var watch = new Stopwatch();
+
             foreach (IStatisticCalculator? calculator in calculators)
             {
-                logger.LogInformation("正在计算: {type}", calculator.GetType().Name);
+                watch.Restart();
                 await calculator.Calculate();
+                watch.Stop();
+
+                logger.LogInformation("计算: {type}完成，用时{time}ms。", calculator.GetType().Name, watch.Elapsed.TotalMilliseconds);
             }
             logger.LogInformation("统计数据计算完毕。");
         }

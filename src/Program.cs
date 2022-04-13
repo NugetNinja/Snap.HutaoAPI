@@ -53,6 +53,7 @@ builder.Services.AddGenshinStatisticsService(opt =>
     .AddCalculator<WeaponUsageCalculator>()
     .AddCalculator<AvatarReliquaryUsageCalculator>()
     .AddCalculator<ActivedConstellationNumCalculator>()
+    .AddCalculator<Snap.Genshin.Website.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
     .AddCalculator<TeamCombinationCalculator>();
 });
 
