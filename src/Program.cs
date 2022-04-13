@@ -40,6 +40,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     else
         opt.UseMySql(builder.Configuration.GetConnectionString("ProductDb"),
             ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ProductDb")));
+    opt.LogTo(msg =>
+    {
+        System.Diagnostics.Debug.WriteLine(msg);
+    });
 });
 
 builder.Services.AddScoped<IStatisticsProvider, StatisticsProvider>();
