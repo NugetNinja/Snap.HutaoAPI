@@ -13,12 +13,13 @@ namespace Snap.Genshin.Website.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController(ApplicationDbContext dbContext,
-                              ISecretManager secretManager,
-                              ILogger<AuthController> logger,
-                              IMailService mailService,
-                              IMemoryCache cache,
-                              ITokenFactory tokenFactory)
+        public AuthController(
+            ApplicationDbContext dbContext,
+            ISecretManager secretManager,
+            ILogger<AuthController> logger,
+            IMailService mailService,
+            IMemoryCache cache,
+            ITokenFactory tokenFactory)
         {
             this.secretManager = secretManager;
             this.dbContext = dbContext;
