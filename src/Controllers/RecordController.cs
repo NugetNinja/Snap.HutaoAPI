@@ -17,6 +17,26 @@ namespace Snap.Genshin.Website.Controllers
 
         private readonly ApplicationDbContext dbContext;
 
+        [HttpGet("[Action]/{uid}")]
+        public IActionResult CheckRecord([FromRoute()] string uid)
+        {
+            if (string.IsNullOrEmpty(Request.Headers.Authorization))
+            {
+                return Unauthorized();
+            }
+
+            var playerQuery = dbContext.Players.Where(player => player.Uid == uid);
+            if (!playerQuery.Any())
+            {
+                return this.Success("查询成功", new { PeriodUploaded = true });
+            }
+
+            var player = playerQuery.Single();
+            var recordQuery = dbContext.PlayerRecords.Where(record => record.PlayerId == player.InnerId);
+
+            return this.Success("查询成功", new { PeriodUploaded = recordQuery.Any() });
+        }
+
         [HttpPost("Upload")]
         // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
