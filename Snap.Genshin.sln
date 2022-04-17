@@ -6,11 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snap.Genshin.Website", "src\Snap.Genshin.Website.csproj", "{6FB3B159-25F1-4C7A-9FBE-823B0A8233E4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C1EC01D-86B8-4092-BF9D-95B5DBE44B2E}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.Genshin.MapReduce", "Snap.Genshin.MapReduce\Snap.Genshin.MapReduce.csproj", "{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snap.Genshin.MapReduce", "Snap.Genshin.MapReduce\Snap.Genshin.MapReduce.csproj", "{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

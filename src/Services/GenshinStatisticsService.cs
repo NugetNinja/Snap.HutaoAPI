@@ -32,7 +32,7 @@ namespace Snap.Genshin.Website.Services
                 from type in calculatorTypes
                 select serviceProvider.GetRequiredService(type) as IStatisticCalculator;
 
-            var watch = new Stopwatch();
+            Stopwatch? watch = new Stopwatch();
 
             foreach (IStatisticCalculator? calculator in calculators)
             {

@@ -1,30 +1,43 @@
-﻿using System;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Snap.Genshin.MapReduce
 {
-    public class Reducer<InputType, OutputKeyType, OutputValueType> where OutputKeyType : notnull
+    /// <summary>
+    /// 规约器
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <typeparam name="TOutputValue">输出值的类型</typeparam>
+    public class Reducer<TInput, TOutputKey, TOutputValue>
+        where TOutputKey : notnull
     {
-        public Reducer(Action<InputType, ConcurrentDictionary<OutputKeyType, OutputValueType>> reducerAction)
+        private readonly Action<TInput, ConcurrentDictionary<TOutputKey, TOutputValue>> reducerAction;
+
+        /// <summary>
+        /// 构造一个新的规约器
+        /// </summary>
+        /// <param name="reducerAction">执行的规约操作</param>
+        public Reducer(Action<TInput, ConcurrentDictionary<TOutputKey, TOutputValue>> reducerAction)
         {
             this.reducerAction = reducerAction;
-            this.ReduceResult = new ConcurrentDictionary<OutputKeyType, OutputValueType>();
+            ReduceResult = new ConcurrentDictionary<TOutputKey, TOutputValue>();
         }
 
-        public void Reduce(IEnumerable<InputType> inputData)
+        /// <summary>
+        /// 获取规约结果
+        /// </summary>
+        public ConcurrentDictionary<TOutputKey, TOutputValue> ReduceResult { get; private set; }
+
+        /// <summary>
+        /// 规约
+        /// </summary>
+        /// <param name="inputData">输入数据</param>
+        public void Reduce(IEnumerable<TInput> inputData)
         {
-            Parallel.ForEach(inputData, (input) =>
-            {
-                reducerAction(input, this.ReduceResult);
-            });
+            Parallel.ForEach(inputData, input => reducerAction(input, ReduceResult));
         }
-
-        public ConcurrentDictionary<OutputKeyType, OutputValueType> ReduceResult { get; private set; }
-
-        private readonly Action<InputType, ConcurrentDictionary<OutputKeyType, OutputValueType>> reducerAction;
     }
 }

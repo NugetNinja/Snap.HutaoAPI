@@ -20,10 +20,10 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
 
         public async Task Calculate()
         {
-            var totalPlayerCount = dbContext.Players.Count();
-            var avatars = (from avatar in dbContext.AvatarDetails select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum)).AsNoTracking();
+            int totalPlayerCount = dbContext.Players.Count();
+            IQueryable<AvatarWithConstellationNum>? avatars = (from avatar in dbContext.AvatarDetails select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum)).AsNoTracking();
 
-            var groupReducer = new Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>>((input, result) =>
+            Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>>? groupReducer = new Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>>((input, result) =>
             {
                 result.GetOrAdd(input.AvatarId, new ConcurrentBag<int>())
                       .Add(input.ActivedNum);
@@ -31,13 +31,13 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
 
             groupReducer.Reduce(avatars);
 
-            var calculationResult = new ConcurrentBag<AvatarConstellationNum>();
+            ConcurrentBag<AvatarConstellationNum>? calculationResult = new ConcurrentBag<AvatarConstellationNum>();
 
             Parallel.ForEach(groupReducer.ReduceResult, kv =>
             {
-                var currentAvatarCount = 0;
+                int currentAvatarCount = 0;
 
-                var reducer = new Reducer<int, int, int>((input, result) =>
+                Reducer<int, int, int>? reducer = new Reducer<int, int, int>((input, result) =>
                 {
                     result.AddOrUpdate(input, 1, (key, oldValue) => Interlocked.Increment(ref oldValue));
                     Interlocked.Increment(ref currentAvatarCount);
@@ -45,7 +45,7 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
 
                 reducer.Reduce(kv.Value);
 
-                var rate = from kvp in reducer.ReduceResult select new Rate<int> { Id = kvp.Key, Value = (double)kvp.Value / currentAvatarCount };
+                IEnumerable<Rate<int>>? rate = from kvp in reducer.ReduceResult select new Rate<int> { Id = kvp.Key, Value = (double)kvp.Value / currentAvatarCount };
                 calculationResult.Add(new() { Avatar = kv.Key, Rate = rate, HoldingRate = (double)kv.Value.Count / totalPlayerCount });
             });
 
