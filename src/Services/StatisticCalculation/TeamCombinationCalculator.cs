@@ -63,13 +63,15 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                     countDic[team]++;
                 }
 
+                var sorted = (from kv in countDic orderby kv.Value descending select kv).Take(24);
+
                 string[] floor_index = group.Key.Split('-');
                 //Convert.ToInt32 性能问题
                 int floor = Convert.ToInt32(floor_index[0]);
                 int index = Convert.ToInt32(floor_index[1]);
 
                 result.Add(new(new LevelInfo(floor, index),
-                    countDic.Select(kv => new Rate<Team>
+                    sorted.Select(kv => new Rate<Team>
                     {
                         Id = kv.Key,
                         Value = kv.Value
