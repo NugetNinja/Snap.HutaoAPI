@@ -17,8 +17,14 @@ namespace Snap.Genshin.Website.Controllers
 
         private readonly ApplicationDbContext dbContext;
 
+        /// <summary>
+        /// 检查用户是否上传了当期记录
+        /// </summary>
+        /// <param name="uid">用户uid</param>
+        /// <returns>结果</returns>
         [HttpGet("[Action]/{uid}")]
-        public IActionResult CheckRecord([FromRoute()] string uid)
+        [ApiExplorerSettings(GroupName = "v1")]
+        public IActionResult CheckRecord([FromRoute] string uid)
         {
             if (string.IsNullOrEmpty(Request.Headers.Authorization))
             {
@@ -37,8 +43,13 @@ namespace Snap.Genshin.Website.Controllers
             return this.Success("查询成功", new { PeriodUploaded = recordQuery.Any() });
         }
 
+        /// <summary>
+        /// 上传记录
+        /// </summary>
+        /// <param name="record">记录</param>
+        /// <returns>结果</returns>
         [HttpPost("Upload")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v1")]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
             if (string.IsNullOrEmpty(Request.Headers.Authorization))
@@ -46,7 +57,6 @@ namespace Snap.Genshin.Website.Controllers
                 return Unauthorized();
             }
 
-            #region 更新角色信息
             Player? player = dbContext.Players
                 .Where(player => player.Uid == record.Uid)
                 .Include(player => player.Avatars)
@@ -57,10 +67,11 @@ namespace Snap.Genshin.Website.Controllers
                 player = new Player()
                 {
                     Uid = record.Uid,
-                    Avatars = new List<AvatarDetail>()
+                    Avatars = new List<AvatarDetail>(),
                 };
                 dbContext.Players.Add(player);
             }
+
             player.Avatars.Clear();
 
             IEnumerable<AvatarDetail>? newAvatars = record.PlayerAvatars
@@ -77,15 +88,13 @@ namespace Snap.Genshin.Website.Controllers
                     {
                         Id = r.Id,
                         Count = r.Count,
-                        UnionId = $"{r.Id}-{r.Count}"
-                    }).ToList()
+                        UnionId = $"{r.Id}-{r.Count}",
+                    }).ToList(),
                 });
             player.Avatars = newAvatars.ToList();
 
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            #endregion
 
-            #region 更新深渊数据
             // 删除旧记录
             PlayerRecord? oldPlayerRecord = dbContext.PlayerRecords
                 .Where(record => record.PlayerId == player.InnerId)
@@ -110,19 +119,16 @@ namespace Snap.Genshin.Website.Controllers
                     .Select(battle => new SpiralAbyssBattle
                     {
                         Avatars = battle.AvatarIds
-                        .Select(avatar => new SpiralAbyssAvatar
-                        {
-                            AvatarId = avatar
-                        }).ToList(),
+                            .Select(avatar => new SpiralAbyssAvatar { AvatarId = avatar })
+                            .ToList(),
                         BattleIndex = battle.BattleIndex,
-                    }).ToList()
-                }).ToList()
+                    }).ToList(),
+                }).ToList(),
             });
 
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            #endregion
 
-            return this.Success($"{record.Uid}-数据上传成功");
+            return this.Success($"UID：{record.Uid}的数据上传成功");
         }
     }
 }

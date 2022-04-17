@@ -30,6 +30,7 @@ namespace Snap.Genshin.Website.Controllers
         private readonly IMemoryCache cache;
 
         [HttpGet("[Action]")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> CalculateStatistics()
         {
             if (Request.Headers["CloudToken"] != cloudToken)
@@ -52,6 +53,7 @@ namespace Snap.Genshin.Website.Controllers
         }
 
         [HttpGet("[Action]")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> ClearStatistics()
         {
             if (Request.Headers["CloudToken"] != cloudToken)

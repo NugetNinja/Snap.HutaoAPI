@@ -23,25 +23,58 @@
             <summary>
             用户登录
             </summary>
-            <param name="appid">AppId</param>
-            <param name="secret">Secret</param>
             <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
         </member>
         <member name="M:Snap.Genshin.Website.Controllers.AuthController.Register(Snap.Genshin.Website.Models.ApiRequest.RegisterModel)">
             <summary>
             用户注册
             </summary>
-            <param name="appName">应用名称</param>
-            <param name="signature">验证码识别号</param>
-            <param name="code">验证码</param>
             <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
         </member>
         <member name="M:Snap.Genshin.Website.Controllers.AuthController.EmailVerify(Snap.Genshin.Website.Models.ApiRequest.EmailVerifyModel)">
             <summary>
             发送验证邮件
             </summary>
-            <param name="appName">应用名称</param>
             <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.GenshinItemsController.Upload(Snap.Genshin.Website.Controllers.GenshinItemsController.UploadModel)">
+            <summary>
+            上传角色与武器与圣遗物映射数据
+            </summary>
+            <param name="request">请求数据</param>
+            <returns>上传的结果</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.GenshinItemsController.Avatars">
+            <summary>
+            获取角色映射列表
+            </summary>
+            <returns>角色映射列表</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.GenshinItemsController.Weapons">
+            <summary>
+            获取武器映射列表
+            </summary>
+            <returns>武器映射列表</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.GenshinItemsController.Reliquaries">
+            <summary>
+            获取圣遗物映射列表
+            </summary>
+            <returns>圣遗物映射列表</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.RecordController.CheckRecord(System.String)">
+            <summary>
+            检查用户是否上传了当期记录
+            </summary>
+            <param name="uid">用户uid</param>
+            <returns>结果</returns>
+        </member>
+        <member name="M:Snap.Genshin.Website.Controllers.RecordController.UploadRecord(Snap.Genshin.Website.Models.SnapGenshin.PlayerRecord)">
+            <summary>
+            上传记录
+            </summary>
+            <param name="record">记录</param>
+            <returns>结果</returns>
         </member>
         <member name="M:Snap.Genshin.Website.Controllers.StatisticsController.GetAvatarParticipation">
             <summary>
@@ -452,6 +485,34 @@
             绑定用户
             </summary>
             <param name="userId">用户ID</param>
+        </member>
+        <member name="T:Snap.Must">
+            <summary>
+            封装验证方法,简化微软验证
+            </summary>
+        </member>
+        <member name="M:Snap.Must.NotNull``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <returns>The value of the parameter.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:Snap.Must.NeverHappen">
+            <summary>
+            Unconditionally throws an <see cref="T:System.NotSupportedException"/>.
+            </summary>
+            <returns>Nothing. This method always throws.</returns>
+        </member>
+        <member name="M:Snap.Must.NeverHappen``1">
+            <summary>
+            Unconditionally throws an <see cref="T:System.NotSupportedException"/>.
+            </summary>
+            <typeparam name="T">The type that the method should be typed to return (although it never returns anything).</typeparam>
+            <returns>Nothing. This method always throws.</returns>
         </member>
     </members>
 </doc>

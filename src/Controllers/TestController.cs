@@ -15,6 +15,7 @@ namespace Snap.Genshin.Website.Controllers
         private readonly IServiceProvider serviceProvider;
 
         [HttpGet("RefreshStatistics")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> RefreshStatistics()
         {
             await serviceProvider

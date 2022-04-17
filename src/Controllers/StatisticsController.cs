@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Models;
 using Snap.Genshin.Website.Models.Statistics;
 using Snap.Genshin.Website.Services;
@@ -25,7 +28,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("AvatarParticipation")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
@@ -47,7 +50,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Overview")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
@@ -69,7 +72,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("AvatarReliquaryUsage")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
@@ -91,7 +94,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("TeamCollocation")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
@@ -113,7 +116,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("WeaponUsage")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
@@ -135,7 +138,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Constellation")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationNum>>))]
         public async Task<IActionResult> GetConstellation()
         {
@@ -157,7 +160,7 @@ namespace Snap.Genshin.Website.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("TeamCombination")]
-        // [Authorize(Policy = IdentityPolicyNames.CommonUser)]
+        [ApiExplorerSettings(GroupName = "v2")]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<LevelTeamUsage>>))]
         public async Task<IActionResult> TeamCombination()
         {

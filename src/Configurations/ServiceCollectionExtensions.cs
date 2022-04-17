@@ -15,6 +15,7 @@ namespace Snap.Genshin.Website.Configurations
             services.AddTransient(services =>
             {
                 IServiceScope scope = services.CreateScope();
+
                 ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 ILogger<GenshinStatisticsService> logger = services.GetRequiredService<ILogger<GenshinStatisticsService>>();
                 IServiceProvider serviceProvider = services.GetRequiredService<IServiceProvider>();
@@ -30,18 +31,12 @@ namespace Snap.Genshin.Website.Configurations
             TokenFactoryConfiguration config = new();
             options.Invoke(config);
 
-            _ = config.Audience ?? throw new Exception(nameof(config.Audience));
-            _ = config.Issuer ?? throw new Exception(nameof(config.Issuer));
-            _ = config.SigningKey ?? throw new Exception(nameof(config.SigningKey));
+            Must.NotNull(config.Audience);
+            Must.NotNull(config.Issuer);
+            Must.NotNull(config.SigningKey);
 
-            services.AddScoped<ITokenFactory, TokenFactory>(services =>
-            {
-                ApplicationDbContext dbContext = services.GetRequiredService<ApplicationDbContext>();
-
-                return new TokenFactory(dbContext, config);
-            });
-
-            return services;
+            return services.AddScoped<ITokenFactory, TokenFactory>(services =>
+                new TokenFactory(services.GetRequiredService<ApplicationDbContext>(), config));
         }
 
         public static IServiceCollection AddUserSecretManager(this IServiceCollection services, Action<SecretManagerConfiguration> options)
@@ -49,19 +44,15 @@ namespace Snap.Genshin.Website.Configurations
             SecretManagerConfiguration config = new();
             options.Invoke(config);
 
-            _ = config.SymmetricKey ?? throw new Exception(nameof(config.SymmetricKey));
-            _ = config.HashSalt ?? throw new Exception(nameof(config.HashSalt));
-            _ = config.SymmetricSalt ?? throw new Exception(nameof(config.SymmetricSalt));
+            Must.NotNull(config.SymmetricKey);
+            Must.NotNull(config.HashSalt);
+            Must.NotNull(config.SymmetricSalt);
 
-            services.AddTransient<ISecretManager, UserSecretManager>(services =>
-            {
-                ILogger<UserSecretManager> logger = services.GetRequiredService<ILogger<UserSecretManager>>();
-                ApplicationDbContext dbContext = services.GetRequiredService<ApplicationDbContext>();
-
-                return new UserSecretManager(dbContext, logger, config);
-            });
-
-            return services;
+            return services.AddTransient<ISecretManager, UserSecretManager>(services =>
+                new UserSecretManager(
+                    services.GetRequiredService<ApplicationDbContext>(),
+                    services.GetRequiredService<ILogger<UserSecretManager>>(),
+                    config));
         }
     }
 }

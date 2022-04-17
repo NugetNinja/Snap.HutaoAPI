@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +12,10 @@ namespace Snap.Genshin.Website.Controllers
     [ApiController]
     public class GenshinItemsController : ControllerBase
     {
+        private const string AvatarKey = "Avatar";
+        private const string WeaponKey = "Weapon";
+        private const string ReliquaryKey = "Reliquary";
+
         public GenshinItemsController(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -17,13 +24,16 @@ namespace Snap.Genshin.Website.Controllers
         private readonly ApplicationDbContext dbContext;
 
         public record ItemInfo([Required] int Id, [Required] string Name, [Required] string Url);
+
         public record UploadModel(IEnumerable<ItemInfo> Avatars, IEnumerable<ItemInfo> Weapons, IEnumerable<ItemInfo> Reliquaries);
 
-        private const string AvatarKey = "Avatar";
-        private const string WeaponKey = "Weapon";
-        private const string ReliquaryKey = "Reliquary";
-
+        /// <summary>
+        /// 上传角色与武器与圣遗物映射数据
+        /// </summary>
+        /// <param name="request">请求数据</param>
+        /// <returns>上传的结果</returns>
         [HttpPost("[action]")]
+        [ApiExplorerSettings(GroupName = "v3")]
         public async Task<IActionResult> Upload([FromBody] UploadModel request)
         {
             if (string.IsNullOrEmpty(Request.Headers.Authorization))
@@ -40,19 +50,34 @@ namespace Snap.Genshin.Website.Controllers
             return this.Success($"数据上传成功");
         }
 
+        /// <summary>
+        /// 获取角色映射列表
+        /// </summary>
+        /// <returns>角色映射列表</returns>
         [HttpGet("[action]")]
+        [ApiExplorerSettings(GroupName = "v3")]
         public IActionResult Avatars()
         {
             return this.Success("角色数据查询成功", ReadItemsFromDb(AvatarKey));
         }
 
+        /// <summary>
+        /// 获取武器映射列表
+        /// </summary>
+        /// <returns>武器映射列表</returns>
         [HttpGet("[action]")]
+        [ApiExplorerSettings(GroupName = "v3")]
         public IActionResult Weapons()
         {
             return this.Success("武器数据查询成功", ReadItemsFromDb(WeaponKey));
         }
 
+        /// <summary>
+        /// 获取圣遗物映射列表
+        /// </summary>
+        /// <returns>圣遗物映射列表</returns>
         [HttpGet("[action]")]
+        [ApiExplorerSettings(GroupName = "v3")]
         public IActionResult Reliquaries()
         {
             return this.Success("圣遗物数据查询成功", ReadItemsFromDb(ReliquaryKey));

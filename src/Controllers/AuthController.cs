@@ -42,6 +42,7 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Login([FromBody] LoginModel request)
         {
             IQueryable<User> userQuery = dbContext.Users.Where(u => request.AppId == u.AppId);
@@ -79,6 +80,7 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Register([FromBody] RegisterModel request)
         {
             IQueryable<User> userQuery = dbContext.Users.Where(u => request.AppName == u.Name);
@@ -122,6 +124,7 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
         [AllowAnonymous]
         [HttpPost("[Action]")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult EmailVerify([FromBody] EmailVerifyModel request)
         {
             // 判断是否请求频繁
