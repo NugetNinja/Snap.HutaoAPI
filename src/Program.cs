@@ -135,7 +135,7 @@ app
     .UseSwagger()
     .UseSwaggerUI(option =>
     {
-        option.SwaggerEndpoint("/swagger/v1/swagger.json", "记录交互 API");
+        option.SwaggerEndpoint("/swagger/v1/swagger.json", Encoding.UTF8.GetString(Encoding.UTF8.GetBytes("记录交互 API")));
         option.SwaggerEndpoint("/swagger/v2/swagger.json", "数据详情 API");
         option.SwaggerEndpoint("/swagger/v3/swagger.json", "物品信息 API");
     });
