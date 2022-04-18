@@ -140,6 +140,8 @@ app
         option.SwaggerEndpoint("/swagger/v3/swagger.json", "物品信息 API");
     });
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
