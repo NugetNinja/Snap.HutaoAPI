@@ -1,9 +1,11 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models;
+using Snap.Genshin.Website.Models.Utility;
 using System.ComponentModel.DataAnnotations;
 
 namespace Snap.Genshin.Website.Controllers
@@ -33,14 +35,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <param name="request">请求数据</param>
         /// <returns>上传的结果</returns>
         [HttpPost("[action]")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ApiExplorerSettings(GroupName = "v3")]
         public async Task<IActionResult> Upload([FromBody] UploadModel request)
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             AddItemToDb(request.Avatars.DistinctBy(item => item.Id), AvatarKey);
             AddItemToDb(request.Weapons.DistinctBy(item => item.Id), WeaponKey);
             AddItemToDb(request.Reliquaries.DistinctBy(item => item.Id), ReliquaryKey);

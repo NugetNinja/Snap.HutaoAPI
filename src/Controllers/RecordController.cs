@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Entities.Record;
 using Snap.Genshin.Website.Models;
+using Snap.Genshin.Website.Models.Utility;
 
 namespace Snap.Genshin.Website.Controllers
 {
@@ -23,14 +25,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <param name="uid">用户uid</param>
         /// <returns>结果</returns>
         [HttpGet("[Action]/{uid}")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ApiExplorerSettings(GroupName = "v1")]
         public IActionResult CheckRecord([FromRoute] string uid)
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             var playerQuery = dbContext.Players.Where(player => player.Uid == uid);
             if (!playerQuery.Any())
             {
@@ -49,14 +47,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <param name="record">记录</param>
         /// <returns>结果</returns>
         [HttpPost("Upload")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ApiExplorerSettings(GroupName = "v1")]
         public async Task<IActionResult> UploadRecord([FromBody] Models.SnapGenshin.PlayerRecord record)
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             Player? player = dbContext.Players
                 .Where(player => player.Uid == record.Uid)
                 .Include(player => player.Avatars)

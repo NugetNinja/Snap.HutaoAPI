@@ -1,9 +1,11 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snap.Genshin.Website.Models;
 using Snap.Genshin.Website.Models.Statistics;
+using Snap.Genshin.Website.Models.Utility;
 using Snap.Genshin.Website.Services;
 using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Text.Json;
@@ -29,14 +31,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("AvatarParticipation")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
         public async Task<IActionResult> GetAvatarParticipation()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<AvatorParticipationCalculator>()
                 .ConfigureAwait(false);
@@ -51,14 +49,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("Overview")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
         public async Task<IActionResult> GetOverviewData()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<OverviewDataCalculator>()
                 .ConfigureAwait(false);
@@ -73,14 +67,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("AvatarReliquaryUsage")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
         public async Task<IActionResult> GetAvatarReliquaryUsage()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<AvatarReliquaryUsageCalculator>()
                 .ConfigureAwait(false);
@@ -95,14 +85,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("TeamCollocation")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
         public async Task<IActionResult> GetTeamCollocation()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<TeamCollocationCalculator>()
                 .ConfigureAwait(false);
@@ -117,14 +103,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("WeaponUsage")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
         public async Task<IActionResult> GetWeaponUsage()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<WeaponUsageCalculator>()
                 .ConfigureAwait(false);
@@ -139,14 +121,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("Constellation")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationNum>>))]
         public async Task<IActionResult> GetConstellation()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<ActivedConstellationNumCalculator>()
                 .ConfigureAwait(false);
@@ -161,14 +139,10 @@ namespace Snap.Genshin.Website.Controllers
         /// <returns></returns>
         [HttpGet("TeamCombination")]
         [ApiExplorerSettings(GroupName = "v2")]
+        [Authorize(IdentityPolicyNames.CommonUser)]
         [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<LevelTeamUsage>>))]
         public async Task<IActionResult> TeamCombination()
         {
-            if (string.IsNullOrEmpty(Request.Headers.Authorization))
-            {
-                return Unauthorized();
-            }
-
             string? json = await statisticsProvider
                 .ReadStatistics<TeamCombinationCalculator>()
                 .ConfigureAwait(false);
