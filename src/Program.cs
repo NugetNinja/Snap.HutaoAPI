@@ -1,4 +1,4 @@
-// Copyright (c) DGP Studio. All rights reserved.
+ï»¿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -79,10 +79,10 @@ services.AddControllers()
         options.HashSalt = config.GetValue<string>("HashSalt");
     })
 
-    // TODO ´ËÎª²âÊÔÓÃ·şÎñ
+    // TODO æ­¤ä¸ºæµ‹è¯•ç”¨æœåŠ¡
     .AddScoped<IMailService, TestMailSender>()
 
-    // ¼øÈ¨²ßÂÔ
+    // é‰´æƒç­–ç•¥
     .AddAuthorization(options =>
     {
         options.AddPolicy(IdentityPolicyNames.CommonUser, policy =>
@@ -107,20 +107,20 @@ services.AddControllers()
         c.SwaggerDoc("v1", new()
         {
             Version = "1.0.0.0",
-            Title = "¼ÇÂ¼½»»¥",
-            Description = "Ìá½»¼ÇÂ¼£¬²éÑ¯Ìá½»×´Ì¬",
+            Title = "è®°å½•äº¤äº’",
+            Description = "æäº¤è®°å½•ï¼ŒæŸ¥è¯¢æäº¤çŠ¶æ€",
         });
         c.SwaggerDoc("v2", new()
         {
             Version = "1.0.0.0",
-            Title = "Êı¾İÏêÇé",
-            Description = "»ñÈ¡ÏêÏ¸µÄ×İÉîÊı¾İ",
+            Title = "æ•°æ®è¯¦æƒ…",
+            Description = "è·å–è¯¦ç»†çš„çºµæ·±æ•°æ®",
         });
         c.SwaggerDoc("v3", new()
         {
             Version = "1.0.0.0",
-            Title = "ÎïÆ·ĞÅÏ¢",
-            Description = "Ìá½»Óë»ñÈ¡ÎïÆ·IdÓ³Éä",
+            Title = "ç‰©å“ä¿¡æ¯",
+            Description = "æäº¤ä¸è·å–ç‰©å“Idæ˜ å°„",
         });
 
         // We only have one executable file so it's fine.
@@ -135,9 +135,9 @@ app
     .UseSwagger()
     .UseSwaggerUI(option =>
     {
-        option.SwaggerEndpoint("/swagger/v1/swagger.json", "¼ÇÂ¼½»»¥ API");
-        option.SwaggerEndpoint("/swagger/v2/swagger.json", "Êı¾İÏêÇé API");
-        option.SwaggerEndpoint("/swagger/v3/swagger.json", "ÎïÆ·ĞÅÏ¢ API");
+        option.SwaggerEndpoint("/swagger/v1/swagger.json", "è®°å½•äº¤äº’ API");
+        option.SwaggerEndpoint("/swagger/v2/swagger.json", "æ•°æ®è¯¦æƒ… API");
+        option.SwaggerEndpoint("/swagger/v3/swagger.json", "ç‰©å“ä¿¡æ¯ API");
     });
 
 app.UseAuthorization();
