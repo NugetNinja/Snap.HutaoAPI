@@ -61,16 +61,9 @@ services.AddControllers()
         };
     })
     .Services
-    .AddTokenFactory(options =>
-    {
-        var config = builder.Configuration.GetSection("Jwt");
-        options.Issuer = config.GetValue<string>("Issuer");
-        options.Audience = config.GetValue<string>("Audience");
-        options.SigningKey = config.GetValue<string>("SecurityKey");
-        options.AccessTokenExpire = config.GetValue<int>("AccessTokenExpire");
-        options.RefreshTokenExpire = config.GetValue<int>("RefreshTokenExpire");
-        options.RefreshTokenBefore = config.GetValue<int>("RefreshTokenBefore");
-    })
+
+    // TODO 逐渐废弃Token签发服务
+    .AddScoped<ITokenFactory, FakeTokenFactory>()
     .AddUserSecretManager(options =>
     {
         var config = builder.Configuration.GetSection("UserSecret");

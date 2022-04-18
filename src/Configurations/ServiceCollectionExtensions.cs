@@ -26,19 +26,6 @@ namespace Snap.Genshin.Website.Configurations
             return services;
         }
 
-        public static IServiceCollection AddTokenFactory(this IServiceCollection services, Action<TokenFactoryConfiguration> options)
-        {
-            TokenFactoryConfiguration config = new();
-            options.Invoke(config);
-
-            Must.NotNull(config.Audience);
-            Must.NotNull(config.Issuer);
-            Must.NotNull(config.SigningKey);
-
-            return services.AddScoped<ITokenFactory, TokenFactory>(services =>
-                new TokenFactory(services.GetRequiredService<ApplicationDbContext>(), config));
-        }
-
         public static IServiceCollection AddUserSecretManager(this IServiceCollection services, Action<SecretManagerConfiguration> options)
         {
             SecretManagerConfiguration config = new();
