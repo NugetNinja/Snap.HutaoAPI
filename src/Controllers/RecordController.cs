@@ -32,7 +32,7 @@ namespace Snap.Genshin.Website.Controllers
             var playerQuery = dbContext.Players.Where(player => player.Uid == uid);
             if (!playerQuery.Any())
             {
-                return this.Success("查询成功", new { PeriodUploaded = true });
+                return this.Success("查询成功", new { PeriodUploaded = false });
             }
 
             var player = playerQuery.Single();
