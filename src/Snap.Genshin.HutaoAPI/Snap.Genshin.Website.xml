@@ -25,18 +25,6 @@
             </summary>
             <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
         </member>
-        <member name="M:Snap.Genshin.Website.Controllers.AuthController.Register(Snap.Genshin.Website.Models.ApiRequest.RegisterModel)">
-            <summary>
-            用户注册
-            </summary>
-            <returns>Ok-成功 BadRequest-查看具体消息 Unauthorized-验证码错误</returns>
-        </member>
-        <member name="M:Snap.Genshin.Website.Controllers.AuthController.EmailVerify(Snap.Genshin.Website.Models.ApiRequest.EmailVerifyModel)">
-            <summary>
-            发送验证邮件
-            </summary>
-            <returns>Ok(Signature)-成功 BadRequest-请求频繁</returns>
-        </member>
         <member name="M:Snap.Genshin.Website.Controllers.GenshinItemsController.Upload(Snap.Genshin.Website.Controllers.GenshinItemsController.UploadModel)">
             <summary>
             上传角色与武器与圣遗物映射数据
