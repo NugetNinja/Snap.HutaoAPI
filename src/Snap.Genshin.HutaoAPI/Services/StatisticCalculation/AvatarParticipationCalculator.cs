@@ -5,9 +5,10 @@ using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
-    public class AvatorParticipationCalculator : IStatisticCalculator
+    [Obsolete("Should not use StatisticCalculation anymore")]
+    public class AvatarParticipationCalculator : IStatisticCalculator
     {
-        public AvatorParticipationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+        public AvatarParticipationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
             this.statisticsProvider = statisticsProvider;
@@ -40,7 +41,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                     .Select(avararGroup => new Rate<int>
                     {
                         Id = avararGroup.Key,
-                        Value = (double)avararGroup.Count() / floor.Count()
+                        Value = (double)avararGroup.Count() / floor.Count(),
                     });
 
                 result.Add(new()
@@ -50,7 +51,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 });
             }
 
-            await statisticsProvider.SaveStatistics<AvatorParticipationCalculator>(result);
+            await statisticsProvider.SaveStatistics<AvatarParticipationCalculator>(result);
         }
     }
 }

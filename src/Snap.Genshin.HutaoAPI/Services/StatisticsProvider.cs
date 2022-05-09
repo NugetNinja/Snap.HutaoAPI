@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Text.Json;
 
 namespace Snap.Genshin.Website.Services
@@ -32,6 +31,7 @@ namespace Snap.Genshin.Website.Services
                 data = new();
                 dbContext.Statistics.Add(data);
             }
+
             data.Period = periodId;
             data.Source = source;
             data.Value = JsonSerializer.Serialize(dataObject);
@@ -42,8 +42,7 @@ namespace Snap.Genshin.Website.Services
         public async Task<string?> ReadStatistics<TSource>()
         {
             // 正在计算统计数据时拒绝请求
-            bool isBusy = cache.TryGetValue("_STATISTICS_BUSY", out _);
-            if (isBusy)
+            if (cache.TryGetValue("_STATISTICS_BUSY", out _))
             {
                 return null;
             }

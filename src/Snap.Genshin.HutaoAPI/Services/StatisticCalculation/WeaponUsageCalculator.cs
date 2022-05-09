@@ -4,6 +4,7 @@ using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
+    [Obsolete("Should not use StatisticCalculation anymore")]
     public class WeaponUsageCalculator : IStatisticCalculator
     {
         public WeaponUsageCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
@@ -17,7 +18,7 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            // TODO AsEnumerable可能带来性能问题
+            // TODO AsEnumerable 可能带来性能问题
             // TODO 应该跳过玩家未上场的角色
             IEnumerable<IGrouping<int, AvatarDetail>> avatarGroups = dbContext.AvatarDetails
                 .AsEnumerable()

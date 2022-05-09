@@ -36,7 +36,7 @@ namespace Snap.Genshin.Website.Controllers
         public async Task<IActionResult> GetAvatarParticipation()
         {
             string? json = await statisticsProvider
-                .ReadStatistics<AvatorParticipationCalculator>()
+                .ReadStatistics<AvatarParticipationCalculator>()
                 .ConfigureAwait(false);
             return json is null
                 ? this.Fail(ApiCode.ServiceConcurrent, "服务冲突")

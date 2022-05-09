@@ -5,6 +5,7 @@ using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
+    [Obsolete("Should not use StatisticCalculation anymore")]
     public class TeamCollocationCalculator : IStatisticCalculator
     {
         public TeamCollocationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)

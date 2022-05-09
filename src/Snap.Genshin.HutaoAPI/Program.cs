@@ -38,11 +38,11 @@ services.AddControllers()
     .AddGenshinStatisticsService(config =>
         config
             .AddCalculator<OverviewDataCalculator>()
-            .AddCalculator<AvatorParticipationCalculator>()
+            .AddCalculator<AvatarParticipationCalculator>()
             .AddCalculator<TeamCollocationCalculator>()
             .AddCalculator<WeaponUsageCalculator>()
             .AddCalculator<AvatarReliquaryUsageCalculator>()
-            .AddCalculator<ActivedConstellationNumCalculator>()
+            .AddCalculator<Snap.Genshin.Website.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
             .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -4,6 +4,7 @@ using Snap.Genshin.Website.Models.Statistics;
 
 namespace Snap.Genshin.Website.Services.StatisticCalculation
 {
+    [Obsolete("Should not use StatisticCalculation anymore")]
     public class ActivedConstellationNumCalculator : IStatisticCalculator
     {
         public ActivedConstellationNumCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)

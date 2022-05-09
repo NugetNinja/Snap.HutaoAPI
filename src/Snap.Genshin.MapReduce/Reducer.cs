@@ -1,6 +1,7 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Microsoft;
 using System.Collections.Concurrent;
 
 namespace Snap.Genshin.MapReduce
@@ -15,6 +16,8 @@ namespace Snap.Genshin.MapReduce
         where TOutputKey : notnull
     {
         private readonly Action<TInput, ConcurrentDictionary<TOutputKey, TOutputValue>> reducerAction;
+        private ConcurrentDictionary<TOutputKey, TOutputValue> reduceResult;
+        private bool reduced = false;
 
         /// <summary>
         /// 构造一个新的规约器
@@ -29,7 +32,16 @@ namespace Snap.Genshin.MapReduce
         /// <summary>
         /// 获取规约结果
         /// </summary>
-        public ConcurrentDictionary<TOutputKey, TOutputValue> ReduceResult { get; private set; }
+        public ConcurrentDictionary<TOutputKey, TOutputValue> ReduceResult
+        {
+            get
+            {
+                Verify.Operation(!reduced, "Reduce Result can't be retrived before call Reduce method");
+                return reduceResult;
+            }
+
+            private set => reduceResult = value;
+        }
 
         /// <summary>
         /// 规约
@@ -38,6 +50,7 @@ namespace Snap.Genshin.MapReduce
         public void Reduce(IEnumerable<TInput> inputData)
         {
             Parallel.ForEach(inputData, input => reducerAction(input, ReduceResult));
+            reduced = true;
         }
     }
 }

@@ -1,14 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.MapReduce;
 using Snap.Genshin.Website.Entities;
 using Snap.Genshin.Website.Models.Statistics;
-using Snap.Genshin.Website.Services.StatisticCalculation;
 using System.Collections.Concurrent;
 
 namespace Snap.Genshin.Website.Services.MapReduceCalculation
 {
+    /// <summary>
+    /// 命座持有率计算器
+    /// </summary>
     public class ActivedConstellationNumCalculator : IStatisticCalculator
     {
+        /// <summary>
+        /// 构造一个新的命座持有率计算器
+        /// </summary>
+        /// <param name="dbContext">数据库上下文</param>
+        /// <param name="statisticsProvider">统计提供器</param>
         public ActivedConstellationNumCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
@@ -18,26 +28,30 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
         private readonly ApplicationDbContext dbContext;
         private readonly IStatisticsProvider statisticsProvider;
 
+        /// <inheritdoc/>
         public async Task Calculate()
         {
             int totalPlayerCount = dbContext.Players.Count();
-            IQueryable<AvatarWithConstellationNum>? avatars = (from avatar in dbContext.AvatarDetails select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum)).AsNoTracking();
+            IQueryable<AvatarWithConstellationNum> avatars = (from avatar in dbContext.AvatarDetails
+                select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum))
+                .AsNoTracking();
 
-            Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>>? groupReducer = new Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>>((input, result) =>
+            Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>> groupReducer = new((input, result) =>
             {
-                result.GetOrAdd(input.AvatarId, new ConcurrentBag<int>())
-                      .Add(input.ActivedNum);
+                result
+                    .GetOrAdd(input.AvatarId, (_) => new ConcurrentBag<int>())
+                    .Add(input.ActivedNum);
             });
 
             groupReducer.Reduce(avatars);
 
-            ConcurrentBag<AvatarConstellationNum>? calculationResult = new ConcurrentBag<AvatarConstellationNum>();
+            ConcurrentBag<AvatarConstellationNum> calculationResult = new();
 
             Parallel.ForEach(groupReducer.ReduceResult, kv =>
             {
                 int currentAvatarCount = 0;
 
-                Reducer<int, int, int>? reducer = new Reducer<int, int, int>((input, result) =>
+                Reducer<int, int, int> reducer = new((input, result) =>
                 {
                     result.AddOrUpdate(input, 1, (key, oldValue) => Interlocked.Increment(ref oldValue));
                     Interlocked.Increment(ref currentAvatarCount);
@@ -45,8 +59,18 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
 
                 reducer.Reduce(kv.Value);
 
-                IEnumerable<Rate<int>>? rate = from kvp in reducer.ReduceResult select new Rate<int> { Id = kvp.Key, Value = (double)kvp.Value / currentAvatarCount };
-                calculationResult.Add(new() { Avatar = kv.Key, Rate = rate, HoldingRate = (double)kv.Value.Count / totalPlayerCount });
+                IEnumerable<Rate<int>> rate = from kvp in reducer.ReduceResult
+                    select new Rate<int>
+                    {
+                        Id = kvp.Key,
+                        Value = (double)kvp.Value / currentAvatarCount,
+                    };
+
+                calculationResult.Add(new()
+                {
+                    Avatar = kv.Key, Rate = rate,
+                    HoldingRate = (double)kv.Value.Count / totalPlayerCount,
+                });
             });
 
             await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(calculationResult);
