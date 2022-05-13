@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Snap.Genshin.Website.Models
+namespace Snap.HutaoAPI.Models
 {
     public class ApiResponse<T>
     {

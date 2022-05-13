@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Configurations
+﻿namespace Snap.HutaoAPI.Configurations
 {
     public class TokenFactoryConfiguration
     {

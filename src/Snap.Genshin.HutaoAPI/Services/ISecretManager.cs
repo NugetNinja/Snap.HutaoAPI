@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Services
+﻿namespace Snap.HutaoAPI.Services
 {
     public interface ISecretManager
     {

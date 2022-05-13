@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Snap.Genshin.Website.Entities;
+using Snap.HutaoAPI.Entities;
 using System.Text.Json;
 
-namespace Snap.Genshin.Website.Services
+namespace Snap.HutaoAPI.Services
 {
     public class StatisticsProvider : IStatisticsProvider
     {

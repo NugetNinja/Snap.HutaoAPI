@@ -1,8 +1,8 @@
-﻿using Snap.Genshin.Website.Models;
+﻿using Snap.HutaoAPI.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snap.Genshin.Website.Entities
+namespace Snap.HutaoAPI.Entities
 {
     /// <summary>
     /// API调用者

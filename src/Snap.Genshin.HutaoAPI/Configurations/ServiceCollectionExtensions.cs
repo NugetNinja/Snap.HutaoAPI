@@ -1,7 +1,7 @@
-﻿using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Services;
+﻿using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Services;
 
-namespace Snap.Genshin.Website.Configurations
+namespace Snap.HutaoAPI.Configurations
 {
     public static class ServiceCollectionExtensions
     {

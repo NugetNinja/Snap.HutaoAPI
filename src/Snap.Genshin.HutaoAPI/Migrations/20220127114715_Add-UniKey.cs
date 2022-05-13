@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Snap.Genshin.Website.Migrations
+namespace Snap.HutaoAPI.Migrations
 {
     public partial class AddUniKey : Migration
     {

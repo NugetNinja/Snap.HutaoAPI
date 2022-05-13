@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Snap.Genshin.Website.Models.ApiRequest
+namespace Snap.HutaoAPI.Models.ApiRequest
 {
     public class LoginModel
     {

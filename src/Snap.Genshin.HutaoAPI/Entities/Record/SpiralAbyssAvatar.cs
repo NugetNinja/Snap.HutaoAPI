@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snap.Genshin.Website.Entities.Record
+namespace Snap.HutaoAPI.Entities.Record
 {
     // TODO 这个表真的有必要吗
     public class SpiralAbyssAvatar

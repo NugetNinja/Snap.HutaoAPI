@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snap.Genshin.Website.Entities.Record
+namespace Snap.HutaoAPI.Entities.Record
 {
     /// <summary>
     /// 深渊关卡信息

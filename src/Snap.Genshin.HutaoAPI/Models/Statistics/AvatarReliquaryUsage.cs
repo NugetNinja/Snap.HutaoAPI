@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Models.Statistics
+﻿namespace Snap.HutaoAPI.Models.Statistics
 {
     /// <summary>
     /// 圣遗物配置数据

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Snap.Genshin.Website.Entities
+namespace Snap.HutaoAPI.Entities
 {
     public partial class ApplicationDbContext : DbContext
     {

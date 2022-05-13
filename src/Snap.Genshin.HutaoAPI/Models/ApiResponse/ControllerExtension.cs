@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Snap.Genshin.Website.Models
+namespace Snap.HutaoAPI.Models
 {
     public static class ControllerExtension
     {

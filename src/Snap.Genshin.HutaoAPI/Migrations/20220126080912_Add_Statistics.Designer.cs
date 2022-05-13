@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Snap.Genshin.Website.Entities;
+using Snap.HutaoAPI.Entities;
 
 #nullable disable
 
-namespace Snap.Genshin.Website.Migrations
+namespace Snap.HutaoAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220126080912_Add_Statistics")]
@@ -21,7 +21,7 @@ namespace Snap.Genshin.Website.Migrations
                 .HasAnnotation("ProductVersion", "6.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Player", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Player", b =>
                 {
                     b.Property<Guid>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.AvatarDetail", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.AvatarDetail", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("AvatarDetails");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.PlayerRecord", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.PlayerRecord", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -90,7 +90,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("PlayerRecords");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.ReliquarySetDetail", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.ReliquarySetDetail", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("ReliquarySetDetails");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssAvatar", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssAvatar", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -131,7 +131,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("SpiralAbyssAvatars");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -150,7 +150,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("SpiralAbyssBattles");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -175,7 +175,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("SpiralAbyssLevels");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Statistics", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Statistics", b =>
                 {
                     b.Property<long>("InnerId")
                         .ValueGeneratedOnAdd()
@@ -197,7 +197,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("Statistics");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.User", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.User", b =>
                 {
                     b.Property<Guid>("AppId")
                         .ValueGeneratedOnAdd()
@@ -212,7 +212,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.UserClaim", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.UserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -236,7 +236,7 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("UsersClaims");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.UserSecret", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.UserSecret", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -260,9 +260,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.ToTable("UsersSecrets");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.AvatarDetail", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.AvatarDetail", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.Player", "Player")
+                    b.HasOne("Snap.HutaoAPI.Entities.Player", "Player")
                         .WithMany("Avatars")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,9 +271,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.PlayerRecord", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.PlayerRecord", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.Player", "Player")
+                    b.HasOne("Snap.HutaoAPI.Entities.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -282,9 +282,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.ReliquarySetDetail", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.ReliquarySetDetail", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.Record.AvatarDetail", "AvatarInfo")
+                    b.HasOne("Snap.HutaoAPI.Entities.Record.AvatarDetail", "AvatarInfo")
                         .WithMany("ReliquarySets")
                         .HasForeignKey("AvatarDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -293,9 +293,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("AvatarInfo");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssAvatar", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssAvatar", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle", "SpiralAbyssBattle")
+                    b.HasOne("Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle", "SpiralAbyssBattle")
                         .WithMany("Avatars")
                         .HasForeignKey("SpiralAbyssBattleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,9 +304,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("SpiralAbyssBattle");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel", "AbyssLevel")
+                    b.HasOne("Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel", "AbyssLevel")
                         .WithMany("Battles")
                         .HasForeignKey("SpiralAbyssLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -315,9 +315,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("AbyssLevel");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.Record.PlayerRecord", "Record")
+                    b.HasOne("Snap.HutaoAPI.Entities.Record.PlayerRecord", "Record")
                         .WithMany("SpiralAbyssLevels")
                         .HasForeignKey("RecordId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -326,9 +326,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("Record");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.UserClaim", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.UserClaim", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.User", "User")
+                    b.HasOne("Snap.HutaoAPI.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -337,9 +337,9 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.UserSecret", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.UserSecret", b =>
                 {
-                    b.HasOne("Snap.Genshin.Website.Entities.User", "User")
+                    b.HasOne("Snap.HutaoAPI.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -348,27 +348,27 @@ namespace Snap.Genshin.Website.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Player", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Player", b =>
                 {
                     b.Navigation("Avatars");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.AvatarDetail", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.AvatarDetail", b =>
                 {
                     b.Navigation("ReliquarySets");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.PlayerRecord", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.PlayerRecord", b =>
                 {
                     b.Navigation("SpiralAbyssLevels");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssBattle", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle", b =>
                 {
                     b.Navigation("Avatars");
                 });
 
-            modelBuilder.Entity("Snap.Genshin.Website.Entities.Record.SpiralAbyssLevel", b =>
+            modelBuilder.Entity("Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel", b =>
                 {
                     b.Navigation("Battles");
                 });

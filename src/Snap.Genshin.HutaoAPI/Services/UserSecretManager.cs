@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.Website.Configurations;
-using Snap.Genshin.Website.Entities;
+using Snap.HutaoAPI.Configurations;
+using Snap.HutaoAPI.Entities;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Snap.Genshin.Website.Services
+namespace Snap.HutaoAPI.Services
 {
     public class UserSecretManager : ISecretManager
     {

@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Models.Utility
+﻿namespace Snap.HutaoAPI.Models.Utility
 {
     public class VerifyCodeMail : IMail
     {

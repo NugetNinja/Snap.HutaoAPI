@@ -1,8 +1,8 @@
-﻿using Snap.Genshin.Website.Configurations;
-using Snap.Genshin.Website.Entities;
+﻿using Snap.HutaoAPI.Configurations;
+using Snap.HutaoAPI.Entities;
 using System.Diagnostics;
 
-namespace Snap.Genshin.Website.Services
+namespace Snap.HutaoAPI.Services
 {
     public class GenshinStatisticsService
     {

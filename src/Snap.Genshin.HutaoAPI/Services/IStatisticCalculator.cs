@@ -1,7 +1,7 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
-namespace Snap.Genshin.Website.Services
+namespace Snap.HutaoAPI.Services
 {
     /// <summary>
     /// 统计计算器
@@ -21,10 +21,10 @@ namespace Snap.Genshin.Website.Services
         /// <returns>深渊期数</returns>
         public static int GetSpiralPeriodId(DateTime time)
         {
-            int periodNum = ((time.Year - 2000) * 12 + time.Month) * 2;
+            int periodNum = (((time.Year - 2000) * 12) + time.Month) * 2;
 
             // 上半月
-            if (time.Day < 16 || time.Day == 16 && (time - time.Date).TotalMinutes < 240)
+            if (time.Day < 16 || (time.Day == 16 && (time - time.Date).TotalMinutes < 240))
             {
                 periodNum--;
             }

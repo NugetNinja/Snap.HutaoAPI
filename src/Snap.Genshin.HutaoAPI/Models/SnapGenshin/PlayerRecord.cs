@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Snap.Genshin.Website.Models.SnapGenshin
+namespace Snap.HutaoAPI.Models.SnapGenshin
 {
     public class PlayerRecord
     {

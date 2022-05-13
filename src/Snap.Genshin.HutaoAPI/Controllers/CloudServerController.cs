@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Services;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Services;
 
-namespace Snap.Genshin.Website.Controllers
+namespace Snap.HutaoAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]

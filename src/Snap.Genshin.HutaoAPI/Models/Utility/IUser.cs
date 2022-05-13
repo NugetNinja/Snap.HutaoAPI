@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Models
+﻿namespace Snap.HutaoAPI.Models
 {
     public interface IUser
     {

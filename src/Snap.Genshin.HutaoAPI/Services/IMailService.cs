@@ -1,6 +1,6 @@
-﻿using Snap.Genshin.Website.Models.Utility;
+﻿using Snap.HutaoAPI.Models.Utility;
 
-namespace Snap.Genshin.Website.Services
+namespace Snap.HutaoAPI.Services
 {
     public interface IMailService
     {

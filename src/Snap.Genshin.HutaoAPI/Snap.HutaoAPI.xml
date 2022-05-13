@@ -1,0 +1,605 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Snap.HutaoAPI</name>
+    </assembly>
+    <members>
+        <member name="P:Snap.HutaoAPI.Configurations.TokenFactoryConfiguration.AccessTokenExpire">
+            <summary>
+            AccessToken有效期（分钟）
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Configurations.TokenFactoryConfiguration.RefreshTokenExpire">
+            <summary>
+            RefreshToken有效期（分钟）
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Configurations.TokenFactoryConfiguration.RefreshTokenBefore">
+            <summary>
+            在RefreshToken过期前多久自动刷新RefreshToken
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.AuthController.Login(Snap.HutaoAPI.Models.ApiRequest.LoginModel)">
+            <summary>
+            用户登录
+            </summary>
+            <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.GenshinItemsController.Upload(Snap.HutaoAPI.Controllers.GenshinItemsController.UploadModel)">
+            <summary>
+            上传角色与武器与圣遗物映射数据
+            </summary>
+            <param name="request">请求数据</param>
+            <returns>上传的结果</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.GenshinItemsController.Avatars">
+            <summary>
+            获取角色映射列表
+            </summary>
+            <returns>角色映射列表</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.GenshinItemsController.Weapons">
+            <summary>
+            获取武器映射列表
+            </summary>
+            <returns>武器映射列表</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.GenshinItemsController.Reliquaries">
+            <summary>
+            获取圣遗物映射列表
+            </summary>
+            <returns>圣遗物映射列表</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.RecordController.CheckRecord(System.String)">
+            <summary>
+            检查用户是否上传了当期记录
+            </summary>
+            <param name="uid">用户uid</param>
+            <returns>结果</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.RecordController.UploadRecord(Snap.HutaoAPI.Models.SnapGenshin.PlayerRecord)">
+            <summary>
+            上传记录
+            </summary>
+            <param name="record">记录</param>
+            <returns>结果</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetAvatarParticipation">
+            <summary>
+            获取角色出场数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetOverviewData">
+            <summary>
+            获取总览数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetAvatarReliquaryUsage">
+            <summary>
+            获取圣遗物数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetTeamCollocation">
+            <summary>
+            获取组队数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetWeaponUsage">
+            <summary>
+            获取武器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetConstellation">
+            <summary>
+            获取命座数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.TeamCombination">
+            <summary>
+            获取队伍使用数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Entities.ApplicationDbContext">
+            <summary>
+            db context
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.Players">
+            <summary>
+            players
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.AvatarDetails">
+            <summary>
+            avatar details
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.ReliquarySetDetails">
+            <summary>
+            Reliquary details
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.PlayerRecords">
+            <summary>
+            player records
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.SpiralAbyssBattles">
+            <summary>
+            深渊对战
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.SpiralAbyssLevels">
+            <summary>
+            深渊等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.SpiralAbyssAvatars">
+            <summary>
+            深渊头像
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.GenshinItems">
+            <summary>
+            genshin
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Entities.Player">
+            <summary>
+            玩家实体
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Player.InnerId">
+            <summary>
+            玩家Id (from database)
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Player.Uid">
+            <summary>
+            玩家uid (from Mohoyo)
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Entities.Record.AvatarDetail">
+            <summary>
+            角色详细信息实体
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.Player">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.AvatarId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.AvatarLevel">
+            <summary>
+            角色等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.ActivedConstellationNum">
+            <summary>
+            已激活命座数
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.WeaponId">
+            <summary>
+            角色武器Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.WeaponLevel">
+            <summary>
+            武器等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.AffixLevel">
+            <summary>
+            武器精炼等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.AvatarDetail.ReliquarySets">
+            <summary>
+            圣遗物配置信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.PlayerRecord.UploadTime">
+            <summary>
+            记录上传日期
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.PlayerRecord.Player">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Entities.Record.ReliquarySetDetail">
+            <summary>
+            圣遗物套装信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.ReliquarySetDetail.Id">
+            <summary>
+            套装Id (from Mihoyo)
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.ReliquarySetDetail.Count">
+            <summary>
+            装备该套装的数量
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.ReliquarySetDetail.UnionId">
+            <summary>
+            格式：{Id}-{Count}
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.ReliquarySetDetail.AvatarInfo">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle.BattleIndex">
+            <summary>
+            第几次战斗
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle.Avatars">
+            <summary>
+            上场角色的Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssBattle.AbyssLevel">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel">
+            <summary>
+            深渊关卡信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel.Record">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel.FloorIndex">
+            <summary>
+            层数
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel.LevelIndex">
+            <summary>
+            房间数
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel.Star">
+            <summary>
+            星数
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Entities.Record.SpiralAbyssLevel.Battles">
+            <summary>
+            战斗详情
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Entities.User">
+            <summary>
+            API调用者
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.AvatarReliquarySet.Id">
+            <summary>
+            套装Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.AvatarReliquarySet.Count">
+            <summary>
+            装备数量
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.AvatarWeapon.Id">
+            <summary>
+            武器Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.AvatarWeapon.Level">
+            <summary>
+            武器等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.AvatarWeapon.AffixLevel">
+            <summary>
+            精炼
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerAvatar.Id">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerAvatar.Level">
+            <summary>
+            角色等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerAvatar.ActivedConstellationNum">
+            <summary>
+            命座数
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerAvatar.Weapon">
+            <summary>
+            武器信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerAvatar.ReliquarySets">
+            <summary>
+            圣遗物配置
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerRecord.Uid">
+            <summary>
+            玩家Uid
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerRecord.PlayerAvatars">
+            <summary>
+            角色信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerRecord.PlayerSpiralAbyssesLevels">
+            <summary>
+            深渊信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerSpiralAbyssBattle.BattleIndex">
+            <summary>
+            第几次战斗
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerSpiralAbyssBattle.AvatarIds">
+            <summary>
+            出场角色Id列表
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerSpiralAbyssLevel.FloorIndex">
+            <summary>
+            第几层
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerSpiralAbyssLevel.LevelIndex">
+            <summary>
+            第几间
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerSpiralAbyssLevel.Star">
+            <summary>
+            星数
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.SnapGenshin.PlayerSpiralAbyssLevel.Battles">
+            <summary>
+            战斗详情
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Statistics.AvatarParticipation">
+            <summary>
+            出场数据
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Statistics.AvatarReliquaryUsage">
+            <summary>
+            圣遗物配置数据
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Statistics.OverviewData.TotalPlayerCount">
+            <summary>
+            所有用户数量
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Statistics.OverviewData.CollectedPlayerCount">
+            <summary>
+            当期提交深渊数据用户数量
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Statistics.OverviewData.FullStarPlayerCount">
+            <summary>
+            当期满星用户数量
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Statistics.TeamCollocation">
+            <summary>
+            组队数据
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Statistics.WeaponUsage">
+            <summary>
+            武器使用数据
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ISecretManager.Bind(System.Guid)">
+            <summary>
+            绑定
+            </summary>
+            <param name="key">要绑定的对象</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ISecretManager.GetSymmetricSecret(System.String)">
+            <summary>
+            获取指定名称的密钥
+            </summary>
+            <param name="secretName">密钥名称</param>
+            <returns>密钥内容</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ISecretManager.StorageSecret(System.String,System.String)">
+            <summary>
+            以对称加密方式存储密钥
+            </summary>
+            <param name="secretName">密钥名称</param>
+            <param name="secret">密钥内容</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ISecretManager.HashSecret(System.String)">
+            <summary>
+            获取密钥哈希值
+            </summary>
+            <param name="secret">密钥内容</param>
+            <returns>密钥哈希</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ISecretManager.HashCompare(System.String,System.String)">
+            <summary>
+            哈希对比
+            </summary>
+            <param name="rawSecret">明文密码</param>
+            <param name="hash">哈希值</param>
+            <returns>是否匹配</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Services.IStatisticCalculator">
+            <summary>
+            统计计算器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.IStatisticCalculator.Calculate">
+            <summary>
+            计算
+            </summary>
+            <returns>任务</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.IStatisticCalculator.GetSpiralPeriodId(System.DateTime)">
+            <summary>
+            获取深渊期数
+            </summary>
+            <param name="time">时间</param>
+            <returns>深渊期数</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator">
+            <summary>
+            命座持有率计算器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.IStatisticsProvider)">
+            <summary>
+            构造一个新的命座持有率计算器
+            </summary>
+            <param name="dbContext">数据库上下文</param>
+            <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator.Calculate">
+            <inheritdoc/>
+        </member>
+        <member name="T:Snap.HutaoAPI.Services.MapReduceCalculation.AvatarParticipationCalculator">
+            <summary>
+            use map reduce
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.MapReduceCalculation.AvatarParticipationCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.IStatisticsProvider)">
+            <summary>
+            构造一个新的角色参与计算器
+            </summary>
+            <param name="dbContext">数据库上下文</param>
+            <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="T:Snap.HutaoAPI.Services.StatisticCalculation.OverviewDataCalculator">
+            <summary>
+            总览数据计算器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.StatisticCalculation.OverviewDataCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.IStatisticsProvider)">
+            <summary>
+            构造一个新的总览数据计算器
+            </summary>
+            <param name="dbContext">数据库上下文</param>
+            <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.StatisticCalculation.OverviewDataCalculator.Calculate">
+            <inheritdoc/>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Services.UserSecretManager},Snap.HutaoAPI.Configurations.SecretManagerConfiguration)">
+            <summary>
+            初始化<see cref="T:Snap.HutaoAPI.Services.UserSecretManager"/>的新实例
+            </summary>
+            <param name="dbContext">数据库</param>
+            <param name="logger">日志</param>
+            <param name="configuration">配置</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.SetUser(System.Guid)">
+            <summary>
+            设置该密钥管理器的用户
+            </summary>
+            <param name="userId">用户ID</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.GetSymmetricSecret(System.String)">
+            <summary>
+            获取指定密钥
+            </summary>
+            <param name="secretKey">密钥名称</param>
+            <returns>指定的密钥</returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.HashSecret(System.String)">
+            <summary>
+            取密钥哈希
+            </summary>
+            <param name="secret">密钥原文</param>
+            <returns>密钥哈希</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.StorageSecret(System.String,System.String)">
+            <summary>
+            存储密钥
+            </summary>
+            <param name="secretKey">密钥名称</param>
+            <param name="secret">密钥原文</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.HashCompare(System.String,System.String)">
+            <summary>
+            比对密码与哈希
+            </summary>
+            <param name="rawSecret">密码</param>
+            <param name="hash">哈希</param>
+            <returns>是否匹配</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.Snap#HutaoAPI#Services#ISecretManager#Bind(System.Guid)">
+            <summary>
+            绑定用户
+            </summary>
+            <param name="userId">用户ID</param>
+        </member>
+        <member name="T:Snap.Must">
+            <summary>
+            封装验证方法,简化微软验证
+            </summary>
+        </member>
+        <member name="M:Snap.Must.NotNull``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <returns>The value of the parameter.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:Snap.Must.NeverHappen">
+            <summary>
+            Unconditionally throws an <see cref="T:System.NotSupportedException"/>.
+            </summary>
+            <returns>Nothing. This method always throws.</returns>
+        </member>
+        <member name="M:Snap.Must.NeverHappen``1">
+            <summary>
+            Unconditionally throws an <see cref="T:System.NotSupportedException"/>.
+            </summary>
+            <typeparam name="T">The type that the method should be typed to return (although it never returns anything).</typeparam>
+            <returns>Nothing. This method always throws.</returns>
+        </member>
+    </members>
+</doc>
