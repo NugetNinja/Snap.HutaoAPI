@@ -1,11 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Snap.HutaoAPI.Entities.Record
 {
+    /// <summary>
+    /// 角色上传
+    /// </summary>
     public class PlayerRecord
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
+        /// <summary>
+        /// 角色记录id from db
+        /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long InnerId { get; set; }
 
         /// <summary>
@@ -21,8 +31,15 @@ namespace Snap.HutaoAPI.Entities.Record
         /// </summary>
         [ForeignKey(nameof(PlayerId))]
         public Player Player { get; set; } = null!;
+
+        /// <summary>
+        /// 外键 记录了上传用户的innerid
+        /// </summary>
         public Guid PlayerId { get; set; }
 
+        /// <summary>
+        /// 外键 深渊层数
+        /// </summary>
         public IList<SpiralAbyssLevel> SpiralAbyssLevels { get; set; } = null!;
     }
 }

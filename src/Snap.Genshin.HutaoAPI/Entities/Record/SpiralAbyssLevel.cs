@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Snap.HutaoAPI.Entities.Record
@@ -8,7 +11,11 @@ namespace Snap.HutaoAPI.Entities.Record
     /// </summary>
     public class SpiralAbyssLevel
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
+        /// <summary>
+        /// 深渊等级id from db
+        /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long InnerId { get; set; }
 
         /// <summary>
@@ -16,6 +23,10 @@ namespace Snap.HutaoAPI.Entities.Record
         /// </summary>
         [ForeignKey(nameof(RecordId))]
         public PlayerRecord Record { get; set; } = null!;
+
+        /// <summary>
+        /// 外键 角色信息
+        /// </summary>
         public long RecordId { get; set; }
 
         /// <summary>

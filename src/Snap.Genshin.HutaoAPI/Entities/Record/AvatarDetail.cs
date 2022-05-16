@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Snap.HutaoAPI.Entities.Record
@@ -8,7 +11,11 @@ namespace Snap.HutaoAPI.Entities.Record
     /// </summary>
     public class AvatarDetail
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
+        /// <summary>
+        /// 角色详细信息实体Id (from database)
+        /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long InnerId { get; set; }
 
         /// <summary>
@@ -16,6 +23,10 @@ namespace Snap.HutaoAPI.Entities.Record
         /// </summary>
         [ForeignKey(nameof(PlayerId))]
         public Player Player { get; set; } = null!;
+
+        /// <summary>
+        /// 外键对应的玩家id (From Db)
+        /// </summary>
         public Guid PlayerId { get; set; }
 
         /// <summary>

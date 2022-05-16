@@ -3,9 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Snap.HutaoAPI.Entities.Record
 {
+    /// <summary>
+    /// 深渊对战信息
+    /// </summary>
     public class SpiralAbyssBattle
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
+        /// <summary>
+        /// 对战id from db
+        /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long InnerId { get; set; }
 
         /// <summary>
@@ -25,6 +32,9 @@ namespace Snap.HutaoAPI.Entities.Record
         [ForeignKey(nameof(SpiralAbyssLevelId))]
         public SpiralAbyssLevel AbyssLevel { get; set; } = null!;
 
+        /// <summary>
+        /// 外键 深渊层数
+        /// </summary>
         public long SpiralAbyssLevelId { get; set; }
     }
 }
