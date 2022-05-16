@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Models;
 using Snap.HutaoAPI.Models.Utility;
@@ -10,20 +11,31 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Snap.HutaoAPI.Controllers
 {
+    /// <summary>
+    /// Item controller
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
-    public class GenshinItemsController : ControllerBase
+    public class GenshinItemController : ControllerBase
     {
         private const string AvatarKey = "Avatar";
         private const string WeaponKey = "Weapon";
         private const string ReliquaryKey = "Reliquary";
 
-        public GenshinItemsController(ApplicationDbContext dbContext)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dbContext">dbcontext from di</param>
+        /// <param name="cache">cache from di</param>
+        public GenshinItemController(ApplicationDbContext dbContext, IMemoryCache cache)
         {
             this.dbContext = dbContext;
+            this.cache = cache;
         }
 
         private readonly ApplicationDbContext dbContext;
+
+        private readonly IMemoryCache cache;
 
         public record ItemInfo([Required] int Id, [Required] string Name, [Required] string Url);
 
@@ -85,6 +97,13 @@ namespace Snap.HutaoAPI.Controllers
         {
             foreach (ItemInfo? uploadItem in uploadedItems)
             {
+                var isInCache = this.cache.TryGetValue($"_ITEM_UPLOAD_{uploadItem.Id}_{type}_", out _);
+
+                if (isInCache)
+                {
+                    continue;
+                }
+
                 if (dbContext.GenshinItems.Any(x => uploadItem.Id == x.Id && x.Type == type))
                 {
                     continue;
@@ -95,15 +114,33 @@ namespace Snap.HutaoAPI.Controllers
                     Id = uploadItem.Id,
                     Name = uploadItem.Name,
                     Url = uploadItem.Url,
-                    Type = type
+                    Type = type,
                 });
+                dbContext.SaveChanges();
+
+                this.cache.Set($"_ITEM_UPLOAD_{uploadItem.Id}_{type}_", uploadItem);
+
+                var isTypeInCache = this.cache.TryGetValue($"_ITEM_TYPE_UPLOAD_{type}_", out HashSet<ItemInfo> s);
+                if (!isTypeInCache || !s.Any())
+                {
+                    s = new()
+                    {
+                        uploadItem,
+                    };
+                }
+                else
+                {
+                    s.Add(uploadItem);
+                }
             }
         }
 
         // TODO 缓存优化
         private IEnumerable<ItemInfo> ReadItemsFromDb(string type)
         {
-            return dbContext.GenshinItems
+            return this.cache.TryGetValue($"_ITEM_TYPE_UPLOAD_{type}_", out HashSet<ItemInfo> item) ?
+                item.ToList() :
+                dbContext.GenshinItems
                 .Where(item => item.Type == type)
                 .Select(item => new ItemInfo(item.Id, item.Name, item.Url));
         }
