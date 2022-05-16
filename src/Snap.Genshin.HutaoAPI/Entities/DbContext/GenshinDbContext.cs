@@ -24,7 +24,7 @@ namespace Snap.HutaoAPI.Entities
         public DbSet<ReliquarySetDetail> ReliquarySetDetails { get; set; } = null!;
 
         /// <summary>
-        /// 角色上传
+        /// 玩家记录
         /// </summary>
         public DbSet<PlayerRecord> PlayerRecords { get; set; } = null!;
 

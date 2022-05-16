@@ -7,12 +7,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Snap.HutaoAPI.Entities.Record
 {
     /// <summary>
-    /// 角色上传
+    /// 玩家记录
     /// </summary>
     public class PlayerRecord
     {
         /// <summary>
-        /// 角色记录id from db
+        /// 玩家记录 id from db
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
