@@ -35,15 +35,6 @@ services.AddControllers()
                 (CoreEventId.ContextInitialized, LogLevel.Debug)));
     })
     .AddScoped<IStatisticsProvider, StatisticsProvider>()
-    .AddGenshinStatisticsService(config =>
-        config
-            .AddCalculator<OverviewDataCalculator>()
-            .AddCalculator<AvatarParticipationCalculator>()
-            .AddCalculator<TeamCollocationCalculator>()
-            .AddCalculator<WeaponUsageCalculator>()
-            .AddCalculator<AvatarReliquaryUsageCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
-            .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -61,14 +52,6 @@ services.AddControllers()
         };
     })
     .Services
-
-    .AddUserSecretManager(options =>
-    {
-        var config = builder.Configuration.GetSection("UserSecret");
-        options.SymmetricKey = config.GetValue<string>("SymmetricKey");
-        options.SymmetricSalt = config.GetValue<string>("SymmetricSalt");
-        options.HashSalt = config.GetValue<string>("HashSalt");
-    })
 
     // TODO 此为测试用服务
     .AddScoped<IMailService, TestMailSender>()

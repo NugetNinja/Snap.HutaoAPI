@@ -1,4 +1,7 @@
-﻿namespace Snap.HutaoAPI.Models.SnapGenshin
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+namespace Snap.HutaoAPI.Models.SnapGenshin
 {
     public class PlayerSpiralAbyssBattle
     {

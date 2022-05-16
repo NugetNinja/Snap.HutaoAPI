@@ -1,12 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Snap.HutaoAPI.Entities;
 using System.Text.Json;
 
 namespace Snap.HutaoAPI.Services
 {
+    /// <summary>
+    /// 统计数据实现
+    /// </summary>
     public class StatisticsProvider : IStatisticsProvider
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dbContext">db from di</param>
+        /// <param name="cache">cache from di</param>
         public StatisticsProvider(ApplicationDbContext dbContext, IMemoryCache cache)
         {
             this.dbContext = dbContext;
@@ -16,6 +27,12 @@ namespace Snap.HutaoAPI.Services
         private readonly ApplicationDbContext dbContext;
         private readonly IMemoryCache cache;
 
+        /// <summary>
+        /// 保存数据
+        /// </summary>
+        /// <typeparam name="TSource">T</typeparam>
+        /// <param name="dataObject">dataObject</param>
+        /// <returns>Task</returns>
         public async Task SaveStatistics<TSource>(object dataObject)
         {
             string? source = typeof(TSource).Name;
@@ -39,6 +56,12 @@ namespace Snap.HutaoAPI.Services
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 读取统计数据
+        /// </summary>
+        /// <typeparam name="TSource">T</typeparam>
+        /// <returns>Task result</returns>
+        // TODO: 以后可以根据泛型来对传出的数据进行格式化
         public async Task<string?> ReadStatistics<TSource>()
         {
             // 正在计算统计数据时拒绝请求

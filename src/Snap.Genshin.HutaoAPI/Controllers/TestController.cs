@@ -26,7 +26,7 @@ namespace Snap.HutaoAPI.Controllers
             logger.LogWarning("数据刷新被手动触发");
             await serviceProvider
                 .GetRequiredService<GenshinStatisticsService>()
-                .CaltulateStatistics();
+                .CalculateStatistics();
             return Ok();
         }
 

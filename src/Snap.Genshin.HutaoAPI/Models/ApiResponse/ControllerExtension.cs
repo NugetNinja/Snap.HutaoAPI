@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Snap.HutaoAPI.Models
 {
+    /// <summary>
+    /// extension for response
+    /// </summary>
     public static class ControllerExtension
     {
         public static IActionResult Success<T>(this ControllerBase _, string msg, T data)

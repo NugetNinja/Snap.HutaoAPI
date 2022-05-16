@@ -1,5 +1,12 @@
-﻿namespace Snap.HutaoAPI.Models
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+namespace Snap.HutaoAPI.Models
 {
+    /// <summary>
+    /// ApiCode
+    /// </summary>
+    /// TODO: 建议使用公用仓库来对所有的apicode进行统一
     public enum ApiCode
     {
         Success = 0,

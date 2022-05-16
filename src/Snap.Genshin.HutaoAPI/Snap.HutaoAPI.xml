@@ -4,21 +4,6 @@
         <name>Snap.HutaoAPI</name>
     </assembly>
     <members>
-        <member name="P:Snap.HutaoAPI.Configurations.TokenFactoryConfiguration.AccessTokenExpire">
-            <summary>
-            AccessToken有效期（分钟）
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Configurations.TokenFactoryConfiguration.RefreshTokenExpire">
-            <summary>
-            RefreshToken有效期（分钟）
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Configurations.TokenFactoryConfiguration.RefreshTokenBefore">
-            <summary>
-            在RefreshToken过期前多久自动刷新RefreshToken
-            </summary>
-        </member>
         <member name="M:Snap.HutaoAPI.Controllers.AuthController.Login(Snap.HutaoAPI.Models.ApiRequest.LoginModel)">
             <summary>
             用户登录
@@ -426,40 +411,30 @@
             武器使用数据
             </summary>
         </member>
-        <member name="M:Snap.HutaoAPI.Services.ISecretManager.Bind(System.Guid)">
+        <member name="T:Snap.HutaoAPI.Services.GenshinStatisticsService">
             <summary>
-            绑定
+            GenshinStatisticsService
             </summary>
-            <param name="key">要绑定的对象</param>
         </member>
-        <member name="M:Snap.HutaoAPI.Services.ISecretManager.GetSymmetricSecret(System.String)">
+        <member name="M:Snap.HutaoAPI.Services.GenshinStatisticsService.#ctor(Snap.HutaoAPI.Configurations.GenshinStatisticsServiceConfiguration,Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Services.GenshinStatisticsService},Snap.HutaoAPI.Entities.ApplicationDbContext,System.IServiceProvider)">
             <summary>
-            获取指定名称的密钥
+            Initializes a new instance of the <see cref="T:Snap.HutaoAPI.Services.GenshinStatisticsService"/> class.
             </summary>
-            <param name="secretName">密钥名称</param>
-            <returns>密钥内容</returns>
+            <param name="options">op from di</param>
+            <param name="logger">logger from di</param>
+            <param name="dbContext">db from di</param>
+            <param name="serviceProvider">service from di</param>
         </member>
-        <member name="M:Snap.HutaoAPI.Services.ISecretManager.StorageSecret(System.String,System.String)">
+        <member name="M:Snap.HutaoAPI.Services.GenshinStatisticsService.CalculateStatistics">
             <summary>
-            以对称加密方式存储密钥
+            do calculate
             </summary>
-            <param name="secretName">密钥名称</param>
-            <param name="secret">密钥内容</param>
+            <returns>Task</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Services.ISecretManager.HashSecret(System.String)">
+        <member name="T:Snap.HutaoAPI.Services.IMailService">
             <summary>
-            获取密钥哈希值
+            Mail service
             </summary>
-            <param name="secret">密钥内容</param>
-            <returns>密钥哈希</returns>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.ISecretManager.HashCompare(System.String,System.String)">
-            <summary>
-            哈希对比
-            </summary>
-            <param name="rawSecret">明文密码</param>
-            <param name="hash">哈希值</param>
-            <returns>是否匹配</returns>
         </member>
         <member name="T:Snap.HutaoAPI.Services.IStatisticCalculator">
             <summary>
@@ -520,58 +495,6 @@
         </member>
         <member name="M:Snap.HutaoAPI.Services.StatisticCalculation.OverviewDataCalculator.Calculate">
             <inheritdoc/>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Services.UserSecretManager},Snap.HutaoAPI.Configurations.SecretManagerConfiguration)">
-            <summary>
-            初始化<see cref="T:Snap.HutaoAPI.Services.UserSecretManager"/>的新实例
-            </summary>
-            <param name="dbContext">数据库</param>
-            <param name="logger">日志</param>
-            <param name="configuration">配置</param>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.SetUser(System.Guid)">
-            <summary>
-            设置该密钥管理器的用户
-            </summary>
-            <param name="userId">用户ID</param>
-            <exception cref="T:System.InvalidOperationException"></exception>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.GetSymmetricSecret(System.String)">
-            <summary>
-            获取指定密钥
-            </summary>
-            <param name="secretKey">密钥名称</param>
-            <returns>指定的密钥</returns>
-            <exception cref="T:System.InvalidOperationException"></exception>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.HashSecret(System.String)">
-            <summary>
-            取密钥哈希
-            </summary>
-            <param name="secret">密钥原文</param>
-            <returns>密钥哈希</returns>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.StorageSecret(System.String,System.String)">
-            <summary>
-            存储密钥
-            </summary>
-            <param name="secretKey">密钥名称</param>
-            <param name="secret">密钥原文</param>
-            <exception cref="T:System.InvalidOperationException"></exception>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.HashCompare(System.String,System.String)">
-            <summary>
-            比对密码与哈希
-            </summary>
-            <param name="rawSecret">密码</param>
-            <param name="hash">哈希</param>
-            <returns>是否匹配</returns>
-        </member>
-        <member name="M:Snap.HutaoAPI.Services.UserSecretManager.Snap#HutaoAPI#Services#ISecretManager#Bind(System.Guid)">
-            <summary>
-            绑定用户
-            </summary>
-            <param name="userId">用户ID</param>
         </member>
         <member name="T:Snap.Must">
             <summary>

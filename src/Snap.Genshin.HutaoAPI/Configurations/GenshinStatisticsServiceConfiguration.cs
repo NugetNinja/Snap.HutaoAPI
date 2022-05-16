@@ -5,6 +5,9 @@ using Snap.HutaoAPI.Services;
 
 namespace Snap.HutaoAPI.Configurations
 {
+    /// <summary>
+    /// 统计相关配置
+    /// </summary>
     public class GenshinStatisticsServiceConfiguration
     {
         public List<Type> CalculatorTypes { get; } = new();

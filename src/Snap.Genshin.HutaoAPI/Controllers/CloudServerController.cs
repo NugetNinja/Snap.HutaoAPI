@@ -44,7 +44,7 @@ namespace Snap.HutaoAPI.Controllers
             cache.Set("_STATISTICS_BUSY", true);
 
             // 计算数据
-            await statisticsService.CaltulateStatistics().ConfigureAwait(false);
+            await statisticsService.CalculateStatistics().ConfigureAwait(false);
 
             // 清除忙碌标识
             cache.Remove("_STATISTICS_BUSY");

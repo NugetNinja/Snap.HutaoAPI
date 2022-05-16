@@ -25,6 +25,7 @@ namespace Snap.HutaoAPI.Services.MapReduceCalculation
         private readonly ApplicationDbContext dbContext;
         private readonly IStatisticsProvider statisticsProvider;
 
+        //TODO: mapreduce的方式待使用
         public Task Calculate()
         {
             return Task.CompletedTask;
