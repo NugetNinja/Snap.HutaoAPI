@@ -1,4 +1,4 @@
-﻿namespace Snap.HutaoAPI.Models.Utility
+﻿namespace Snap.HutaoAPI.Models.Identity
 {
     public class VerifyCodeMail : IMail
     {

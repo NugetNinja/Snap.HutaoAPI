@@ -1,20 +1,10 @@
-﻿namespace Snap.HutaoAPI.Models.Statistics
-{
-    //record 自动实现相等比较
-    public record Team
-    {
-        public Team() { }
-        public Team(string upHalf, string downHalf)
-        {
-            UpHalf = upHalf;
-            DownHalf = downHalf;
-        }
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
 
-        public string UpHalf { get; set; } = null!;
-        public string DownHalf { get; set; } = null!;
-    }
+namespace Snap.HutaoAPI.Models.Statistics;
 
-    public record LevelInfo(int Floor, int Index);
+public record LevelTeamUsage(FloorIndex Level, IEnumerable<Rate<Team>> Teams);
 
-    public record LevelTeamUsage(LevelInfo Level, IEnumerable<Rate<Team>> Teams);
-}
+public record FloorIndex(int Floor, int Index);
+
+public record Team(string UpHalf, string DownHalf);

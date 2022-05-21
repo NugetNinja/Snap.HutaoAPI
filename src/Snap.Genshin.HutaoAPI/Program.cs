@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Snap.HutaoAPI;
 using Snap.HutaoAPI.Configurations;
 using Snap.HutaoAPI.Entities;
-using Snap.HutaoAPI.Models.Utility;
+using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Services;
 using Snap.HutaoAPI.Services.StatisticCalculation;
 using System.Security.Claims;

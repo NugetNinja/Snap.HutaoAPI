@@ -1,5 +1,11 @@
-﻿namespace Snap.HutaoAPI.Models.Statistics
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+namespace Snap.HutaoAPI.Models.Statistics
 {
+    /// <summary>
+    /// 总览数据
+    /// </summary>
     public class OverviewData
     {
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿using Flurl.Http;
-using Snap.HutaoAPI.Models.Utility;
+using Snap.HutaoAPI.Models.Identity;
 
 namespace Snap.HutaoAPI.Services
 {

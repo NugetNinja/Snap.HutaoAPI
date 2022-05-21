@@ -9,11 +9,24 @@ namespace Snap.HutaoAPI.Models
     /// TODO: 建议使用公用仓库来对所有的apicode进行统一
     public enum ApiCode
     {
+        /// <summary>
+        /// 成功
+        /// </summary>
         Success = 0,
+
+        /// <summary>
+        /// 失败
+        /// </summary>
         Fail = -1,
-        // 数据库异常
+
+        /// <summary>
+        /// 数据库异常
+        /// </summary>
         DbException = 101,
-        // 服务冲突
-        ServiceConcurrent = 102,
+
+        /// <summary>
+        /// 服务冲突
+        /// </summary>
+        ServiceConcurrentConflict = 102,
     }
 }

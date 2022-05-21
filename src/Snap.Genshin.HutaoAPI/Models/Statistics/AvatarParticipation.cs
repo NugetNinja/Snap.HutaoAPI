@@ -1,12 +1,20 @@
-﻿namespace Snap.HutaoAPI.Models.Statistics
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+namespace Snap.HutaoAPI.Models.Statistics;
+
+/// <summary>
+/// 出场数据
+/// </summary>
+public class AvatarParticipation
 {
     /// <summary>
-    /// 出场数据
+    /// 层
     /// </summary>
-    public class AvatarParticipation
-    {
-        public int Floor { get; set; }
+    public int Floor { get; set; }
 
-        public IEnumerable<Rate<int>> AvatarUsage { get; set; } = null!;
-    }
+    /// <summary>
+    /// 角色使用率
+    /// </summary>
+    public IEnumerable<Rate<int>> AvatarUsage { get; set; } = null!;
 }

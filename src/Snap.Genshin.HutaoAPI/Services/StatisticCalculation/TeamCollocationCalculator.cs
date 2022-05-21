@@ -21,7 +21,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
         {
             Dictionary<int, IDictionary<int, int>> avatarBattleWithWhoCountDic = new(128);
             Dictionary<int, int> avatarBattleWithAnyCountDic = new(128);
-            foreach (SpiralAbyssBattle battle in dbContext.SpiralAbyssBattles.Include(battle => battle.Avatars))
+            foreach (DetailedBattleInfo battle in dbContext.SpiralAbyssBattles.Include(battle => battle.Avatars))
             {
                 foreach (SpiralAbyssAvatar avatar in battle.Avatars)
                 {

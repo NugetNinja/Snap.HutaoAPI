@@ -5,32 +5,29 @@ using System.Text.Json.Serialization;
 
 namespace Snap.HutaoAPI.Models
 {
+
     /// <summary>
-    /// 响应
+    /// 带有数据的响应
     /// </summary>
-    public class ApiResponse
+    /// <typeparam name="T">T</typeparam>
+    public class ApiResponse<T> : ApiResponse
     {
         /// <summary>
         /// 构造一个新的响应
         /// </summary>
         /// <param name="code">响应代码</param>
         /// <param name="message">消息</param>
-        public ApiResponse(ApiCode code, string message)
+        /// <param name="data">数据</param>
+        public ApiResponse(ApiCode code, string message, T data)
+            : base(code, message)
         {
-            Code = code;
-            Message = message;
+            Data = data;
         }
 
         /// <summary>
-        /// 返回代码
+        /// 数据
         /// </summary>
-        [JsonPropertyName("retcode")]
-        public ApiCode Code { get; set; }
-
-        /// <summary>
-        /// 消息
-        /// </summary>
-        [JsonPropertyName("message")]
-        public string Message { get; set; }
+        [JsonPropertyName("data")]
+        public T? Data { get; set; }
     }
 }

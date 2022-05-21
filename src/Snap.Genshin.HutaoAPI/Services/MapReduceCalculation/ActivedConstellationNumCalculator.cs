@@ -31,11 +31,12 @@ namespace Snap.HutaoAPI.Services.MapReduceCalculation
         /// <inheritdoc/>
         public async Task Calculate()
         {
-            int totalPlayerCount = this.dbContext.Players.Count();
+            int totalPlayerCount = dbContext.Players.Count();
             IQueryable<AvatarWithConstellationNum> avatars = (from avatar in dbContext.AvatarDetails
                 select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum))
                 .AsNoTracking();
 
+            // extract ActivedConstellationNum from AvatarWithConstellationNum
             Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>> groupReducer = new((input, result) =>
             {
                 result
@@ -43,33 +44,32 @@ namespace Snap.HutaoAPI.Services.MapReduceCalculation
                     .Add(input.ActivedNum);
             });
 
+            // [角色id,未相加的命座数]
             groupReducer.Reduce(avatars);
 
             ConcurrentBag<AvatarConstellationNum> calculationResult = new();
 
-            Parallel.ForEach(groupReducer.ReduceResult, kv =>
+            Parallel.ForEach(groupReducer.ReduceResult, avatarIdAllConstellationCount =>
             {
                 int currentAvatarCount = 0;
 
-                Reducer<int, int, int> reducer = new((input, result) =>
+                Reducer<int, int, int> reducer = new((constellation, result) =>
                 {
-                    result.AddOrUpdate(input, 1, (key, oldValue) => Interlocked.Increment(ref oldValue));
+                    result.AddOrUpdate(constellation, 1, (_, previousValue) => Interlocked.Increment(ref previousValue));
                     Interlocked.Increment(ref currentAvatarCount);
                 });
 
-                reducer.Reduce(kv.Value);
+                // [角色id,计数后的命座数]
+                reducer.Reduce(avatarIdAllConstellationCount.Value);
 
-                IEnumerable<Rate<int>> rate = from kvp in reducer.ReduceResult
-                    select new Rate<int>
-                    {
-                        Id = kvp.Key,
-                        Value = (double)kvp.Value / currentAvatarCount,
-                    };
+                IEnumerable<Rate<int>> rate = reducer.ReduceResult
+                    .Select(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / currentAvatarCount));
 
                 calculationResult.Add(new()
                 {
-                    Avatar = kv.Key, Rate = rate,
-                    HoldingRate = (double)kv.Value.Count / totalPlayerCount,
+                    Avatar = avatarIdAllConstellationCount.Key,
+                    Rate = rate,
+                    HoldingRate = (double)avatarIdAllConstellationCount.Value.Count / totalPlayerCount,
                 });
             });
 

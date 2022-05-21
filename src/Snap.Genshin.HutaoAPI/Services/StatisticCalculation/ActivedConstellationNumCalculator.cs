@@ -20,19 +20,19 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
         {
             double totalPlayerCount = dbContext.Players.Count();
 
-            IEnumerable<IGrouping<int, AvatarDetail>> avatarGroups = dbContext.AvatarDetails
+            IEnumerable<IGrouping<int, DetailedAvatarInfo>> avatarGroups = dbContext.AvatarDetails
                 .AsEnumerable()
                 .GroupBy(avatar => avatar.AvatarId);
 
             List<AvatarConstellationNum> result = new(128);
 
-            foreach (IGrouping<int, AvatarDetail>? avatarGroup in avatarGroups)
+            foreach (IGrouping<int, DetailedAvatarInfo>? avatarGroup in avatarGroups)
             {
                 Dictionary<int, int> countDic = Enumerable
                     .Range(0, 7)
                     .ToDictionary(key => key, value => 0);
 
-                foreach (AvatarDetail? avatar in avatarGroup)
+                foreach (DetailedAvatarInfo? avatar in avatarGroup)
                 {
                     countDic[avatar.ActivedConstellationNum]++;
                 }

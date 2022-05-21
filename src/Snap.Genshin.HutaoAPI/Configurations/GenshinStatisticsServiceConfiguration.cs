@@ -3,25 +3,27 @@
 
 using Snap.HutaoAPI.Services;
 
-namespace Snap.HutaoAPI.Configurations
+namespace Snap.HutaoAPI.Configurations;
+
+/// <summary>
+/// 统计相关配置
+/// </summary>
+public class GenshinStatisticsServiceConfiguration
 {
     /// <summary>
-    /// 统计相关配置
+    /// 计算器的类型集合
     /// </summary>
-    public class GenshinStatisticsServiceConfiguration
+    public List<Type> CalculatorTypes { get; } = new();
+
+    /// <summary>
+    /// 添加计算器
+    /// </summary>
+    /// <typeparam name="T">计算器的类型</typeparam>
+    /// <returns>可继续操作的配置</returns>
+    public GenshinStatisticsServiceConfiguration AddCalculator<T>()
+        where T : IStatisticCalculator
     {
-        public List<Type> CalculatorTypes { get; } = new();
-
-        public GenshinStatisticsServiceConfiguration AddCalculator<T>()
-            where T : IStatisticCalculator
-        {
-            return AddCalculator(typeof(T));
-        }
-
-        private GenshinStatisticsServiceConfiguration AddCalculator(Type calculatorType)
-        {
-            CalculatorTypes.Add(calculatorType);
-            return this;
-        }
+        CalculatorTypes.Add(typeof(T));
+        return this;
     }
 }

@@ -1,12 +1,20 @@
-﻿namespace Snap.HutaoAPI.Models.Statistics
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+namespace Snap.HutaoAPI.Models.Statistics;
+
+/// <summary>
+/// 武器使用数据
+/// </summary>
+public class WeaponUsage
 {
     /// <summary>
-    /// 武器使用数据
+    /// 角色
     /// </summary>
-    public class WeaponUsage
-    {
-        public int Avatar { get; set; }
+    public int Avatar { get; set; }
 
-        public IEnumerable<Rate<int>> Weapons { get; set; } = null!;
-    }
+    /// <summary>
+    /// 武器
+    /// </summary>
+    public IEnumerable<Rate<int>> Weapons { get; set; } = null!;
 }

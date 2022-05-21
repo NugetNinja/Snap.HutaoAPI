@@ -19,21 +19,21 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
 
         public async Task Calculate()
         {
-            List<SpiralAbyssBattle> battles = dbContext.SpiralAbyssBattles
+            List<DetailedBattleInfo> battles = dbContext.SpiralAbyssBattles
                 .Where(battle => battle.AbyssLevel.FloorIndex >= 9)
                 .Include(battle => battle.AbyssLevel)
                 .ToList();
-            IEnumerable<IGrouping<string, SpiralAbyssBattle>> groups = battles
+            IEnumerable<IGrouping<string, DetailedBattleInfo>> groups = battles
                 .GroupBy(battle => $"{battle.AbyssLevel.FloorIndex}-{battle.AbyssLevel.LevelIndex}");
 
             List<LevelTeamUsage> result = new(12);
 
-            foreach (IGrouping<string, SpiralAbyssBattle>? group in groups)
+            foreach (IGrouping<string, DetailedBattleInfo>? group in groups)
             {
-                IEnumerable<IGrouping<long, SpiralAbyssBattle>> challenges = group
+                IEnumerable<IGrouping<long, DetailedBattleInfo>> challenges = group
                     .GroupBy(battle => battle.SpiralAbyssLevelId);
                 Dictionary<Team, int> countDic = new();
-                foreach (IGrouping<long, SpiralAbyssBattle>? challenge in challenges)
+                foreach (IGrouping<long, DetailedBattleInfo>? challenge in challenges)
                 {
                     // 1-上半 2-下半
                     IList<SpiralAbyssAvatar>? upHalfAvatars = challenge
@@ -71,7 +71,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 int floor = Convert.ToInt32(floor_index[0]);
                 int index = Convert.ToInt32(floor_index[1]);
 
-                result.Add(new(new LevelInfo(floor, index),
+                result.Add(new(new FloorIndex(floor, index),
                     sorted.Select(kv => new Rate<Team>
                     {
                         Id = kv.Key,

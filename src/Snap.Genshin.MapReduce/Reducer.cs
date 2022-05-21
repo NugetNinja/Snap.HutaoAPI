@@ -32,6 +32,7 @@ namespace Snap.Genshin.MapReduce
         /// <summary>
         /// 获取规约结果
         /// </summary>
+        /// <exception cref="InvalidOperationException">Reduce Result can't be retrived before call Reduce method</exception>
         public ConcurrentDictionary<TOutputKey, TOutputValue> ReduceResult
         {
             get

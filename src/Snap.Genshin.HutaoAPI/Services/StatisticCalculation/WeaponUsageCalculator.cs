@@ -20,13 +20,13 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
         {
             // TODO AsEnumerable 可能带来性能问题
             // TODO 应该跳过玩家未上场的角色
-            IEnumerable<IGrouping<int, AvatarDetail>> avatarGroups = dbContext.AvatarDetails
+            IEnumerable<IGrouping<int, DetailedAvatarInfo>> avatarGroups = dbContext.AvatarDetails
                 .AsEnumerable()
                 .GroupBy(avatar => avatar.AvatarId);
 
             List<WeaponUsage> result = new(avatarGroups.Count());
 
-            foreach (IGrouping<int, AvatarDetail>? avatarGroup in avatarGroups)
+            foreach (IGrouping<int, DetailedAvatarInfo>? avatarGroup in avatarGroups)
             {
                 if (!dbContext.SpiralAbyssAvatars.Any(avatar => avatar.AvatarId == avatarGroup.Key))
                 {
@@ -37,13 +37,13 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 List<Rate<int>> weaponRateList = new(32);
                 WeaponUsage avatarWeaponUsage = new() { Avatar = avatarGroup.Key, Weapons = weaponRateList };
 
-                IEnumerable<IGrouping<int, AvatarDetail>> weaponGroup = avatarGroup
+                IEnumerable<IGrouping<int, DetailedAvatarInfo>> weaponGroup = avatarGroup
                     .AsEnumerable()
                     .GroupBy(avatar => avatar.WeaponId)
                     .OrderByDescending(group => group.Count())
                     .Take(8);
                 // 取武器使用率前8
-                foreach (IGrouping<int, AvatarDetail>? weapon in weaponGroup)
+                foreach (IGrouping<int, DetailedAvatarInfo>? weapon in weaponGroup)
                 {
                     weaponRateList.Add(new()
                     {

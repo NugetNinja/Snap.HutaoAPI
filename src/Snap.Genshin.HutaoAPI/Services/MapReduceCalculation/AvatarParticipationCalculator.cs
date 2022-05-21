@@ -10,6 +10,8 @@ namespace Snap.HutaoAPI.Services.MapReduceCalculation
     /// </summary>
     public class AvatarParticipationCalculator : IStatisticCalculator
     {
+        private readonly ApplicationDbContext dbContext;
+        private readonly IStatisticsProvider statisticsProvider;
 
         /// <summary>
         /// 构造一个新的角色参与计算器
@@ -21,9 +23,6 @@ namespace Snap.HutaoAPI.Services.MapReduceCalculation
             this.dbContext = dbContext;
             this.statisticsProvider = statisticsProvider;
         }
-
-        private readonly ApplicationDbContext dbContext;
-        private readonly IStatisticsProvider statisticsProvider;
 
         //TODO: mapreduce的方式待使用
         public Task Calculate()

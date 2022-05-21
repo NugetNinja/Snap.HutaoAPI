@@ -3,9 +3,12 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Snap.HutaoAPI.Models.SnapGenshin
+namespace Snap.HutaoAPI.Models.Uploading
 {
-    public class PlayerRecord
+    /// <summary>
+    /// 上传的深渊记录
+    /// </summary>
+    public class RecordInfo
     {
         /// <summary>
         /// 玩家Uid
@@ -16,11 +19,11 @@ namespace Snap.HutaoAPI.Models.SnapGenshin
         /// <summary>
         /// 角色信息
         /// </summary>
-        public List<PlayerAvatar> PlayerAvatars { get; set; } = null!;
+        public List<AvatarInfo> PlayerAvatars { get; set; } = null!;
 
         /// <summary>
         /// 深渊信息
         /// </summary>
-        public List<PlayerSpiralAbyssLevel> PlayerSpiralAbyssesLevels { get; set; } = null!;
+        public List<LevelInfo> PlayerSpiralAbyssesLevels { get; set; } = null!;
     }
 }

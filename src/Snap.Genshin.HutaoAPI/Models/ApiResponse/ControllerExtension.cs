@@ -10,24 +10,51 @@ namespace Snap.HutaoAPI.Models
     /// </summary>
     public static class ControllerExtension
     {
-        public static IActionResult Success<T>(this ControllerBase _, string msg, T data)
+        /// <summary>
+        /// 成功
+        /// </summary>
+        /// <typeparam name="T">返回数据的类型</typeparam>
+        /// <param name="controller">控制器</param>
+        /// <param name="msg">消息</param>
+        /// <param name="data">返回的数据</param>
+        /// <returns>操作结果</returns>
+        public static IActionResult Success<T>(this ControllerBase controller, string msg, T data)
         {
             return new JsonResult(new ApiResponse<T>(ApiCode.Success, msg, data));
         }
 
-        public static IActionResult Success(this ControllerBase _, string msg)
+        /// <summary>
+        /// 成功
+        /// </summary>
+        /// <param name="controller">控制器</param>
+        /// <param name="msg">消息</param>
+        /// <returns>操作结果</returns>
+        public static IActionResult Success(this ControllerBase controller, string msg)
         {
-            return new JsonResult(new ApiResponse<object?>(ApiCode.Success, msg, null));
+            return new JsonResult(new ApiResponse(ApiCode.Success, msg));
         }
 
-        public static IActionResult Fail(this ControllerBase _, string msg)
+        /// <summary>
+        /// 失败
+        /// </summary>
+        /// <param name="controller">控制器</param>
+        /// <param name="msg">消息</param>
+        /// <returns>操作结果</returns>
+        public static IActionResult Fail(this ControllerBase controller, string msg)
         {
-            return new JsonResult(new ApiResponse<object?>(ApiCode.Fail, msg, null));
+            return new JsonResult(new ApiResponse(ApiCode.Fail, msg));
         }
 
-        public static IActionResult Fail(this ControllerBase _, ApiCode code, string msg)
+        /// <summary>
+        /// 失败
+        /// </summary>
+        /// <param name="controller">控制器</param>
+        /// <param name="code">返回代码</param>
+        /// <param name="msg">消息</param>
+        /// <returns>操作结果</returns>
+        public static IActionResult Fail(this ControllerBase controller, ApiCode code, string msg)
         {
-            return new JsonResult(new ApiResponse<object?>(code, msg, null));
+            return new JsonResult(new ApiResponse(code, msg));
         }
     }
 }

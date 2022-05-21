@@ -1,9 +1,9 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
-namespace Snap.HutaoAPI.Models.SnapGenshin
+namespace Snap.HutaoAPI.Models.Uploading
 {
-    public class AvatarWeapon
+    public class WeaponInfo
     {
         /// <summary>
         /// 武器Id

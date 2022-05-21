@@ -21,9 +21,9 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
         {
             Dictionary<int, Dictionary<string, int>> ansDic = new(128);
             Dictionary<int, int> countDic = new(128);
-            foreach (AvatarDetail avatar in dbContext.AvatarDetails.Include(avatar => avatar.ReliquarySets))
+            foreach (DetailedAvatarInfo avatar in dbContext.AvatarDetails.Include(avatar => avatar.ReliquarySets))
             {
-                IEnumerable<ReliquarySetDetail> sets = avatar.ReliquarySets
+                IEnumerable<DetailedReliquarySetInfo> sets = avatar.ReliquarySets
                     .Where(set => set.Count >= 4);
                 if (!sets.Any())
                 {
@@ -39,7 +39,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 }
 
                 // 标准化装备数量
-                foreach (ReliquarySetDetail set in sets)
+                foreach (DetailedReliquarySetInfo set in sets)
                 {
                     if (set.Count >= 4)
                     {
