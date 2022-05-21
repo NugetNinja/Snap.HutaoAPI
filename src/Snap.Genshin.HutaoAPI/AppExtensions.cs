@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website;
+﻿namespace Snap.HutaoAPI;
 
 public static class AppExtensions
 {

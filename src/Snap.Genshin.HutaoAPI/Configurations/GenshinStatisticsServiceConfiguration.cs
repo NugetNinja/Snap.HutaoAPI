@@ -1,10 +1,13 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
-using Snap.Genshin.Website.Services;
+using Snap.HutaoAPI.Services;
 
-namespace Snap.Genshin.Website.Configurations
+namespace Snap.HutaoAPI.Configurations
 {
+    /// <summary>
+    /// 统计相关配置
+    /// </summary>
     public class GenshinStatisticsServiceConfiguration
     {
         public List<Type> CalculatorTypes { get; } = new();

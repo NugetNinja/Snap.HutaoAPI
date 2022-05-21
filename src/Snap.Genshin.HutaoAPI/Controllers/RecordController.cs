@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Entities.Record;
-using Snap.Genshin.Website.Models;
-using Snap.Genshin.Website.Models.Utility;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Entities.Record;
+using Snap.HutaoAPI.Models;
+using Snap.HutaoAPI.Models.Utility;
 
-namespace Snap.Genshin.Website.Controllers
+namespace Snap.HutaoAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]

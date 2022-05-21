@@ -3,14 +3,14 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Snap.Genshin.Website.Models;
-using Snap.Genshin.Website.Models.Statistics;
-using Snap.Genshin.Website.Models.Utility;
-using Snap.Genshin.Website.Services;
-using Snap.Genshin.Website.Services.StatisticCalculation;
+using Snap.HutaoAPI.Models;
+using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Models.Utility;
+using Snap.HutaoAPI.Services;
+using Snap.HutaoAPI.Services.StatisticCalculation;
 using System.Text.Json;
 
-namespace Snap.Genshin.Website.Controllers
+namespace Snap.HutaoAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]

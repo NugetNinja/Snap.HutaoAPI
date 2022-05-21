@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Models.Statistics
+﻿namespace Snap.HutaoAPI.Models.Statistics
 {
     /// <summary>
     /// 武器使用数据

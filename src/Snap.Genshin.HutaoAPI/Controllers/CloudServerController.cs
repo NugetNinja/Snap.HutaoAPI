@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Services;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Services;
 
-namespace Snap.Genshin.Website.Controllers
+namespace Snap.HutaoAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
@@ -44,7 +44,7 @@ namespace Snap.Genshin.Website.Controllers
             cache.Set("_STATISTICS_BUSY", true);
 
             // 计算数据
-            await statisticsService.CaltulateStatistics().ConfigureAwait(false);
+            await statisticsService.CalculateStatistics().ConfigureAwait(false);
 
             // 清除忙碌标识
             cache.Remove("_STATISTICS_BUSY");

@@ -3,11 +3,11 @@
 
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.MapReduce;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Models.Statistics;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Models.Statistics;
 using System.Collections.Concurrent;
 
-namespace Snap.Genshin.Website.Services.MapReduceCalculation
+namespace Snap.HutaoAPI.Services.MapReduceCalculation
 {
     /// <summary>
     /// 命座持有率计算器
@@ -31,7 +31,7 @@ namespace Snap.Genshin.Website.Services.MapReduceCalculation
         /// <inheritdoc/>
         public async Task Calculate()
         {
-            int totalPlayerCount = dbContext.Players.Count();
+            int totalPlayerCount = this.dbContext.Players.Count();
             IQueryable<AvatarWithConstellationNum> avatars = (from avatar in dbContext.AvatarDetails
                 select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum))
                 .AsNoTracking();

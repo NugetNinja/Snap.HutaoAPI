@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Snap.Genshin.Website": {
+    "Snap.HutaoAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

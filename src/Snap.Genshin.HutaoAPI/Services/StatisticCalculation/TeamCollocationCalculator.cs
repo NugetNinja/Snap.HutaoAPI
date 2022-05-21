@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Entities.Record;
-using Snap.Genshin.Website.Models.Statistics;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Entities.Record;
+using Snap.HutaoAPI.Models.Statistics;
 
-namespace Snap.Genshin.Website.Services.StatisticCalculation
+namespace Snap.HutaoAPI.Services.StatisticCalculation
 {
     [Obsolete("Should not use StatisticCalculation anymore")]
     public class TeamCollocationCalculator : IStatisticCalculator
@@ -51,7 +51,8 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
             Dictionary<int, IEnumerable<(int AvatarId, int Count)>> avatarBattleWithWhoList = new(128);
             foreach (KeyValuePair<int, IDictionary<int, int>> pair in avatarBattleWithWhoCountDic)
             {
-                avatarBattleWithWhoList.Add(pair.Key,
+                avatarBattleWithWhoList.Add(
+                    pair.Key,
                     from kv in pair.Value orderby kv.Value descending select (kv.Key, kv.Value));
             }
 
@@ -61,13 +62,12 @@ namespace Snap.Genshin.Website.Services.StatisticCalculation
                 result.Add(new()
                 {
                     Avater = pair.Key,
-                    Collocations =
-                    (from count in pair.Value
+                    Collocations = (from count in pair.Value
                      select new Rate<int>()
                      {
                          Id = count.AvatarId,
-                         Value = (double)count.Count / avatarBattleWithAnyCountDic[pair.Key]
-                     }).Take(8)
+                         Value = (double)count.Count / avatarBattleWithAnyCountDic[pair.Key],
+                     }).Take(8),
                 });
             }
 

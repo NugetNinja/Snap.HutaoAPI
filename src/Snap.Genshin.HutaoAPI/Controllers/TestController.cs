@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Snap.Genshin.Website.Models.Utility;
-using Snap.Genshin.Website.Services;
+using Snap.HutaoAPI.Models.Utility;
+using Snap.HutaoAPI.Services;
 
 #if DEBUG
-namespace Snap.Genshin.Website.Controllers
+namespace Snap.HutaoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,7 +26,7 @@ namespace Snap.Genshin.Website.Controllers
             logger.LogWarning("数据刷新被手动触发");
             await serviceProvider
                 .GetRequiredService<GenshinStatisticsService>()
-                .CaltulateStatistics();
+                .CalculateStatistics();
             return Ok();
         }
 

@@ -1,6 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
 
-namespace Snap.Genshin.Website.Models.SnapGenshin
+using System.ComponentModel.DataAnnotations;
+
+namespace Snap.HutaoAPI.Models.SnapGenshin
 {
     public class PlayerRecord
     {

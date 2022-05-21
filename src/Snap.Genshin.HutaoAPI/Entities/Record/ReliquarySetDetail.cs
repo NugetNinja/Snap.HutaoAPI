@@ -1,14 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snap.Genshin.Website.Entities.Record
+namespace Snap.HutaoAPI.Entities.Record
 {
     /// <summary>
     /// 圣遗物套装信息
     /// </summary>
     public class ReliquarySetDetail
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Key]
+        /// <summary>
+        /// 圣遗物id from db
+        /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long InnerId { get; set; }
 
         /// <summary>
@@ -34,6 +41,9 @@ namespace Snap.Genshin.Website.Entities.Record
         [ForeignKey(nameof(AvatarDetailId))]
         public AvatarDetail AvatarInfo { get; set; } = null!;
 
+        /// <summary>
+        /// 外键 对应的角色id
+        /// </summary>
         public long AvatarDetailId { get; set; }
     }
 }

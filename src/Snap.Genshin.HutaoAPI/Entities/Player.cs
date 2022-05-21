@@ -1,8 +1,8 @@
-﻿using Snap.Genshin.Website.Entities.Record;
+﻿using Snap.HutaoAPI.Entities.Record;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snap.Genshin.Website.Entities
+namespace Snap.HutaoAPI.Entities
 {
     /// <summary>
     /// 玩家实体
@@ -12,15 +12,19 @@ namespace Snap.Genshin.Website.Entities
         /// <summary>
         /// 玩家Id (from database)
         /// </summary>
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid InnerId { get; set; }
 
         /// <summary>
-        /// 玩家uid (from Mohoyo)
+        /// 玩家uid (from Mihoyo)
         /// </summary>
         [Required]
         public string Uid { get; set; } = null!;
 
+        /// <summary>
+        /// 外键
+        /// </summary>
         public IList<AvatarDetail> Avatars { get; set; } = null!;
     }
 }

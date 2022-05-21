@@ -1,4 +1,4 @@
-﻿namespace Snap.Genshin.Website.Models.Statistics
+﻿namespace Snap.HutaoAPI.Models.Statistics
 {
     //record 自动实现相等比较
     public record Team

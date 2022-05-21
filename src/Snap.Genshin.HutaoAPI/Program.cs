@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
-using Snap.Genshin.Website;
-using Snap.Genshin.Website.Configurations;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Models.Utility;
-using Snap.Genshin.Website.Services;
-using Snap.Genshin.Website.Services.StatisticCalculation;
+using Snap.HutaoAPI;
+using Snap.HutaoAPI.Configurations;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Models.Utility;
+using Snap.HutaoAPI.Services;
+using Snap.HutaoAPI.Services.StatisticCalculation;
 using System.Security.Claims;
 using System.Text;
 
@@ -35,15 +35,6 @@ services.AddControllers()
                 (CoreEventId.ContextInitialized, LogLevel.Debug)));
     })
     .AddScoped<IStatisticsProvider, StatisticsProvider>()
-    .AddGenshinStatisticsService(config =>
-        config
-            .AddCalculator<OverviewDataCalculator>()
-            .AddCalculator<AvatarParticipationCalculator>()
-            .AddCalculator<TeamCollocationCalculator>()
-            .AddCalculator<WeaponUsageCalculator>()
-            .AddCalculator<AvatarReliquaryUsageCalculator>()
-            .AddCalculator<Snap.Genshin.Website.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
-            .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -61,14 +52,6 @@ services.AddControllers()
         };
     })
     .Services
-
-    .AddUserSecretManager(options =>
-    {
-        var config = builder.Configuration.GetSection("UserSecret");
-        options.SymmetricKey = config.GetValue<string>("SymmetricKey");
-        options.SymmetricSalt = config.GetValue<string>("SymmetricSalt");
-        options.HashSalt = config.GetValue<string>("HashSalt");
-    })
 
     // TODO 此为测试用服务
     .AddScoped<IMailService, TestMailSender>()

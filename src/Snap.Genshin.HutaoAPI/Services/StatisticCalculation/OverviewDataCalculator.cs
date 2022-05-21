@@ -1,10 +1,10 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Models.Statistics;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Models.Statistics;
 
-namespace Snap.Genshin.Website.Services.StatisticCalculation
+namespace Snap.HutaoAPI.Services.StatisticCalculation
 {
     /// <summary>
     /// 总览数据计算器

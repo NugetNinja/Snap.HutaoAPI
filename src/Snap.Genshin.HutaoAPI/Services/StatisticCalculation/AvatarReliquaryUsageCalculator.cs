@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.Website.Entities;
-using Snap.Genshin.Website.Entities.Record;
-using Snap.Genshin.Website.Models.Statistics;
+using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Entities.Record;
+using Snap.HutaoAPI.Models.Statistics;
 
-namespace Snap.Genshin.Website.Services.StatisticCalculation
+namespace Snap.HutaoAPI.Services.StatisticCalculation
 {
     [Obsolete("Should not use StatisticCalculation anymore")]
     public class AvatarReliquaryUsageCalculator : IStatisticCalculator

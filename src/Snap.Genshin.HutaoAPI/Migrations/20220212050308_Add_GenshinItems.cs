@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Snap.Genshin.Website.Migrations
+namespace Snap.HutaoAPI.Migrations
 {
     public partial class Add_GenshinItems : Migration
     {
