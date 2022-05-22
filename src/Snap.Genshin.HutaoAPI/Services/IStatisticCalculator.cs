@@ -12,14 +12,14 @@ namespace Snap.HutaoAPI.Services
         /// 计算
         /// </summary>
         /// <returns>任务</returns>
-        public Task Calculate();
+        Task Calculate();
 
         /// <summary>
         /// 获取深渊期数
         /// </summary>
         /// <param name="time">时间</param>
         /// <returns>深渊期数</returns>
-        public static int GetSpiralPeriodId(DateTime time)
+        static int GetSpiralPeriodId(DateTime time)
         {
             int periodNum = (((time.Year - 2000) * 12) + time.Month) * 2;
 

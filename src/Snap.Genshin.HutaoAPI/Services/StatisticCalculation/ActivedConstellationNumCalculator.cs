@@ -24,7 +24,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 .AsEnumerable()
                 .GroupBy(avatar => avatar.AvatarId);
 
-            List<AvatarConstellationNum> result = new(128);
+            List<AvatarConstellationInfo> result = new(128);
 
             foreach (IGrouping<int, DetailedAvatarInfo>? avatarGroup in avatarGroups)
             {
@@ -44,7 +44,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 int avatarHolding = countDic.Sum(kv => kv.Value);
                 double holdingRate = avatarHolding / totalPlayerCount;
 
-                result.Add(new AvatarConstellationNum { Avatar = avatarGroup.Key, HoldingRate = holdingRate, Rate = rate });
+                result.Add(new AvatarConstellationInfo { Avatar = avatarGroup.Key, HoldingRate = holdingRate, Rate = rate });
             }
 
             await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(result);

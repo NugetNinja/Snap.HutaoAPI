@@ -12,7 +12,7 @@ public class TeamCollocation
     /// 角色Id
     /// </summary>
     [Obsolete("拼写错误")]
-    public int Avater { get; set; }
+    public int Avater => Avatar;
 
     /// <summary>
     /// 角色Id

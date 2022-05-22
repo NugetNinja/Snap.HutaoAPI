@@ -61,7 +61,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
             {
                 result.Add(new()
                 {
-                    Avater = pair.Key,
+                    Avatar = pair.Key,
                     Collocations = (from count in pair.Value
                      select new Rate<int>()
                      {

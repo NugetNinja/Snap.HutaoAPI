@@ -135,7 +135,7 @@ public class StatisticsController : ControllerBase
     [HttpGet("Constellation")]
     [ApiExplorerSettings(GroupName = "v2")]
     [Authorize(IdentityPolicyNames.CommonUser)]
-    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationNum>>))]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationInfo>>))]
     public async Task<IActionResult> GetConstellation()
     {
         string? json = await statisticsProvider
@@ -144,7 +144,7 @@ public class StatisticsController : ControllerBase
 
         return json is null
             ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationNum>>(json));
+            : this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationInfo>>(json));
     }
 
     /// <summary>

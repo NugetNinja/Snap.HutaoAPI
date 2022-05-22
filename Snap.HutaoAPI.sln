@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snap.HutaoAPI", "src\Snap.G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snap.Genshin.MapReduce", "src\Snap.Genshin.MapReduce\Snap.Genshin.MapReduce.csproj", "{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{B6171499-A74A-4A19-819E-F9BBACA98E86}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +24,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532} = {B6171499-A74A-4A19-819E-F9BBACA98E86}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BFC5B60-05B5-47CC-B736-CA79958541DA}

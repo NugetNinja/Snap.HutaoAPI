@@ -6,7 +6,7 @@ namespace Snap.HutaoAPI.Models.Statistics;
 /// <summary>
 /// 角色命座信息
 /// </summary>
-public class AvatarConstellationNum
+public class AvatarConstellationInfo
 {
     /// <summary>
     /// 角色Id

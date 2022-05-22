@@ -9,22 +9,22 @@ namespace Snap.Genshin.MapReduce
     /// 映射器
     /// </summary>
     /// <typeparam name="TInput">输入的类型</typeparam>
-    /// <typeparam name="TMapResult">映射结果的类型</typeparam>
-    public class Mapper<TInput, TMapResult>
+    /// <typeparam name="TResult">映射结果的类型</typeparam>
+    public class Mapper<TInput, TResult>
         where TInput : new()
-        where TMapResult : new()
+        where TResult : new()
     {
-        private readonly Func<TInput, TMapResult?> mappingFunc;
-        private /*static?*/ ConcurrentBag<TMapResult> inputBag;
+        private readonly Func<TInput, TResult?> mappingFunc;
+        private ConcurrentBag<TResult> inputBag;
 
         /// <summary>
         /// 构造一个新的映射器
         /// </summary>
         /// <param name="mappingFunc">映射操作</param>
-        public Mapper(Func<TInput, TMapResult?> mappingFunc)
+        public Mapper(Func<TInput, TResult?> mappingFunc)
         {
-            inputBag = new ConcurrentBag<TMapResult>();
-            MapResult = new BlockingCollection<TMapResult>(inputBag);
+            inputBag = new ConcurrentBag<TResult>();
+            Result = new BlockingCollection<TResult>(inputBag);
             this.mappingFunc = mappingFunc;
         }
 
@@ -34,26 +34,25 @@ namespace Snap.Genshin.MapReduce
         /// <param name="fullData">待映射的数据</param>
         public void Map(IEnumerable<TInput> fullData)
         {
-            if (MapResult.IsAddingCompleted)
+            if (Result.IsAddingCompleted)
             {
-                inputBag = new ConcurrentBag<TMapResult>();
-                MapResult = new BlockingCollection<TMapResult>(inputBag);
+                inputBag = new ConcurrentBag<TResult>();
+                Result = new BlockingCollection<TResult>(inputBag);
             }
 
-            var chunks = fullData.Chunk(ChunkSize);
+            IEnumerable<TInput[]> chunks = fullData.Chunk(ChunkSize);
 
             Parallel.ForEach(chunks, chunk =>
             {
-                foreach (var input in chunk)
+                foreach (TInput input in chunk)
                 {
-                    var mapResult = mappingFunc(input);
-                    if (mapResult is not null)
+                    if (mappingFunc(input) is TResult mapResult)
                     {
-                        MapResult.Add(mapResult);
+                        Result.Add(mapResult);
                     }
                 }
 
-                MapResult.CompleteAdding();
+                Result.CompleteAdding();
             });
         }
 
@@ -65,6 +64,6 @@ namespace Snap.Genshin.MapReduce
         /// <summary>
         /// 映射结果
         /// </summary>
-        public BlockingCollection<TMapResult> MapResult { get; private set; }
+        public BlockingCollection<TResult> Result { get; private set; }
     }
 }

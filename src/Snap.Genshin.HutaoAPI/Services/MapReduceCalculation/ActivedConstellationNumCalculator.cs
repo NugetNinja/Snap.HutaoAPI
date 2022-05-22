@@ -4,78 +4,64 @@
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.MapReduce;
 using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
 using System.Collections.Concurrent;
 
-namespace Snap.HutaoAPI.Services.MapReduceCalculation
+namespace Snap.HutaoAPI.Services.MapReduceCalculation;
+
+/// <summary>
+/// 命座持有率计算器
+/// </summary>
+public class ActivedConstellationNumCalculator : IStatisticCalculator
 {
+    private readonly ApplicationDbContext dbContext;
+    private readonly IStatisticsProvider statisticsProvider;
+
     /// <summary>
-    /// 命座持有率计算器
+    /// 构造一个新的命座持有率计算器
     /// </summary>
-    public class ActivedConstellationNumCalculator : IStatisticCalculator
+    /// <param name="dbContext">数据库上下文</param>
+    /// <param name="statisticsProvider">统计提供器</param>
+    public ActivedConstellationNumCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
     {
-        /// <summary>
-        /// 构造一个新的命座持有率计算器
-        /// </summary>
-        /// <param name="dbContext">数据库上下文</param>
-        /// <param name="statisticsProvider">统计提供器</param>
-        public ActivedConstellationNumCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
-        {
-            this.dbContext = dbContext;
-            this.statisticsProvider = statisticsProvider;
-        }
-
-        private readonly ApplicationDbContext dbContext;
-        private readonly IStatisticsProvider statisticsProvider;
-
-        /// <inheritdoc/>
-        public async Task Calculate()
-        {
-            int totalPlayerCount = dbContext.Players.Count();
-            IQueryable<AvatarWithConstellationNum> avatars = (from avatar in dbContext.AvatarDetails
-                select new AvatarWithConstellationNum(avatar.AvatarId, avatar.ActivedConstellationNum))
-                .AsNoTracking();
-
-            // extract ActivedConstellationNum from AvatarWithConstellationNum
-            Reducer<AvatarWithConstellationNum, int, ConcurrentBag<int>> groupReducer = new((input, result) =>
-            {
-                result
-                    .GetOrAdd(input.AvatarId, (_) => new ConcurrentBag<int>())
-                    .Add(input.ActivedNum);
-            });
-
-            // [角色id,未相加的命座数]
-            groupReducer.Reduce(avatars);
-
-            ConcurrentBag<AvatarConstellationNum> calculationResult = new();
-
-            Parallel.ForEach(groupReducer.ReduceResult, avatarIdAllConstellationCount =>
-            {
-                int currentAvatarCount = 0;
-
-                Reducer<int, int, int> reducer = new((constellation, result) =>
-                {
-                    result.AddOrUpdate(constellation, 1, (_, previousValue) => Interlocked.Increment(ref previousValue));
-                    Interlocked.Increment(ref currentAvatarCount);
-                });
-
-                // [角色id,计数后的命座数]
-                reducer.Reduce(avatarIdAllConstellationCount.Value);
-
-                IEnumerable<Rate<int>> rate = reducer.ReduceResult
-                    .Select(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / currentAvatarCount));
-
-                calculationResult.Add(new()
-                {
-                    Avatar = avatarIdAllConstellationCount.Key,
-                    Rate = rate,
-                    HoldingRate = (double)avatarIdAllConstellationCount.Value.Count / totalPlayerCount,
-                });
-            });
-
-            await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(calculationResult);
-        }
+        this.dbContext = dbContext;
+        this.statisticsProvider = statisticsProvider;
     }
 
-    internal record AvatarWithConstellationNum(int AvatarId, int ActivedNum);
+    /// <inheritdoc/>
+    public async Task Calculate()
+    {
+        int totalPlayerCount = dbContext.Players.Count();
+
+        ConcurrentBag<AvatarConstellationInfo> calculationResult = dbContext.AvatarDetails
+            .Select(avatar => new AvatarConstellationPair(avatar.AvatarId, avatar.ActivedConstellationNum))
+            .AsNoTracking()
+            .Reduce((AvatarConstellationPair input, ConcurrentDictionary<int, ConcurrentBag<int>> result) =>
+            {
+                result
+                    .GetOrNew(input.AvatarId)
+                    .Add(input.Constellation);
+            })
+            .Reduce((KeyValuePair<int, ConcurrentBag<int>> idCountBagPair, ConcurrentBag<AvatarConstellationInfo> result) =>
+            {
+                IEnumerable<Rate<int>> rate = idCountBagPair.Value
+                    .Reduce((int constellation, ConcurrentDictionary<int, int> constellationCountMap) =>
+                    {
+                        constellationCountMap.AddOrUpdate(constellation, 1, (_, count) => Interlocked.Increment(ref count));
+                    })
+                    .Select(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / idCountBagPair.Value.Count));
+
+                result.Add(new()
+                {
+                    Avatar = idCountBagPair.Key,
+                    Rate = rate,
+                    HoldingRate = (double)idCountBagPair.Value.Count / totalPlayerCount,
+                });
+            });
+
+        await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(calculationResult);
+    }
 }
+
+internal record AvatarConstellationPair(int AvatarId, int Constellation);
