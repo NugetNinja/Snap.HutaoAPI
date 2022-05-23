@@ -4,8 +4,8 @@
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.MapReduce;
 using Snap.HutaoAPI.Entities;
-using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Services.MapReduceCalculation;
@@ -37,31 +37,22 @@ public class ActivedConstellationNumCalculator : IStatisticCalculator
         ConcurrentBag<AvatarConstellationInfo> calculationResult = dbContext.AvatarDetails
             .Select(avatar => new AvatarConstellationPair(avatar.AvatarId, avatar.ActivedConstellationNum))
             .AsNoTracking()
-            .Reduce((AvatarConstellationPair input, ConcurrentDictionary<int, ConcurrentBag<int>> result) =>
-            {
-                result
-                    .GetOrNew(input.AvatarId)
-                    .Add(input.Constellation);
-            })
-            .Reduce((KeyValuePair<int, ConcurrentBag<int>> idCountBagPair, ConcurrentBag<AvatarConstellationInfo> result) =>
-            {
-                IEnumerable<Rate<int>> rate = idCountBagPair.Value
-                    .Reduce((int constellation, ConcurrentDictionary<int, int> constellationCountMap) =>
-                    {
-                        constellationCountMap.AddOrUpdate(constellation, 1, (_, count) => Interlocked.Increment(ref count));
-                    })
-                    .Select(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / idCountBagPair.Value.Count));
 
-                result.Add(new()
-                {
-                    Avatar = idCountBagPair.Key,
-                    Rate = rate,
-                    HoldingRate = (double)idCountBagPair.Value.Count / totalPlayerCount,
-                });
+            // 按角色id分组
+            .ParallelToMappedBag(input => input.AvatarId, input => input.Constellation)
+            .ParallelSelect(group => new AvatarConstellationInfo()
+            {
+                Avatar = group.Key,
+                Rate = group.Value
+
+                    // 统计各个命座个数
+                    .ParallelToAggregateMap()
+                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / group.Value.Count)),
+                HoldingRate = (double)group.Value.Count / totalPlayerCount,
             });
 
         await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(calculationResult);
     }
-}
 
-internal record AvatarConstellationPair(int AvatarId, int Constellation);
+    internal record AvatarConstellationPair(int AvatarId, int Constellation);
+}

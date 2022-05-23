@@ -19,7 +19,7 @@ public class AvatarConstellationInfo
     public double HoldingRate { get; set; }
 
     /// <summary>
-    /// 命座率
+    /// 命座持有率
     /// </summary>
     public IEnumerable<Rate<int>> Rate { get; set; } = null!;
 }

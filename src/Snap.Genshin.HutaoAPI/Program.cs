@@ -10,6 +10,7 @@ using Snap.HutaoAPI.Configurations;
 using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Services;
+using Snap.HutaoAPI.Services.Abstraction;
 using Snap.HutaoAPI.Services.StatisticCalculation;
 using System.Security.Claims;
 using System.Text;
@@ -20,7 +21,8 @@ builder.ExitOnWrongEnvironment();
 
 var services = builder.Services;
 
-services.AddControllers()
+services
+    .AddControllers()
     .Services
     .AddMemoryCache()
     .AddDbContext<ApplicationDbContext>(optionBuilder =>
@@ -35,6 +37,15 @@ services.AddControllers()
                 (CoreEventId.ContextInitialized, LogLevel.Debug)));
     })
     .AddScoped<IStatisticsProvider, StatisticsProvider>()
+    .AddGenshinStatistics(config =>
+        config
+            .AddCalculator<OverviewDataCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.AvatarParticipationCalculator>()
+            .AddCalculator<TeamCollocationCalculator>()
+            .AddCalculator<WeaponUsageCalculator>()
+            .AddCalculator<AvatarReliquaryUsageCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
+            .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -98,12 +109,12 @@ services.AddControllers()
         });
 
         // We only have one executable file so it's fine.
-        var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        string xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         c.IncludeXmlComments(xmlPath);
     });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app
     .UseSwagger()
@@ -112,11 +123,9 @@ app
         option.SwaggerEndpoint("/swagger/v1/swagger.json", "记录交互 API");
         option.SwaggerEndpoint("/swagger/v2/swagger.json", "数据详情 API");
         option.SwaggerEndpoint("/swagger/v3/swagger.json", "物品信息 API");
-    });
-
-app.UseAuthentication();
-
-app.UseAuthorization();
+    })
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.MapControllers();
 

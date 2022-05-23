@@ -3,7 +3,7 @@
 
 using Snap.HutaoAPI.Models.Identity;
 
-namespace Snap.HutaoAPI.Services
+namespace Snap.HutaoAPI.Services.Abstraction
 {
     /// <summary>
     /// Mail service

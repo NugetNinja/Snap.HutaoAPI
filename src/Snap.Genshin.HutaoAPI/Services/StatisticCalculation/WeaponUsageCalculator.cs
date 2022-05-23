@@ -1,6 +1,10 @@
-﻿using Snap.HutaoAPI.Entities;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Entities.Record;
 using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Services.Abstraction;
 
 namespace Snap.HutaoAPI.Services.StatisticCalculation
 {
@@ -42,13 +46,14 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                     .GroupBy(avatar => avatar.WeaponId)
                     .OrderByDescending(group => group.Count())
                     .Take(8);
+
                 // 取武器使用率前8
                 foreach (IGrouping<int, DetailedAvatarInfo>? weapon in weaponGroup)
                 {
                     weaponRateList.Add(new()
                     {
                         Id = weapon.Key,
-                        Value = (double)weapon.Count() / count
+                        Value = (double)weapon.Count() / count,
                     });
                 }
 

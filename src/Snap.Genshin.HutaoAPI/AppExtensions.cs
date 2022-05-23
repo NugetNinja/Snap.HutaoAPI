@@ -1,7 +1,18 @@
-﻿namespace Snap.HutaoAPI;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
 
+namespace Snap.HutaoAPI;
+
+/// <summary>
+/// 应用程序扩展
+/// </summary>
 public static class AppExtensions
 {
+    /// <summary>
+    /// 在错误的环境下退出
+    /// </summary>
+    /// <param name="builder">构建器</param>
+    /// <returns>可继续操作的构建器</returns>
     public static WebApplicationBuilder ExitOnWrongEnvironment(this WebApplicationBuilder builder)
     {
 #if DEBUG
@@ -11,6 +22,7 @@ public static class AppExtensions
             Environment.Exit(Environment.ExitCode);
         }
 #endif
+
 #if RELEASE
         if (builder.Environment.IsDevelopment())
         {

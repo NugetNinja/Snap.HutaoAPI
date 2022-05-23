@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Snap.HutaoAPI.Models;
 using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Models.Statistics;
-using Snap.HutaoAPI.Services;
+using Snap.HutaoAPI.Services.Abstraction;
 using Snap.HutaoAPI.Services.StatisticCalculation;
 using System.Text.Json;
 

@@ -2,6 +2,7 @@
 using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Entities.Record;
 using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Services.Abstraction;
 
 namespace Snap.HutaoAPI.Services.StatisticCalculation
 {

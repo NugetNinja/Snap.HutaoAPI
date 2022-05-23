@@ -2,6 +2,7 @@
 using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Entities.Record;
 using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Services.Abstraction;
 
 namespace Snap.HutaoAPI.Services.StatisticCalculation
 {
@@ -49,6 +50,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                     {
                         set.Count = 2;
                     }
+
                     // TODO 该逻辑可否移动到Controller
                     set.UnionId = $"{set.Id}-{set.Count}";
                 }
@@ -81,8 +83,8 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                     .Select(kvp => new Rate<string>
                     {
                         Id = kvp.Key,
-                        Value = (double)kvp.Value / countDic[kv.Key]
-                    })
+                        Value = (double)kvp.Value / countDic[kv.Key],
+                    }),
                 };
 
             await statisticsProvider.SaveStatistics<AvatarReliquaryUsageCalculator>(result);

@@ -2,6 +2,7 @@
 using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Entities.Record;
 using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Services.Abstraction;
 
 namespace Snap.HutaoAPI.Services.StatisticCalculation
 {
@@ -21,6 +22,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
         {
             Dictionary<int, IDictionary<int, int>> avatarBattleWithWhoCountDic = new(128);
             Dictionary<int, int> avatarBattleWithAnyCountDic = new(128);
+
             foreach (DetailedBattleInfo battle in dbContext.SpiralAbyssBattles.Include(battle => battle.Avatars))
             {
                 foreach (SpiralAbyssAvatar avatar in battle.Avatars)
@@ -30,6 +32,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                         avatarBattleWithWhoCountDic.Add(avatar.AvatarId, new Dictionary<int, int>(128));
                         avatarBattleWithAnyCountDic.Add(avatar.AvatarId, 0);
                     }
+
                     foreach (SpiralAbyssAvatar otherAvatar in battle.Avatars)
                     {
                         if (avatar.AvatarId == otherAvatar.AvatarId)
@@ -47,6 +50,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                     }
                 }
             }
+
             // 按照出现次数排序
             Dictionary<int, IEnumerable<(int AvatarId, int Count)>> avatarBattleWithWhoList = new(128);
             foreach (KeyValuePair<int, IDictionary<int, int>> pair in avatarBattleWithWhoCountDic)

@@ -1,0 +1,124 @@
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using System.Collections.Concurrent;
+
+namespace Snap.Genshin.MapReduce;
+
+/// <summary>
+/// 规约扩展方法
+/// </summary>
+public static class ParallelExtensions
+{
+    /// <summary>
+    /// 规约到映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <typeparam name="TOutputValue">输出值的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="action">执行的规约操作</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TOutputKey, TOutputValue> ParallelToMap<TInput, TOutputKey, TOutputValue>(
+        this IEnumerable<TInput> inputData,
+        Action<TInput, ConcurrentDictionary<TOutputKey, TOutputValue>> action)
+        where TOutputKey : notnull
+    {
+        ConcurrentDictionary<TOutputKey, TOutputValue> result = new();
+        Parallel.ForEach(inputData, input => action(input, result));
+        return result;
+    }
+
+    /// <summary>
+    /// 规约到计数映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TInput, int> ParallelToAggregateMap<TInput>(this IEnumerable<TInput> inputData)
+        where TInput : notnull
+    {
+        return inputData.ParallelToMap((TInput input, ConcurrentDictionary<TInput, int> countMap) =>
+        {
+            countMap.AddOrUpdate(input, 1, (_, count) => Interlocked.Increment(ref count));
+        });
+    }
+
+    /// <summary>
+    /// 规约到计数映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="keySelector">键选择器</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TOutputKey, int> ParallelToAggregateMap<TInput, TOutputKey>(
+        this IEnumerable<TInput> inputData,
+        Func<TInput, TOutputKey> keySelector)
+        where TInput : notnull
+        where TOutputKey : notnull
+    {
+        return inputData.ParallelToMap((TInput input, ConcurrentDictionary<TOutputKey, int> countMap) =>
+        {
+            countMap.AddOrUpdate(keySelector(input), 1, (_, count) => Interlocked.Increment(ref count));
+        });
+    }
+
+    /// <summary>
+    /// 规约到包的映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <typeparam name="TOutputValue">输出包内值的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="keySelector">键选择器</param>
+    /// <param name="valueSelector">值选择器</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TOutputKey, ConcurrentBag<TOutputValue>> ParallelToMappedBag<TInput, TOutputKey, TOutputValue>(
+        this IEnumerable<TInput> inputData,
+        Func<TInput, TOutputKey> keySelector,
+        Func<TInput, TOutputValue> valueSelector)
+        where TOutputKey : notnull
+    {
+        return inputData.ParallelToMap((TInput input, ConcurrentDictionary<TOutputKey, ConcurrentBag<TOutputValue>> result) =>
+        {
+            result
+                .GetOrAdd(keySelector(input), (_) => new ConcurrentBag<TOutputValue>())
+                .Add(valueSelector(input));
+        });
+    }
+
+    /// <summary>
+    /// 规约到包
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutput">输出值的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="action">执行的规约操作</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentBag<TOutput> ReduceToBag<TInput, TOutput>(
+        this IEnumerable<TInput> inputData,
+        Action<TInput, ConcurrentBag<TOutput>> action)
+    {
+        ConcurrentBag<TOutput> result = new();
+        Parallel.ForEach(inputData, input => action(input, result));
+        return result;
+    }
+
+    /// <summary>
+    /// 规约到包
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutput">输出值的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="valueSelector">值选择器</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentBag<TOutput> ParallelSelect<TInput, TOutput>(
+        this IEnumerable<TInput> inputData,
+        Func<TInput, TOutput> valueSelector)
+    {
+        ConcurrentBag<TOutput> result = new();
+        Parallel.ForEach(inputData, input => result.Add(valueSelector(input)));
+        return result;
+    }
+}

@@ -4,6 +4,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Services.Abstraction;
 using System.Text.Json;
 
 namespace Snap.HutaoAPI.Services

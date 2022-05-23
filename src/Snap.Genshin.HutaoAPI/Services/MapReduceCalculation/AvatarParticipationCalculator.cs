@@ -4,9 +4,8 @@
 using Microsoft.EntityFrameworkCore;
 using Snap.Genshin.MapReduce;
 using Snap.HutaoAPI.Entities;
-using Snap.HutaoAPI.Entities.Record;
-using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
+using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Services.MapReduceCalculation;
@@ -35,36 +34,24 @@ public class AvatarParticipationCalculator : IStatisticCalculator
     {
         ConcurrentBag<AvatarParticipation> calculationResult = dbContext.SpiralAbyssAvatars
 
-            // 忽略九层以下数据
+            // 忽略 九层以下 非满星数据 数据
             .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9)
-
-            // 忽略非满星数据
             .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.Star == 3)
 
             .Include(avatar => avatar.SpiralAbyssBattle)
             .ThenInclude(battle => battle.AbyssLevel)
             .AsNoTracking()
-            .Reduce((SpiralAbyssAvatar avatar, ConcurrentDictionary<int, ConcurrentBag<SpiralAbyssAvatar>> result) =>
-            {
-                result
-                    .GetOrNew(avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex)
-                    .Add(avatar);
-            })
-            .Reduce((KeyValuePair<int, ConcurrentBag<SpiralAbyssAvatar>> floorAvatarBarPair, ConcurrentBag<AvatarParticipation> result) =>
-            {
-                // 当前层出场的所有角色
-                IEnumerable<Rate<int>>? rate = floorAvatarBarPair.Value
-                    .Reduce((SpiralAbyssAvatar avatar, ConcurrentDictionary<int, int> avatarIdCountMap) =>
-                    {
-                        avatarIdCountMap.AddOrUpdate(avatar.AvatarId, 1, (_, count) => Interlocked.Increment(ref count));
-                    })
-                    .Select(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / floorAvatarBarPair.Value.Count));
 
-                result.Add(new()
-                {
-                    Floor = floorAvatarBarPair.Key,
-                    AvatarUsage = rate,
-                });
+            // 按楼层分组
+            .ParallelToMappedBag(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex, avatar => avatar)
+            .ParallelSelect(floorAvatarBarPair => new AvatarParticipation()
+            {
+                Floor = floorAvatarBarPair.Key,
+                AvatarUsage = floorAvatarBarPair.Value
+
+                    // 统计角色的出场次数
+                    .ParallelToAggregateMap(avatar => avatar.AvatarId)
+                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / floorAvatarBarPair.Value.Count)),
             });
 
         await statisticsProvider.SaveStatistics<AvatarParticipationCalculator>(calculationResult);
