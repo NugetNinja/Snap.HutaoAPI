@@ -2,8 +2,8 @@
 // Licensed under the MIT license.
 
 using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.MapReduce;
 using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
@@ -37,16 +37,12 @@ public class ActivedConstellationNumCalculator : IStatisticCalculator
         ConcurrentBag<AvatarConstellationInfo> calculationResult = dbContext.AvatarDetails
             .Select(avatar => new AvatarConstellationPair(avatar.AvatarId, avatar.ActivedConstellationNum))
             .AsNoTracking()
-
-            // 按角色id分组
-            .ParallelToMappedBag(input => input.AvatarId, input => input.Constellation)
+            .ParallelToMappedBag(input => input.AvatarId, input => input.Constellation) // 按角色id分组
             .ParallelSelect(group => new AvatarConstellationInfo()
             {
                 Avatar = group.Key,
                 Rate = group.Value
-
-                    // 统计各个命座个数
-                    .ParallelToAggregateMap()
+                    .ParallelToAggregateMap() // 统计各个命座个数
                     .ParallelSelect(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / group.Value.Count)),
                 HoldingRate = (double)group.Value.Count / totalPlayerCount,
             });

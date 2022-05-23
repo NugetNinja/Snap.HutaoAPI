@@ -3,7 +3,7 @@
 
 using System.Collections.Concurrent;
 
-namespace Snap.Genshin.MapReduce;
+namespace Snap.HutaoAPI.Extension;
 
 /// <summary>
 /// 规约扩展方法
@@ -85,6 +85,36 @@ public static class ParallelExtensions
             result
                 .GetOrAdd(keySelector(input), (_) => new ConcurrentBag<TOutputValue>())
                 .Add(valueSelector(input));
+        });
+    }
+
+    /// <summary>
+    /// 规约到包的映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <typeparam name="TOutputValue">输出包内值的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="keySelector">键选择器</param>
+    /// <param name="valueSelector">值选择器</param>
+    /// <param name="valueFilter">值过滤器</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TOutputKey, ConcurrentBag<TOutputValue>> ParallelToMappedBag<TInput, TOutputKey, TOutputValue>(
+        this IEnumerable<TInput> inputData,
+        Func<TInput, TOutputKey> keySelector,
+        Func<TInput, TOutputValue> valueSelector,
+        Func<TOutputValue, bool> valueFilter)
+        where TOutputKey : notnull
+    {
+        return inputData.ParallelToMap((TInput input, ConcurrentDictionary<TOutputKey, ConcurrentBag<TOutputValue>> result) =>
+        {
+            TOutputValue value = valueSelector(input);
+            if (valueFilter(value))
+            {
+                result
+                    .GetOrAdd(keySelector(input), (_) => new ConcurrentBag<TOutputValue>())
+                    .Add(value);
+            }
         });
     }
 

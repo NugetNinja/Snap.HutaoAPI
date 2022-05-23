@@ -2,8 +2,8 @@
 // Licensed under the MIT license.
 
 using Microsoft.EntityFrameworkCore;
-using Snap.Genshin.MapReduce;
 using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
@@ -11,7 +11,7 @@ using System.Collections.Concurrent;
 namespace Snap.HutaoAPI.Services.MapReduceCalculation;
 
 /// <summary>
-/// use map reduce
+/// 角色搭配计算器
 /// </summary>
 public class AvatarParticipationCalculator : IStatisticCalculator
 {
@@ -19,7 +19,7 @@ public class AvatarParticipationCalculator : IStatisticCalculator
     private readonly IStatisticsProvider statisticsProvider;
 
     /// <summary>
-    /// 构造一个新的角色参与计算器
+    /// 构造一个新的角色搭配计算器
     /// </summary>
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="statisticsProvider">统计提供器</param>
@@ -33,24 +33,17 @@ public class AvatarParticipationCalculator : IStatisticCalculator
     public async Task Calculate()
     {
         ConcurrentBag<AvatarParticipation> calculationResult = dbContext.SpiralAbyssAvatars
-
-            // 忽略 九层以下 非满星数据 数据
-            .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9)
-            .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.Star == 3)
-
+            .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9) // 忽略九层以下数据
+            .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.Star == 3) // 忽略非满星数据
             .Include(avatar => avatar.SpiralAbyssBattle)
             .ThenInclude(battle => battle.AbyssLevel)
             .AsNoTracking()
-
-            // 按楼层分组
-            .ParallelToMappedBag(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex, avatar => avatar)
+            .ParallelToMappedBag(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex, avatar => avatar) // 按楼层分组
             .ParallelSelect(floorAvatarBarPair => new AvatarParticipation()
             {
                 Floor = floorAvatarBarPair.Key,
                 AvatarUsage = floorAvatarBarPair.Value
-
-                    // 统计角色的出场次数
-                    .ParallelToAggregateMap(avatar => avatar.AvatarId)
+                    .ParallelToAggregateMap(avatar => avatar.AvatarId) // 统计角色的出场次数
                     .ParallelSelect(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / floorAvatarBarPair.Value.Count)),
             });
 

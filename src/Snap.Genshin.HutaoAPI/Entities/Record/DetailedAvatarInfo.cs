@@ -69,4 +69,24 @@ public class DetailedAvatarInfo
     /// 圣遗物配置信息
     /// </summary>
     public IList<DetailedReliquarySetInfo> ReliquarySets { get; set; } = null!;
+
+    /// <summary>
+    /// 标准化的圣遗物个数
+    /// </summary>
+    public IList<DetailedReliquarySetInfo> NormalizedReliquarySets
+    {
+        get
+        {
+            IEnumerable<DetailedReliquarySetInfo> sets = ReliquarySets
+                .Where(set => set.Count >= 2);
+
+            // 标准化装备数量
+            foreach (DetailedReliquarySetInfo set in sets)
+            {
+                set.Count = set.Count >= 4 ? 4 : 2;
+            }
+
+            return sets.ToList();
+        }
+    }
 }

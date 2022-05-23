@@ -43,7 +43,7 @@ services
             .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.AvatarParticipationCalculator>()
             .AddCalculator<TeamCollocationCalculator>()
             .AddCalculator<WeaponUsageCalculator>()
-            .AddCalculator<AvatarReliquaryUsageCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.AvatarReliquaryUsageCalculator>()
             .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
             .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

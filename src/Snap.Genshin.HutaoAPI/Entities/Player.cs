@@ -13,6 +13,17 @@ namespace Snap.HutaoAPI.Entities;
 public class Player
 {
     /// <summary>
+    /// 构造一个新的玩家
+    /// </summary>
+    /// <param name="uid">uid</param>
+    /// <param name="avatars">角色列表</param>
+    public Player(string uid, IList<DetailedAvatarInfo> avatars)
+    {
+        Uid = uid;
+        Avatars = avatars;
+    }
+
+    /// <summary>
     /// 玩家Id (from database)
     /// </summary>
     [Key]
@@ -26,7 +37,7 @@ public class Player
     public string Uid { get; set; } = null!;
 
     /// <summary>
-    /// 外键
+    /// 角色列表
     /// </summary>
     public IList<DetailedAvatarInfo> Avatars { get; set; } = null!;
 }
