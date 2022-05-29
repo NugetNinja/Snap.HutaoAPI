@@ -21,19 +21,39 @@ public class Rate<T>
     /// </summary>
     /// <param name="id">id</param>
     /// <param name="value">值</param>
-    public Rate(T? id, double value)
+    public Rate(T id, decimal value)
     {
         Id = id;
         Value = value;
     }
 
     /// <summary>
+    /// 构造一个新的比率
+    /// </summary>
+    /// <param name="keyValuePair">键值对</param>
+    public Rate(KeyValuePair<T, decimal> keyValuePair)
+    {
+        Id = keyValuePair.Key;
+        Value = keyValuePair.Value;
+    }
+
+    /// <summary>
+    /// 构造一个新的比率
+    /// </summary>
+    /// <param name="keyValuePair">键值对</param>
+    public Rate(KeyValuePair<T, int> keyValuePair)
+    {
+        Id = keyValuePair.Key;
+        Value = keyValuePair.Value;
+    }
+
+    /// <summary>
     /// Id
     /// </summary>
-    public T? Id { get; set; }
+    public T Id { get; set; } = default!;
 
     /// <summary>
     /// 值
     /// </summary>
-    public double Value { get; set; }
+    public decimal Value { get; set; }
 }

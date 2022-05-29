@@ -40,11 +40,11 @@ services
     .AddGenshinStatistics(config =>
         config
             .AddCalculator<OverviewDataCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.AvatarParticipationCalculator>()
-            .AddCalculator<TeamCollocationCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipationCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.TeamCollocationCalculator>()
             .AddCalculator<WeaponUsageCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.AvatarReliquaryUsageCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.MapReduceCalculation.ActivedConstellationNumCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.AvatarReliquaryUsageCalculator>()
+            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.ActivedConstellationNumCalculator>()
             .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

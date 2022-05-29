@@ -9,7 +9,7 @@ using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
 
-namespace Snap.HutaoAPI.Services.MapReduceCalculation;
+namespace Snap.HutaoAPI.Services.ParallelCalculation;
 
 /// <summary>
 /// 角色圣遗物搭配计算器
@@ -38,7 +38,7 @@ public class AvatarReliquaryUsageCalculator : IStatisticCalculator
             .AsNoTracking()
             .ParallelToMappedBag(
                 avatar => avatar.AvatarId,
-                avatar => avatar.NormalizedReliquarySets,
+                avatar => avatar.GetNormalizedReliquarySets(),
                 sets => sets.Any())
             .ParallelSelect(input =>
             {
@@ -46,7 +46,7 @@ public class AvatarReliquaryUsageCalculator : IStatisticCalculator
                     .ParallelSelect(ConvertReliquarySetsToString);
 
                 // 提取有效圣遗物总数
-                double totalCount = relicBag.Count;
+                decimal totalCount = relicBag.Count;
 
                 IEnumerable<Rate<string>> rates = relicBag
                     .ParallelToAggregateMap()

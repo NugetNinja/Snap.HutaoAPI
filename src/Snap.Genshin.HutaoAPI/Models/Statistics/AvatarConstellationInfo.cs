@@ -16,7 +16,7 @@ public class AvatarConstellationInfo
     /// <summary>
     /// 持有率
     /// </summary>
-    public double HoldingRate { get; set; }
+    public decimal HoldingRate { get; set; }
 
     /// <summary>
     /// 命座持有率

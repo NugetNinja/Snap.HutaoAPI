@@ -8,7 +8,7 @@ using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
 
-namespace Snap.HutaoAPI.Services.MapReduceCalculation;
+namespace Snap.HutaoAPI.Services.ParallelCalculation;
 
 /// <summary>
 /// 命座持有率计算器
@@ -32,7 +32,7 @@ public class ActivedConstellationNumCalculator : IStatisticCalculator
     /// <inheritdoc/>
     public async Task Calculate()
     {
-        int totalPlayerCount = dbContext.Players.Count();
+        decimal totalPlayerCount = dbContext.Players.Count();
 
         ConcurrentBag<AvatarConstellationInfo> calculationResult = dbContext.AvatarDetails
             .Select(avatar => new AvatarConstellationPair(avatar.AvatarId, avatar.ActivedConstellationNum))
@@ -43,12 +43,23 @@ public class ActivedConstellationNumCalculator : IStatisticCalculator
                 Avatar = group.Key,
                 Rate = group.Value
                     .ParallelToAggregateMap() // 统计各个命座个数
-                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / group.Value.Count)),
-                HoldingRate = (double)group.Value.Count / totalPlayerCount,
+                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / group.Value.Count)),
+                HoldingRate = group.Value.Count / totalPlayerCount,
             });
 
         await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(calculationResult);
     }
 
-    internal record AvatarConstellationPair(int AvatarId, int Constellation);
+    private class AvatarConstellationPair
+    {
+        public AvatarConstellationPair(int avatarId, int constellation)
+        {
+            AvatarId = avatarId;
+            Constellation = constellation;
+        }
+
+        public int AvatarId { get; set; }
+
+        public int Constellation { get; set; }
+    }
 }

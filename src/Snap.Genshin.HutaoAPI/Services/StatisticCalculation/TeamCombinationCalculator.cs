@@ -9,14 +9,16 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
     [Obsolete("Should not use StatisticCalculation anymore")]
     public class TeamCombinationCalculator : IStatisticCalculator
     {
+        private readonly ApplicationDbContext dbContext;
+        private readonly IStatisticsProvider statisticsProvider;
+
         public TeamCombinationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         {
             this.dbContext = dbContext;
             this.statisticsProvider = statisticsProvider;
         }
 
-        private readonly ApplicationDbContext dbContext;
-        private readonly IStatisticsProvider statisticsProvider;
+
 
         public async Task Calculate()
         {
@@ -24,6 +26,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 .Where(battle => battle.AbyssLevel.FloorIndex >= 9)
                 .Include(battle => battle.AbyssLevel)
                 .ToList();
+
             IEnumerable<IGrouping<string, DetailedBattleInfo>> groups = battles
                 .GroupBy(battle => $"{battle.AbyssLevel.FloorIndex}-{battle.AbyssLevel.LevelIndex}");
 
@@ -68,7 +71,7 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 var sorted = (from kv in countDic orderby kv.Value descending select kv).Take(24);
 
                 string[] floor_index = group.Key.Split('-');
-                //Convert.ToInt32 性能问题
+                // Convert.ToInt32 性能问题
                 int floor = Convert.ToInt32(floor_index[0]);
                 int index = Convert.ToInt32(floor_index[1]);
 

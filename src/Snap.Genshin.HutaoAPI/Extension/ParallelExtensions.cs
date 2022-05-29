@@ -69,6 +69,27 @@ public static class ParallelExtensions
     /// </summary>
     /// <typeparam name="TInput">输入的类型</typeparam>
     /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="keySelector">键选择器</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TOutputKey, ConcurrentBag<TInput>> ParallelGroupBy<TInput, TOutputKey>(
+        this IEnumerable<TInput> inputData,
+        Func<TInput, TOutputKey> keySelector)
+        where TOutputKey : notnull
+    {
+        return inputData.ParallelToMap((TInput input, ConcurrentDictionary<TOutputKey, ConcurrentBag<TInput>> result) =>
+        {
+            result
+                .GetOrAdd(keySelector(input), (_) => new ConcurrentBag<TInput>())
+                .Add(input);
+        });
+    }
+
+    /// <summary>
+    /// 规约到包的映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
     /// <typeparam name="TOutputValue">输出包内值的类型</typeparam>
     /// <param name="inputData">输入数据</param>
     /// <param name="keySelector">键选择器</param>
@@ -116,23 +137,6 @@ public static class ParallelExtensions
                     .Add(value);
             }
         });
-    }
-
-    /// <summary>
-    /// 规约到包
-    /// </summary>
-    /// <typeparam name="TInput">输入的类型</typeparam>
-    /// <typeparam name="TOutput">输出值的类型</typeparam>
-    /// <param name="inputData">输入数据</param>
-    /// <param name="action">执行的规约操作</param>
-    /// <returns>规约的结果</returns>
-    public static ConcurrentBag<TOutput> ReduceToBag<TInput, TOutput>(
-        this IEnumerable<TInput> inputData,
-        Action<TInput, ConcurrentBag<TOutput>> action)
-    {
-        ConcurrentBag<TOutput> result = new();
-        Parallel.ForEach(inputData, input => action(input, result));
-        return result;
     }
 
     /// <summary>

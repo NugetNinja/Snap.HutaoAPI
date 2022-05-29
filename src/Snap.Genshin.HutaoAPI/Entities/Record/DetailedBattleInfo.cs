@@ -39,4 +39,9 @@ public class DetailedBattleInfo
     /// 外键 深渊层数
     /// </summary>
     public long SpiralAbyssLevelId { get; set; }
+
+    public string GetFloorLevelString()
+    {
+        return $"{AbyssLevel.FloorIndex}-{AbyssLevel.LevelIndex}";
+    }
 }

@@ -8,7 +8,7 @@ using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
 using System.Collections.Concurrent;
 
-namespace Snap.HutaoAPI.Services.MapReduceCalculation;
+namespace Snap.HutaoAPI.Services.ParallelCalculation;
 
 /// <summary>
 /// 角色搭配计算器
@@ -44,7 +44,7 @@ public class AvatarParticipationCalculator : IStatisticCalculator
                 Floor = floorAvatarBarPair.Key,
                 AvatarUsage = floorAvatarBarPair.Value
                     .ParallelToAggregateMap(avatar => avatar.AvatarId) // 统计角色的出场次数
-                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (double)idCount.Value / floorAvatarBarPair.Value.Count)),
+                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / floorAvatarBarPair.Value.Count)),
             });
 
         await statisticsProvider.SaveStatistics<AvatarParticipationCalculator>(calculationResult);
