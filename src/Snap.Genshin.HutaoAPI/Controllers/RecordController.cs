@@ -105,7 +105,9 @@ public class RecordController : ControllerBase
         dbContext.PlayerRecords.Add(new DetailedRecordInfo()
         {
             PlayerId = player.InnerId,
-            SpiralAbyssLevels = record.PlayerSpiralAbyssesLevels.Select(level => level.Complexify()).ToList(),
+            SpiralAbyssLevels = record.PlayerSpiralAbyssesLevels
+                .Select(level => level.Complexify())
+                .ToList(),
         });
 
         await dbContext

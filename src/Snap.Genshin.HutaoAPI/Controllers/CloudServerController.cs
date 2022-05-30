@@ -41,14 +41,8 @@ public class CloudServerController : ControllerBase
 
         logger.LogInformation("已触发数据更新...");
 
-        // 写入忙碌标识
-        cache.Set("_STATISTICS_BUSY", true);
-
         // 计算数据
-        await statisticsService.CalculateStatistics().ConfigureAwait(false);
-
-        // 清除忙碌标识
-        cache.Remove("_STATISTICS_BUSY");
+        await statisticsService.CalculateAllStatistics().ConfigureAwait(false);
 
         return Ok();
     }
@@ -72,4 +66,3 @@ public class CloudServerController : ControllerBase
         return Ok();
     }
 }
-

@@ -3,6 +3,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Snap.HutaoAPI.Entities.Record;
+using Snap.HutaoAPI.Entities.User;
 
 namespace Snap.HutaoAPI.Entities;
 

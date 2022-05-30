@@ -6,17 +6,15 @@ using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
-using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Services.ParallelCalculation;
 
 /// <summary>
 /// 角色搭配计算器
 /// </summary>
-public class TeamCollocationCalculator : IStatisticCalculator
+public class TeamCollocationCalculator : StatisticCalculator<IEnumerable<TeamCollocation>>
 {
     private readonly ApplicationDbContext dbContext;
-    private readonly IStatisticsProvider statisticsProvider;
 
     /// <summary>
     /// 构造一个新的角色搭配计算器
@@ -24,19 +22,19 @@ public class TeamCollocationCalculator : IStatisticCalculator
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="statisticsProvider">统计提供器</param>
     public TeamCollocationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+        : base(statisticsProvider)
     {
         this.dbContext = dbContext;
-        this.statisticsProvider = statisticsProvider;
     }
 
     /// <inheritdoc/>
-    public async Task Calculate()
+    public override IEnumerable<TeamCollocation> Calculate()
     {
-        ConcurrentBag<TeamCollocation> calculationResult = dbContext.SpiralAbyssBattles
+        return dbContext.SpiralAbyssBattles
             .Include(battle => battle.Avatars)
             .Select(battle => battle.Avatars)
             .AsNoTracking()
-            .AsParallel()
+            .AsEnumerable()
             .ParallelSelect(list => list.Select(avatar => avatar.AvatarId)) // 转换到仅剩id的列表
             .ParallelSelect(ids => ids.Select(id => new AvatarBattleWith(id, ids.Where(a => a != id))))
             .SelectMany(list => list)
@@ -54,8 +52,6 @@ public class TeamCollocationCalculator : IStatisticCalculator
                         .Select(idCount => new Rate<int>(idCount.Key, idCount.Value / totalAvatarBattleWithCount)),
                 };
             });
-
-        await statisticsProvider.SaveStatistics<TeamCollocationCalculator>(calculationResult);
     }
 
     private class AvatarBattleWith

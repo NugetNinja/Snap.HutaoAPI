@@ -14,10 +14,9 @@ namespace Snap.HutaoAPI.Services.ParallelCalculation;
 /// <summary>
 /// 角色圣遗物搭配计算器
 /// </summary>
-public class AvatarReliquaryUsageCalculator : IStatisticCalculator
+public class AvatarReliquaryUsageCalculator : StatisticCalculator<IEnumerable<AvatarReliquaryUsage>>
 {
     private readonly ApplicationDbContext dbContext;
-    private readonly IStatisticsProvider statisticsProvider;
 
     /// <summary>
     /// 构造一个新的圣遗物搭配计算器
@@ -25,17 +24,18 @@ public class AvatarReliquaryUsageCalculator : IStatisticCalculator
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="statisticsProvider">统计提供器</param>
     public AvatarReliquaryUsageCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+        : base(statisticsProvider)
     {
         this.dbContext = dbContext;
-        this.statisticsProvider = statisticsProvider;
     }
 
     /// <inheritdoc/>
-    public async Task Calculate()
+    public override IEnumerable<AvatarReliquaryUsage> Calculate()
     {
-        ConcurrentBag<AvatarReliquaryUsage> calculationResult = dbContext.AvatarDetails
+        return dbContext.AvatarDetails
             .Include(avatar => avatar.ReliquarySets)
             .AsNoTracking()
+            .AsEnumerable()
             .ParallelToMappedBag(
                 avatar => avatar.AvatarId,
                 avatar => avatar.GetNormalizedReliquarySets(),
@@ -56,8 +56,6 @@ public class AvatarReliquaryUsageCalculator : IStatisticCalculator
 
                 return new AvatarReliquaryUsage(input.Key, rates);
             });
-
-        await statisticsProvider.SaveStatistics<AvatarReliquaryUsageCalculator>(calculationResult);
     }
 
     private string ConvertReliquarySetsToString(IList<DetailedReliquarySetInfo> sets)

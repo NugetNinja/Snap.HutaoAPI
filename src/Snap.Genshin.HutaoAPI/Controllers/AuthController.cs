@@ -24,8 +24,9 @@ public class AuthController : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult Login([FromBody] LoginModel request)
     {
+        // 重定向至 auth api
         return RedirectPreserveMethod("https://auth.snapgenshin.com/auth/login");
     }
 
-    public record LoginModel([property:Required] Guid AppId, [property:Required] string Secret);
+    public record LoginModel([property: Required] Guid AppId, [property: Required] string Secret);
 }

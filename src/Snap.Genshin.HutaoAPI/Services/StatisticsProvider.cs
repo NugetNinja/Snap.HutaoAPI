@@ -28,18 +28,13 @@ namespace Snap.HutaoAPI.Services
         private readonly ApplicationDbContext dbContext;
         private readonly IMemoryCache cache;
 
-        /// <summary>
-        /// 保存数据
-        /// </summary>
-        /// <typeparam name="TSource">T</typeparam>
-        /// <param name="dataObject">dataObject</param>
-        /// <returns>Task</returns>
-        public async Task SaveStatistics<TSource>(object dataObject)
+        /// <inheritdoc/>
+        public async Task SaveStatisticAsync(Type calculatorType, object dataObject)
         {
-            string? source = typeof(TSource).Name;
+            int periodId = GetSpiralPeriodId(DateTime.UtcNow);
+            string source = calculatorType.Name;
 
             // 新增或修改当期数据
-            int periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.UtcNow);
             Statistics? data = dbContext.Statistics
                 .Where(s => s.Source == source)
                 .Where(s => s.Period == periodId)
@@ -54,33 +49,57 @@ namespace Snap.HutaoAPI.Services
             data.Source = source;
             data.Value = JsonSerializer.Serialize(dataObject);
 
-            await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            await dbContext.SaveChangesAsync()
+                .ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// 读取统计数据
-        /// </summary>
-        /// <typeparam name="TSource">T</typeparam>
-        /// <returns>Task result</returns>
-        // TODO: 以后可以根据泛型来对传出的数据进行格式化
-        public async Task<string?> ReadStatistics<TSource>()
+        /// <inheritdoc/>
+        public async Task<TResult?> ReadStatisticAsync<TCalculator, TResult>()
+            where TCalculator : StatisticCalculator<TResult>
+            where TResult : notnull
         {
             // 正在计算统计数据时拒绝请求
             if (cache.TryGetValue("_STATISTICS_BUSY", out _))
             {
-                return null;
+                return default;
             }
 
-            string? source = typeof(TSource).Name;
+            string? source = typeof(TCalculator).Name;
 
             // 查询当期数据
-            int periodId = IStatisticCalculator.GetSpiralPeriodId(DateTime.UtcNow);
+            int periodId = GetSpiralPeriodId(DateTime.UtcNow);
             Statistics? data = await dbContext.Statistics
                 .Where(s => s.Source == source)
                 .Where(s => s.Period == periodId)
                 .SingleOrDefaultAsync();
 
-            return data?.Value;
+            return data is null
+                ? default
+                : JsonSerializer.Deserialize<TResult>(data.Value);
+        }
+
+        /// <summary>
+        /// 获取深渊期数
+        /// </summary>
+        /// <param name="time">时间</param>
+        /// <returns>深渊期数</returns>
+        private int GetSpiralPeriodId(DateTime time)
+        {
+            int periodNum = (((time.Year - 2000) * 12) + time.Month) * 2;
+
+            // 上半月
+            if (time.Day < 16 || (time.Day == 16 && (time - time.Date).TotalMinutes < 240))
+            {
+                periodNum--;
+            }
+
+            // 上个月
+            if (time.Day == 1 && (time - time.Date).TotalMinutes < 240)
+            {
+                periodNum--;
+            }
+
+            return periodNum;
         }
     }
 }

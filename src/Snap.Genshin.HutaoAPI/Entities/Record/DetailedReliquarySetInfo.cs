@@ -33,7 +33,10 @@ public class DetailedReliquarySetInfo
     /// <summary>
     /// 格式：{Id}-{Count}
     /// </summary>
-    public string UnionId => $"{Id}-{Count}";
+    public string UnionId
+    {
+        get => $"{Id}-{Count}";
+    }
 
     /// <summary>
     /// 外键

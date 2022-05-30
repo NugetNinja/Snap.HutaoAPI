@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snap.HutaoAPI", "src\Snap.Genshin.HutaoAPI\Snap.HutaoAPI.csproj", "{6FB3B159-25F1-4C7A-9FBE-823B0A8233E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snap.Genshin.MapReduce", "src\Snap.Genshin.MapReduce\Snap.Genshin.MapReduce.csproj", "{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{6FB3B159-25F1-4C7A-9FBE-823B0A8233E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FB3B159-25F1-4C7A-9FBE-823B0A8233E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FB3B159-25F1-4C7A-9FBE-823B0A8233E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77BC5AB6-7E1A-4510-B46A-D8D29BFA6532}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

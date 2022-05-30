@@ -27,6 +27,6 @@ namespace Snap.HutaoAPI.Models
         /// <summary>
         /// 服务冲突
         /// </summary>
-        ServiceConcurrentConflict = 102,
+        ServiceConflict = 102,
     }
 }

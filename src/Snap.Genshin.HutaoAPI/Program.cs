@@ -11,6 +11,7 @@ using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Services;
 using Snap.HutaoAPI.Services.Abstraction;
+using Snap.HutaoAPI.Services.ParallelCalculation;
 using Snap.HutaoAPI.Services.StatisticCalculation;
 using System.Security.Claims;
 using System.Text;
@@ -40,11 +41,11 @@ services
     .AddGenshinStatistics(config =>
         config
             .AddCalculator<OverviewDataCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipationCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.TeamCollocationCalculator>()
+            .AddCalculator<AvatarParticipationCalculator>()
+            .AddCalculator<TeamCollocationCalculator>()
             .AddCalculator<WeaponUsageCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.AvatarReliquaryUsageCalculator>()
-            .AddCalculator<Snap.HutaoAPI.Services.ParallelCalculation.ActivedConstellationNumCalculator>()
+            .AddCalculator<AvatarReliquaryUsageCalculator>()
+            .AddCalculator<ActivedConstellationNumCalculator>()
             .AddCalculator<TeamCombinationCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

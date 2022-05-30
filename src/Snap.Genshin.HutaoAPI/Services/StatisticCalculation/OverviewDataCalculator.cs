@@ -10,24 +10,23 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
     /// <summary>
     /// 总览数据计算器
     /// </summary>
-    public class OverviewDataCalculator : IStatisticCalculator
+    public class OverviewDataCalculator : StatisticCalculator<OverviewData>
     {
+        private readonly ApplicationDbContext dbContext;
+
         /// <summary>
         /// 构造一个新的总览数据计算器
         /// </summary>
         /// <param name="dbContext">数据库上下文</param>
         /// <param name="statisticsProvider">统计提供器</param>
         public OverviewDataCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+            : base(statisticsProvider)
         {
             this.dbContext = dbContext;
-            this.statisticsProvider = statisticsProvider;
         }
 
-        private readonly ApplicationDbContext dbContext;
-        private readonly IStatisticsProvider statisticsProvider;
-
         /// <inheritdoc/>
-        public async Task Calculate()
+        public override OverviewData Calculate()
         {
             // 所有玩家数量
             int totalPlayerCount = dbContext.Players.Count();
@@ -43,12 +42,12 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
                 .Distinct()
                 .Count();
 
-            await statisticsProvider.SaveStatistics<OverviewDataCalculator>(new OverviewData
+            return new()
             {
                 CollectedPlayerCount = collectedPlayerCount,
                 TotalPlayerCount = totalPlayerCount,
                 FullStarPlayerCount = fullStarPassedPlayerCount,
-            });
+            };
         }
     }
 }

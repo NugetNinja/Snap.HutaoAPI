@@ -6,17 +6,15 @@ using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
-using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Services.ParallelCalculation;
 
 /// <summary>
 /// 命座持有率计算器
 /// </summary>
-public class ActivedConstellationNumCalculator : IStatisticCalculator
+public class ActivedConstellationNumCalculator : StatisticCalculator<IEnumerable<AvatarConstellationInfo>>
 {
     private readonly ApplicationDbContext dbContext;
-    private readonly IStatisticsProvider statisticsProvider;
 
     /// <summary>
     /// 构造一个新的命座持有率计算器
@@ -24,19 +22,20 @@ public class ActivedConstellationNumCalculator : IStatisticCalculator
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="statisticsProvider">统计提供器</param>
     public ActivedConstellationNumCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+        : base(statisticsProvider)
     {
         this.dbContext = dbContext;
-        this.statisticsProvider = statisticsProvider;
     }
 
     /// <inheritdoc/>
-    public async Task Calculate()
+    public override IEnumerable<AvatarConstellationInfo> Calculate()
     {
         decimal totalPlayerCount = dbContext.Players.Count();
 
-        ConcurrentBag<AvatarConstellationInfo> calculationResult = dbContext.AvatarDetails
+        return dbContext.AvatarDetails
             .Select(avatar => new AvatarConstellationPair(avatar.AvatarId, avatar.ActivedConstellationNum))
             .AsNoTracking()
+            .AsEnumerable()
             .ParallelToMappedBag(input => input.AvatarId, input => input.Constellation) // 按角色id分组
             .ParallelSelect(group => new AvatarConstellationInfo()
             {
@@ -46,8 +45,6 @@ public class ActivedConstellationNumCalculator : IStatisticCalculator
                     .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / group.Value.Count)),
                 HoldingRate = group.Value.Count / totalPlayerCount,
             });
-
-        await statisticsProvider.SaveStatistics<ActivedConstellationNumCalculator>(calculationResult);
     }
 
     private class AvatarConstellationPair

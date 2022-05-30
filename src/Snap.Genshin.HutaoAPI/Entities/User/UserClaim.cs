@@ -4,7 +4,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snap.HutaoAPI.Entities;
+namespace Snap.HutaoAPI.Entities.User;
 
 /// <summary>
 /// 用户Cliam

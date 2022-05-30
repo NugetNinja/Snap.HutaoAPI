@@ -7,8 +7,8 @@ using Snap.HutaoAPI.Models;
 using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
+using Snap.HutaoAPI.Services.ParallelCalculation;
 using Snap.HutaoAPI.Services.StatisticCalculation;
-using System.Text.Json;
 
 namespace Snap.HutaoAPI.Controllers;
 
@@ -19,19 +19,16 @@ namespace Snap.HutaoAPI.Controllers;
 [ApiController]
 public class StatisticsController : ControllerBase
 {
+    private readonly IStatisticsProvider statisticsProvider;
+
     /// <summary>
     /// 构造一个新的统计数据控制器
     /// </summary>
-    /// <param name="logger">日志器</param>
     /// <param name="statisticsProvider">统计提供器</param>
-    public StatisticsController(ILogger<StatisticsController> logger, IStatisticsProvider statisticsProvider)
+    public StatisticsController(IStatisticsProvider statisticsProvider)
     {
-        this.logger = logger;
         this.statisticsProvider = statisticsProvider;
     }
-
-    private readonly IStatisticsProvider statisticsProvider;
-    private readonly ILogger logger;
 
     /// <summary>
     /// 获取角色出场数据
@@ -43,13 +40,13 @@ public class StatisticsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
     public async Task<IActionResult> GetAvatarParticipation()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<AvatarParticipationCalculator>()
+        IEnumerable<AvatarParticipation>? result = await statisticsProvider
+            .ReadStatisticAsync<AvatarParticipationCalculator, IEnumerable<AvatarParticipation>>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("出场率数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarParticipation>>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("出场率数据获取成功", result);
     }
 
     /// <summary>
@@ -62,13 +59,13 @@ public class StatisticsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ApiResponse<OverviewData>))]
     public async Task<IActionResult> GetOverviewData()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<OverviewDataCalculator>()
+        OverviewData? result = await statisticsProvider
+            .ReadStatisticAsync<OverviewDataCalculator, OverviewData>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("总览数据获取成功", JsonSerializer.Deserialize<OverviewData>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("总览数据获取成功", result);
     }
 
     /// <summary>
@@ -81,13 +78,13 @@ public class StatisticsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarReliquaryUsage>>))]
     public async Task<IActionResult> GetAvatarReliquaryUsage()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<AvatarReliquaryUsageCalculator>()
+        IEnumerable<AvatarReliquaryUsage>? result = await statisticsProvider
+            .ReadStatisticAsync<AvatarReliquaryUsageCalculator, IEnumerable<AvatarReliquaryUsage>>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("圣遗物数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarReliquaryUsage>>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("圣遗物数据获取成功", result);
     }
 
     /// <summary>
@@ -100,13 +97,13 @@ public class StatisticsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<TeamCollocation>>))]
     public async Task<IActionResult> GetTeamCollocation()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<TeamCollocationCalculator>()
+        IEnumerable<TeamCollocation>? result = await statisticsProvider
+            .ReadStatisticAsync<TeamCollocationCalculator, IEnumerable<TeamCollocation>>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("角色搭配数据获取成功", JsonSerializer.Deserialize<IEnumerable<TeamCollocation>>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("角色搭配数据获取成功", result);
     }
 
     /// <summary>
@@ -119,13 +116,13 @@ public class StatisticsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
     public async Task<IActionResult> GetWeaponUsage()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<WeaponUsageCalculator>()
+        IEnumerable<WeaponUsage>? result = await statisticsProvider
+            .ReadStatisticAsync<WeaponUsageCalculator, IEnumerable<WeaponUsage>>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("武器数据获取成功", JsonSerializer.Deserialize<IEnumerable<WeaponUsage>>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("武器数据获取成功", result);
     }
 
     /// <summary>
@@ -138,13 +135,13 @@ public class StatisticsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarConstellationInfo>>))]
     public async Task<IActionResult> GetConstellation()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<ActivedConstellationNumCalculator>()
+        IEnumerable<AvatarConstellationInfo>? result = await statisticsProvider
+            .ReadStatisticAsync<ActivedConstellationNumCalculator, IEnumerable<AvatarConstellationInfo>>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("命座数据获取成功", JsonSerializer.Deserialize<IEnumerable<AvatarConstellationInfo>>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("命座数据获取成功", result);
     }
 
     /// <summary>
@@ -155,14 +152,14 @@ public class StatisticsController : ControllerBase
     [ApiExplorerSettings(GroupName = "v2")]
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<LevelTeamUsage>>))]
-    public async Task<IActionResult> TeamCombination()
+    public async Task<IActionResult> GetTeamCombination()
     {
-        string? json = await statisticsProvider
-            .ReadStatistics<TeamCombinationCalculator>()
+        IEnumerable<LevelTeamUsage>? result = await statisticsProvider
+            .ReadStatisticAsync<TeamCombinationCalculator, IEnumerable<LevelTeamUsage>>()
             .ConfigureAwait(false);
 
-        return json is null
-            ? this.Fail(ApiCode.ServiceConcurrentConflict, "服务冲突")
-            : this.Success("队伍使用数据获取成功", JsonSerializer.Deserialize<IEnumerable<LevelTeamUsage>>(json));
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("队伍使用数据获取成功", result);
     }
 }
