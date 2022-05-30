@@ -1,6 +1,7 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Microsoft;
 using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Extension;
@@ -30,6 +31,27 @@ public static class ParallelExtensions
     }
 
     /// <summary>
+    /// 规约到映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <typeparam name="TOutputKey">输出键的类型</typeparam>
+    /// <typeparam name="TOutputValue">输出值的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <param name="dictionaryFactory">字典构造器</param>
+    /// <param name="action">执行的规约操作</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TOutputKey, TOutputValue> ParallelToMap<TInput, TOutputKey, TOutputValue>(
+        this IEnumerable<TInput> inputData,
+        Func<ConcurrentDictionary<TOutputKey, TOutputValue>> dictionaryFactory,
+        Action<TInput, ConcurrentDictionary<TOutputKey, TOutputValue>> action)
+        where TOutputKey : notnull
+    {
+        ConcurrentDictionary<TOutputKey, TOutputValue> result = dictionaryFactory();
+        Parallel.ForEach(inputData, input => action(input, result));
+        return result;
+    }
+
+    /// <summary>
     /// 规约到计数映射
     /// </summary>
     /// <typeparam name="TInput">输入的类型</typeparam>
@@ -39,6 +61,21 @@ public static class ParallelExtensions
         where TInput : notnull
     {
         return inputData.ParallelToMap((TInput input, ConcurrentDictionary<TInput, int> countMap) =>
+        {
+            countMap.AddOrUpdate(input, 1, (_, count) => Interlocked.Increment(ref count));
+        });
+    }
+
+    /// <summary>
+    /// 规约到计数映射
+    /// </summary>
+    /// <typeparam name="TInput">输入的类型</typeparam>
+    /// <param name="inputData">输入数据</param>
+    /// <returns>规约的结果</returns>
+    public static ConcurrentDictionary<TInput, int> ParallelToAggregateMap<TInput>(this IEnumerable<TInput> inputData, Func<ConcurrentDictionary<TInput, int>> mapFactory)
+        where TInput : notnull
+    {
+        return inputData.ParallelToMap(mapFactory, (TInput input, ConcurrentDictionary<TInput, int> countMap) =>
         {
             countMap.AddOrUpdate(input, 1, (_, count) => Interlocked.Increment(ref count));
         });
@@ -154,5 +191,22 @@ public static class ParallelExtensions
         ConcurrentBag<TOutput> result = new();
         Parallel.ForEach(inputData, input => result.Add(valueSelector(input)));
         return result;
+    }
+
+    /// <summary>
+    /// 非空
+    /// </summary>
+    /// <typeparam name="T">源类型</typeparam>
+    /// <param name="source">源</param>
+    /// <returns>非空的源</returns>
+    public static IEnumerable<T> NotNull<T>(this IEnumerable<T?> source)
+        where T : notnull
+    {
+        if (source.Any())
+        {
+            return source.Where(x => x != null)!;
+        }
+
+        return Enumerable.Empty<T>();
     }
 }

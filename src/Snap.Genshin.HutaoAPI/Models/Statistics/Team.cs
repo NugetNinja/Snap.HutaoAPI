@@ -11,29 +11,6 @@ public record Team
     /// <summary>
     /// 构造一个新的队伍
     /// </summary>
-    /// <param name="upHalfAvatars">上半</param>
-    /// <param name="downHalfAvatars">下半</param>
-    public Team(IList<SpiralAbyssAvatar>? upHalfAvatars, IList<SpiralAbyssAvatar>? downHalfAvatars)
-    {
-        string upHalfAvatarsString = upHalfAvatars is null
-                            ? string.Empty
-                            : string.Join(',', upHalfAvatars
-                                .OrderBy(avatar => avatar.AvatarId)
-                                .Select(a => a.AvatarId));
-
-        string downHalfAvatarsString = downHalfAvatars is null
-            ? string.Empty
-            : string.Join(',', downHalfAvatars
-                .OrderBy(avatar => avatar.AvatarId)
-                .Select(a => a.AvatarId));
-
-        UpHalf = upHalfAvatarsString;
-        DownHalf = downHalfAvatarsString;
-    }
-
-    /// <summary>
-    /// 构造一个新的队伍
-    /// </summary>
     /// <param name="upHalf">上半</param>
     /// <param name="downHalf">下半</param>
     [JsonConstructor]
@@ -53,12 +30,39 @@ public record Team
     /// </summary>
     public string? DownHalf { get; set; }
 
+    public static Team? FromBattleInfo(IEnumerable<DetailedBattleInfo> battleInfos)
+    {
+        IEnumerable<int>? up = battleInfos
+            .Where(battle => battle.BattleIndex == 1)
+            .SingleOrDefault()?
+            .Avatars
+            .OrderBy(avatar => avatar.AvatarId)
+            .Select(a => a.AvatarId);
+
+        IEnumerable<int>? down = battleInfos
+            .Where(battle => battle.BattleIndex == 2)
+            .SingleOrDefault()?
+            .Avatars
+            .OrderBy(avatar => avatar.AvatarId)
+            .Select(a => a.AvatarId);
+
+        if (up is null || down is null)
+        {
+            return null;
+        }
+
+        string upString = string.Join(',', up);
+        string downString = string.Join(',', down);
+
+        return new Team(upString, downString);
+    }
+
     /// <summary>
     /// 验证该队伍是否有效
     /// </summary>
     /// <returns>该队伍是否有效</returns>
     public bool Validate()
     {
-        return (!string.IsNullOrEmpty(UpHalf)) && (!string.IsNullOrEmpty(DownHalf));
+        return !(string.IsNullOrEmpty(UpHalf) || string.IsNullOrEmpty(DownHalf));
     }
 }

@@ -6,6 +6,7 @@ using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Extension;
 using Snap.HutaoAPI.Models.Statistics;
 using Snap.HutaoAPI.Services.Abstraction;
+using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Services.ParallelCalculation;
 
@@ -41,10 +42,15 @@ public class ActivedConstellationNumCalculator : StatisticCalculator<IEnumerable
             {
                 Avatar = group.Key,
                 Rate = group.Value
-                    .ParallelToAggregateMap() // 统计各个命座个数
+                    .ParallelToAggregateMap(InitializeWithConstellation) // 统计各个命座个数
                     .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / group.Value.Count)),
                 HoldingRate = group.Value.Count / totalPlayerCount,
             });
+    }
+
+    private ConcurrentDictionary<int, int> InitializeWithConstellation()
+    {
+        return new(Enumerable.Range(0, 7).ToDictionary(x => x));
     }
 
     private class AvatarConstellationPair

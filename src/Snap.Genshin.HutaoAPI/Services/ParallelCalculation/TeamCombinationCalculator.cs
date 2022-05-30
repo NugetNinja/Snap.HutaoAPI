@@ -41,16 +41,8 @@ public class TeamCombinationCalculator : StatisticCalculator<IEnumerable<LevelTe
             {
                 ConcurrentBag<Rate<Team>> teamRate = groupedIdBattle.Value
                     .ParallelGroupBy(battle => battle.SpiralAbyssLevelId)
-                    .ParallelSelect(idBattle => new Team(
-                        idBattle.Value
-                            .Where(battle => battle.BattleIndex == 1)
-                            .Select(battle => battle.Avatars)
-                            .SingleOrDefault(),
-                        idBattle.Value
-                            .Where(battle => battle.BattleIndex == 2)
-                            .Select(battle => battle.Avatars)
-                            .SingleOrDefault()))
-                    .Where(team => team.Validate())
+                    .ParallelSelect(idBattle => Team.FromBattleInfo(idBattle.Value))
+                    .NotNull()
                     .ParallelToAggregateMap()
                     .OrderByDescending(countTeam => countTeam.Value)
                     .Take(24)

@@ -30,18 +30,13 @@ public class DetailedBattleInfo
     public IList<SpiralAbyssAvatar> Avatars { get; set; } = null!;
 
     /// <summary>
-    /// 外键
+    /// 深渊层数
     /// </summary>
     [ForeignKey(nameof(SpiralAbyssLevelId))]
     public DetailedLevelInfo AbyssLevel { get; set; } = null!;
 
     /// <summary>
-    /// 外键 深渊层数
+    /// 深渊层数外键
     /// </summary>
     public long SpiralAbyssLevelId { get; set; }
-
-    public string GetFloorLevelString()
-    {
-        return $"{AbyssLevel.FloorIndex}-{AbyssLevel.LevelIndex}";
-    }
 }

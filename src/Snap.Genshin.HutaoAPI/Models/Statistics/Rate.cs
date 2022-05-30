@@ -31,16 +31,6 @@ public class Rate<T>
     /// 构造一个新的比率
     /// </summary>
     /// <param name="keyValuePair">键值对</param>
-    public Rate(KeyValuePair<T, decimal> keyValuePair)
-    {
-        Id = keyValuePair.Key;
-        Value = keyValuePair.Value;
-    }
-
-    /// <summary>
-    /// 构造一个新的比率
-    /// </summary>
-    /// <param name="keyValuePair">键值对</param>
     public Rate(KeyValuePair<T, int> keyValuePair)
     {
         Id = keyValuePair.Key;
