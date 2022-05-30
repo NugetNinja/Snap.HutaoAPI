@@ -13,11 +13,18 @@ namespace Snap.HutaoAPI.Entities;
 public class Player
 {
     /// <summary>
+    /// 为了EFC
+    /// </summary>
+    public Player()
+    {
+    }
+
+    /// <summary>
     /// 构造一个新的玩家
     /// </summary>
     /// <param name="uid">uid</param>
     /// <param name="avatars">角色列表</param>
-    public Player(string uid, IList<DetailedAvatarInfo> avatars)
+    public Player(string uid, List<DetailedAvatarInfo> avatars)
     {
         Uid = uid;
         Avatars = avatars;

@@ -74,7 +74,7 @@ public class RecordController : ControllerBase
 
         if (player is null)
         {
-            player = new Player(record.Uid, new List<DetailedAvatarInfo>());
+            player = new Player(record.Uid, new());
             dbContext.Players.Add(player);
         }
         else
