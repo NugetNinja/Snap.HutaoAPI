@@ -1,6 +1,8 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Snap.HutaoAPI.Services.Abstraction;
+
 namespace Snap.HutaoAPI.Configurations;
 
 /// <summary>
@@ -19,7 +21,7 @@ public class GenshinStatisticsServiceConfiguration
     /// <typeparam name="T">计算器的类型</typeparam>
     /// <returns>可继续操作的配置</returns>
     public GenshinStatisticsServiceConfiguration AddCalculator<T>()
-        where T : IStatisticCalculator
+        where T : IStatisticPipeline
     {
         CalculatorTypes.Add(typeof(T));
         return this;

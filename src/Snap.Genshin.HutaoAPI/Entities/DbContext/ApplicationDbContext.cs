@@ -70,7 +70,7 @@ public class ApplicationDbContext : DbContext
     /// <summary>
     /// 用户
     /// </summary>
-    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<User.User> Users { get; set; } = null!;
 
     /// <summary>
     /// 用户Claims
