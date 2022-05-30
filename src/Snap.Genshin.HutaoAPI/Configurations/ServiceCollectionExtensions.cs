@@ -1,6 +1,7 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Microsoft.Extensions.Caching.Memory;
 using Snap.HutaoAPI.Services;
 
 namespace Snap.HutaoAPI.Configurations;
@@ -28,9 +29,10 @@ public static class ServiceCollectionExtensions
             // IServiceScope scope = services.CreateScope();
             // ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             ILogger<GenshinStatisticsService> logger = services.GetRequiredService<ILogger<GenshinStatisticsService>>();
+            IMemoryCache memoryCache = services.GetRequiredService<IMemoryCache>();
             IServiceProvider serviceProvider = services.GetRequiredService<IServiceProvider>();
 
-            return new GenshinStatisticsService(config, logger, serviceProvider);
+            return new GenshinStatisticsService(config, logger, memoryCache, serviceProvider);
         });
 
         return services;
