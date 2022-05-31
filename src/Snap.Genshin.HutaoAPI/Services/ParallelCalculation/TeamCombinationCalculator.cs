@@ -34,6 +34,7 @@ public class TeamCombinationCalculator : StatisticCalculator<IEnumerable<LevelTe
         return dbContext.SpiralAbyssBattles
             .Where(battle => battle.AbyssLevel.FloorIndex >= 9)
             .Include(battle => battle.AbyssLevel)
+            .Include(battle => battle.Avatars)
             .AsNoTracking()
             .AsEnumerable()
             .ParallelGroupBy(battle => new FloorIndex(battle.AbyssLevel.FloorIndex, battle.AbyssLevel.LevelIndex))
