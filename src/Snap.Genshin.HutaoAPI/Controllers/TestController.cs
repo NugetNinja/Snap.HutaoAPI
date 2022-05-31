@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Snap.HutaoAPI.Models;
 using Snap.HutaoAPI.Services;
 
 namespace Snap.HutaoAPI.Controllers;
@@ -30,6 +31,6 @@ public class TestController : ControllerBase
         // 计算数据
         await statisticsService.CalculateAllStatistics().ConfigureAwait(false);
 
-        return Ok();
+        return this.Success("完成");
     }
 }
