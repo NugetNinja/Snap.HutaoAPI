@@ -33,8 +33,8 @@ public class DetailedReliquarySetInfo
     /// <summary>
     /// 格式：{Id}-{Count}
     /// </summary>
-    /// <returns>联合id</returns>
-    public string UnionId { get => $"{Id}-{Count}"; }
+    [Obsolete("不应使用此字段")]
+    public string UnionId { get; set; } = string.Empty;
 
     /// <summary>
     /// 外键
@@ -46,4 +46,13 @@ public class DetailedReliquarySetInfo
     /// 外键 对应的角色id
     /// </summary>
     public long AvatarDetailId { get; set; }
+
+    /// <summary>
+    /// 格式：{Id}-{Count}
+    /// </summary>
+    /// <returns>联合id</returns>
+    public string GetUnionId()
+    {
+        return $"{Id}-{Count}";
+    }
 }

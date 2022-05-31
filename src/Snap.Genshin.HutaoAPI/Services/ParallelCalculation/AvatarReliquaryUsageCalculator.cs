@@ -60,6 +60,6 @@ public class AvatarReliquaryUsageCalculator : StatisticCalculator<IEnumerable<Av
 
     private string ConvertReliquarySetsToString(IList<DetailedReliquarySetInfo> sets)
     {
-        return string.Join(';', sets.Select(set => set.UnionId));
+        return string.Join(';', sets.Select(set => set.GetUnionId()));
     }
 }
