@@ -44,7 +44,6 @@ public class AvatarParticipationCalculator : StatisticCalculator<IEnumerable<Ava
                 AvatarUsage = floorAvatarBarPair.Value
                     .ParallelToAggregateMap(avatar => avatar.AvatarId) // 统计角色的出场次数
                     .OrderByDescending(counter => counter.Value)
-                    .Take(8)
                     .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / floorAvatarBarPair.Value.Count)),
             });
     }

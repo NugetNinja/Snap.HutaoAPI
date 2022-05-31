@@ -31,25 +31,6 @@ public class StatisticsController : ControllerBase
     }
 
     /// <summary>
-    /// 获取角色出场数据
-    /// </summary>
-    /// <returns>角色出场数据</returns>
-    [HttpGet("AvatarParticipation")]
-    [ApiExplorerSettings(GroupName = "v2")]
-    [Authorize(IdentityPolicyNames.CommonUser)]
-    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
-    public async Task<IActionResult> GetAvatarParticipation()
-    {
-        IEnumerable<AvatarParticipation>? result = await statisticsProvider
-            .ReadStatisticAsync<AvatarParticipationCalculator, IEnumerable<AvatarParticipation>>()
-            .ConfigureAwait(false);
-
-        return result is null
-            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
-            : this.Success("出场率数据获取成功", result);
-    }
-
-    /// <summary>
     /// 获取总览数据
     /// </summary>
     /// <returns>总览数据</returns>
@@ -66,6 +47,25 @@ public class StatisticsController : ControllerBase
         return result is null
             ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
             : this.Success("总览数据获取成功", result);
+    }
+
+    /// <summary>
+    /// 获取角色出场数据
+    /// </summary>
+    /// <returns>角色出场数据</returns>
+    [HttpGet("AvatarParticipation")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Authorize(IdentityPolicyNames.CommonUser)]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
+    public async Task<IActionResult> GetAvatarParticipation()
+    {
+        IEnumerable<AvatarParticipation>? result = await statisticsProvider
+            .ReadStatisticAsync<AvatarParticipationCalculator, IEnumerable<AvatarParticipation>>()
+            .ConfigureAwait(false);
+
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("出场率数据获取成功", result);
     }
 
     /// <summary>
@@ -110,11 +110,11 @@ public class StatisticsController : ControllerBase
     /// 获取武器使用数据
     /// </summary>
     /// <returns>武器使用数据</returns>
-    [HttpGet("WeaponUsage")]
+    [HttpGet("AvatarWeaponUsage")]
     [ApiExplorerSettings(GroupName = "v2")]
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<WeaponUsage>>))]
-    public async Task<IActionResult> GetWeaponUsage()
+    public async Task<IActionResult> GetAvatarWeaponUsage()
     {
         IEnumerable<WeaponUsage>? result = await statisticsProvider
             .ReadStatisticAsync<WeaponUsageCalculator, IEnumerable<WeaponUsage>>()
@@ -160,6 +160,6 @@ public class StatisticsController : ControllerBase
 
         return result is null
             ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
-            : this.Success("队伍使用数据获取成功", result);
+            : this.Success("队伍使用数据获取成功", result.Select(usage => usage.ReduceTeamsTo(24)));
     }
 }

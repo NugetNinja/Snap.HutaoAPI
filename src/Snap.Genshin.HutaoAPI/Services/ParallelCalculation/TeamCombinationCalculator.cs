@@ -45,8 +45,6 @@ public class TeamCombinationCalculator : StatisticCalculator<IEnumerable<LevelTe
                     .ParallelSelect(idBattle => Team.FromBattleInfo(idBattle.Value))
                     .NotNull()
                     .ParallelToAggregateMap()
-                    .OrderByDescending(countTeam => countTeam.Value)
-                    .Take(24)
                     .ParallelSelect(teamCount => new Rate<Team>(teamCount));
 
                 return new LevelTeamUsage(groupedIdBattle.Key, teamRate);

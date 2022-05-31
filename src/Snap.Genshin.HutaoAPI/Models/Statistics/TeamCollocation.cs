@@ -11,15 +11,6 @@ public class TeamCollocation
     /// <summary>
     /// 角色Id
     /// </summary>
-    [Obsolete("拼写错误")]
-    public int Avater
-    {
-        get => Avatar;
-    }
-
-    /// <summary>
-    /// 角色Id
-    /// </summary>
     public int Avatar { get; set; }
 
     /// <summary>

@@ -43,13 +43,17 @@ public class TeamCollocationCalculator : StatisticCalculator<IEnumerable<TeamCol
             {
                 IEnumerable<int> flattenAvatars = avatarBattleWith.Value
                     .SelectMany(id => id);
+
                 decimal totalAvatarBattleWithCount = flattenAvatars.Count();
+
                 return new TeamCollocation
                 {
                     Avatar = avatarBattleWith.Key,
                     Collocations = flattenAvatars
                         .ParallelToAggregateMap()
-                        .Select(idCount => new Rate<int>(idCount.Key, idCount.Value / totalAvatarBattleWithCount)),
+                        .Select(idCount => new Rate<int>(idCount.Key, idCount.Value / totalAvatarBattleWithCount))
+                        .OrderByDescending(rate => rate.Value)
+                        .Take(8),
                 };
             });
     }
