@@ -30,7 +30,6 @@ namespace Snap.HutaoAPI.Models.Uploading
             {
                 Id = Id,
                 Count = Count,
-                //UnionId = $"{Id}-{Count}",
             };
         }
     }

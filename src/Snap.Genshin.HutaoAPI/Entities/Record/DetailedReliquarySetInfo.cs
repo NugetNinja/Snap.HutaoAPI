@@ -34,10 +34,7 @@ public class DetailedReliquarySetInfo
     /// 格式：{Id}-{Count}
     /// </summary>
     /// <returns>联合id</returns>
-    public string GetUnionId()
-    {
-        return $"{Id}-{Count}";
-    }
+    public string UnionId { get => $"{Id}-{Count}"; }
 
     /// <summary>
     /// 外键
