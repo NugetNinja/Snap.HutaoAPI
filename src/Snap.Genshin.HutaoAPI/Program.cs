@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 using Snap.HutaoAPI;
 using Snap.HutaoAPI.Configurations;
 using Snap.HutaoAPI.Entities;
+using Snap.HutaoAPI.Job;
 using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Services;
 using Snap.HutaoAPI.Services.Abstraction;
@@ -113,6 +115,33 @@ services
         string xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
         string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         c.IncludeXmlComments(xmlPath);
+    })
+
+    // 计划任务
+    .AddQuartz(config =>
+    {
+        config
+            .UseMicrosoftDependencyInjectionJobFactory();
+
+        config
+            .ScheduleJob<StatisticsRefreshJob>(trigger =>
+            {
+                trigger
+                    .StartNow()
+                    .WithCronSchedule("0 0 */1 * * ?");
+            })
+            .ScheduleJob<StatisticsClearJob>(trigger =>
+            {
+                trigger
+                    .StartNow()
+                    .WithCronSchedule("0 0 4 1,16 * ?");
+            });
+    })
+    .AddTransient<StatisticsRefreshJob>()
+    .AddTransient<StatisticsClearJob>()
+    .AddQuartzServer(options =>
+    {
+        options.WaitForJobsToComplete = true;
     });
 
 WebApplication app = builder.Build();
