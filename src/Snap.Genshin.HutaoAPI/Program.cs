@@ -128,7 +128,7 @@ services
             {
                 trigger
                     .StartNow()
-                    .WithCronSchedule("0 0 */1 * * ?");
+                    .WithCronSchedule("0 5 */1 * * ?");
             })
             .ScheduleJob<StatisticsClearJob>(trigger =>
             {
