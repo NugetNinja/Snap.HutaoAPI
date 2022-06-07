@@ -38,12 +38,12 @@ public class AvatarReliquaryUsageCalculator : StatisticCalculator<IEnumerable<Av
             .AsEnumerable()
             .ParallelToMappedBag(
                 avatar => avatar.AvatarId,
-                avatar => avatar.GetNormalizedReliquarySets(),
+                avatar => avatar.GetNormalizedReliquarySets(), // 未排序
                 sets => sets.Any())
             .ParallelSelect(input =>
             {
                 ConcurrentBag<string>? relicBag = input.Value
-                    .ParallelSelect(ConvertReliquarySetsToString);
+                    .ParallelSelect(UnionReliquarySets);
 
                 // 提取有效圣遗物总数
                 decimal totalCount = relicBag.Count;
@@ -58,8 +58,10 @@ public class AvatarReliquaryUsageCalculator : StatisticCalculator<IEnumerable<Av
             });
     }
 
-    private string ConvertReliquarySetsToString(IList<DetailedReliquarySetInfo> sets)
+    private string UnionReliquarySets(IList<DetailedReliquarySetInfo> sets)
     {
-        return string.Join(';', sets.Select(set => set.GetUnionId()));
+        return string.Join(';', sets
+            .OrderBy(set => set.Id)
+            .Select(set => set.GetUnionId()));
     }
 }

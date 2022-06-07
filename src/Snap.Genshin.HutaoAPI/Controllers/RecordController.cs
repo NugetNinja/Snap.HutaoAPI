@@ -8,6 +8,7 @@ using Snap.HutaoAPI.Entities;
 using Snap.HutaoAPI.Entities.Record;
 using Snap.HutaoAPI.Models;
 using Snap.HutaoAPI.Models.Identity;
+using Snap.HutaoAPI.Models.Uploading;
 
 namespace Snap.HutaoAPI.Controllers;
 
@@ -68,8 +69,9 @@ public class RecordController : ControllerBase
     [HttpPost("Upload")]
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ApiExplorerSettings(GroupName = "v1")]
-    public async Task<IActionResult> UploadRecord([FromBody] Models.Uploading.RecordInfo record)
+    public async Task<IActionResult> UploadRecord([FromBody] RecordInfo record)
     {
+        // TODO validate record.
         Player? player = dbContext.Players
             .Where(player => player.Uid == record.Uid)
             .Include(player => player.Avatars)
