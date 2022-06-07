@@ -39,6 +39,7 @@ namespace Snap.HutaoAPI.Services
                 .Where(s => s.Source == source)
                 .Where(s => s.Period == periodId)
                 .SingleOrDefault();
+
             if (data is null)
             {
                 data = new();

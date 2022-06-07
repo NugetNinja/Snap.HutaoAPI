@@ -48,7 +48,8 @@ services
             .AddCalculator<WeaponUsageCalculator>()
             .AddCalculator<AvatarReliquaryUsageCalculator>()
             .AddCalculator<ActivedConstellationNumCalculator>()
-            .AddCalculator<TeamCombinationCalculator>())
+            .AddCalculator<TeamCombinationForFloorAndLevelCalculator>()
+            .AddCalculator<TeamCombinationForFloorCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -104,6 +105,12 @@ services
             Title = "数据详情",
             Description = "获取详细的纵深数据",
         });
+        c.SwaggerDoc("v4", new()
+        {
+            Version = "1.0.0.0",
+            Title = "数据详情2",
+            Description = "获取更详细的纵深数据",
+        });
         c.SwaggerDoc("v3", new()
         {
             Version = "1.0.0.0",
@@ -152,6 +159,7 @@ app
     {
         option.SwaggerEndpoint("/swagger/v1/swagger.json", "记录交互 API");
         option.SwaggerEndpoint("/swagger/v2/swagger.json", "数据详情 API");
+        option.SwaggerEndpoint("/swagger/v4/swagger.json", "数据详情2 API");
         option.SwaggerEndpoint("/swagger/v3/swagger.json", "物品信息 API");
     })
     .UseAuthentication()

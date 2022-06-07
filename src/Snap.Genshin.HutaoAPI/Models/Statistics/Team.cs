@@ -30,6 +30,11 @@ public record Team
     /// </summary>
     public string? DownHalf { get; set; }
 
+    /// <summary>
+    /// 将 <see cref="DetailedBattleInfo"/> 转化到 <see cref="Team"/>
+    /// </summary>
+    /// <param name="battleInfos">战斗信息</param>
+    /// <returns>队伍，当上下半不完整时可能为空</returns>
     public static Team? FromBattleInfo(IEnumerable<DetailedBattleInfo> battleInfos)
     {
         IEnumerable<int>? up = battleInfos
@@ -55,6 +60,16 @@ public record Team
         string downString = string.Join(',', down);
 
         return new Team(upString, downString);
+    }
+
+    /// <summary>
+    /// 检查队伍是否包含某个角色
+    /// </summary>
+    /// <param name="avatar">角色id</param>
+    /// <returns>是否包含</returns>
+    public bool Contains(string avatar)
+    {
+        return UpHalf!.Contains(avatar) || DownHalf!.Contains(avatar);
     }
 
     /// <summary>

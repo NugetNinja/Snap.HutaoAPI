@@ -41,11 +41,7 @@ public class WeaponUsageCalculator : StatisticCalculator<IEnumerable<WeaponUsage
                     .ParallelGroupBy(avatar => avatar.WeaponId)
                     .OrderByDescending(group => group.Value.Count)
                     .Take(8)
-                    .Select(weapon => new Rate<int>
-                    {
-                        Id = weapon.Key,
-                        Value = (decimal)weapon.Value.Count / avatarGroup.Value.Count,
-                    }),
+                    .Select(weapon => new Rate<int>(weapon.Key, (decimal)weapon.Value.Count / avatarGroup.Value.Count)),
             });
     }
 }

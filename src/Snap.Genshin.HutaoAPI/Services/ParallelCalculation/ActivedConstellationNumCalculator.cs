@@ -37,7 +37,7 @@ public class ActivedConstellationNumCalculator : StatisticCalculator<IEnumerable
             .Select(avatar => new AvatarConstellationPair(avatar.AvatarId, avatar.ActivedConstellationNum))
             .AsNoTracking()
             .AsEnumerable()
-            .ParallelToMappedBag(input => input.AvatarId, input => input.Constellation) // 按角色id分组
+            .ParallelGroupBy(input => input.AvatarId, input => input.Constellation) // 按角色id分组
             .ParallelSelect(group => new AvatarConstellationInfo()
             {
                 Avatar = group.Key,
@@ -50,7 +50,7 @@ public class ActivedConstellationNumCalculator : StatisticCalculator<IEnumerable
 
     private ConcurrentDictionary<int, int> InitializeWithConstellation()
     {
-        return new(Enumerable.Range(0, 7).ToDictionary(x => x));
+        return new(Enumerable.Range(0, 7).ToDictionary(x => x, y => 0));
     }
 
     private class AvatarConstellationPair

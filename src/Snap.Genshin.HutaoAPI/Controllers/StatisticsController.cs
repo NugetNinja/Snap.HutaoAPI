@@ -151,15 +151,15 @@ public class StatisticsController : ControllerBase
     [HttpGet("TeamCombination")]
     [ApiExplorerSettings(GroupName = "v2")]
     [Authorize(IdentityPolicyNames.CommonUser)]
-    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<LevelTeamUsage>>))]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<FloorLevelTeamUsage>>))]
     public async Task<IActionResult> GetTeamCombination()
     {
-        IEnumerable<LevelTeamUsage>? result = await statisticsProvider
-            .ReadStatisticAsync<TeamCombinationCalculator, IEnumerable<LevelTeamUsage>>()
+        IEnumerable<FloorLevelTeamUsage>? result = await statisticsProvider
+            .ReadStatisticAsync<TeamCombinationForFloorAndLevelCalculator, IEnumerable<FloorLevelTeamUsage>>()
             .ConfigureAwait(false);
 
         return result is null
             ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
-            : this.Success("队伍使用数据获取成功", result.Select(usage => usage.ReduceTeamsTo(24)));
+            : this.Success("队伍使用数据获取成功", result.Select(usage => usage.ReduceTeamsTo(16)));
     }
 }

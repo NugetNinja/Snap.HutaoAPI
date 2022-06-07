@@ -38,7 +38,7 @@ public class TeamCollocationCalculator : StatisticCalculator<IEnumerable<TeamCol
             .ParallelSelect(list => list.Select(avatar => avatar.AvatarId)) // 转换到仅剩id的列表
             .ParallelSelect(ids => ids.Select(id => new AvatarBattleWith(id, ids.Where(a => a != id))))
             .SelectMany(list => list)
-            .ParallelToMappedBag(battle => battle.AvatarId, battle => battle.BattleWith)
+            .ParallelGroupBy(battle => battle.AvatarId, battle => battle.BattleWith)
             .ParallelSelect(avatarBattleWith =>
             {
                 IEnumerable<int> flattenAvatars = avatarBattleWith.Value

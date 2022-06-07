@@ -3,9 +3,12 @@
 
 namespace Snap.HutaoAPI.Models.Statistics;
 
-public record LevelTeamUsage
+/// <summary>
+/// 层间队伍使用
+/// </summary>
+public record FloorLevelTeamUsage
 {
-    public LevelTeamUsage(FloorIndex level, IEnumerable<Rate<Team>> teams)
+    public FloorLevelTeamUsage(FloorIndex level, IEnumerable<Rate<Team>> teams)
     {
         this.Level = level;
         this.Teams = teams;
@@ -17,14 +20,12 @@ public record LevelTeamUsage
 
     /// <summary>
     /// 减少队伍个数
-    /// 限制到24个内
+    /// 限制到x个内
     /// </summary>
     /// <param name="count">限制的个数</param>
     /// <returns>限制后的队伍使用率</returns>
-    public LevelTeamUsage ReduceTeamsTo(int count)
+    public FloorLevelTeamUsage ReduceTeamsTo(int count)
     {
-        return new LevelTeamUsage(Level, Teams.OrderByDescending(team => team.Value).Take(count));
+        return new FloorLevelTeamUsage(Level, Teams.OrderByDescending(team => team.Value).Take(count));
     }
 }
-
-public record FloorIndex(int Floor, int Index);

@@ -51,12 +51,32 @@
             验证接口控制器
             </summary>
         </member>
-        <member name="M:Snap.HutaoAPI.Controllers.AuthController.Login(Snap.HutaoAPI.Controllers.AuthController.LoginModel)">
+        <member name="M:Snap.HutaoAPI.Controllers.AuthController.Login(Snap.HutaoAPI.Controllers.AuthController.LoginTicket)">
             <summary>
             用户登录
             </summary>
-            <param name="request">请求模型</param>
+            <param name="ticket">请求模型</param>
             <returns>Ok-成功 Unauthorized-密码错误 BadRequest-用户不存在</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Controllers.AuthController.LoginTicket">
+            <summary>
+            登录
+            </summary>
+            <param name="AppId">appid</param>
+            <param name="Secret">密钥</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.AuthController.LoginTicket.#ctor(System.Guid,System.String)">
+            <summary>
+            登录
+            </summary>
+            <param name="AppId">appid</param>
+            <param name="Secret">密钥</param>
+        </member>
+        <member name="P:Snap.HutaoAPI.Controllers.AuthController.LoginTicket.AppId">
+            <summary>appid</summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Controllers.AuthController.LoginTicket.Secret">
+            <summary>密钥</summary>
         </member>
         <member name="T:Snap.HutaoAPI.Controllers.GenshinItemController">
             <summary>
@@ -183,6 +203,52 @@
             <param name="record">记录</param>
             <returns>结果</returns>
         </member>
+        <member name="T:Snap.HutaoAPI.Controllers.Statistics2Controller">
+            <summary>
+            统计数据控制器2
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.#ctor(Snap.HutaoAPI.Services.Abstraction.IStatisticsProvider)">
+            <summary>
+            构造一个新的统计数据控制器
+            </summary>
+            <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.GetTeamCombination">
+            <summary>
+            获取队伍出场数据
+            </summary>
+            <returns>队伍出场数据</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.GetRecommandTeams(Snap.HutaoAPI.Controllers.Statistics2Controller.DesiredInfo)">
+            <summary>
+            获取队伍出场数据
+            </summary>
+            <param name="desiredInfo">期望信息</param>
+            <returns>队伍出场数据</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Controllers.Statistics2Controller.DesiredInfo">
+            <summary>
+            封装期望楼层与角色列表
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.DesiredInfo.#ctor(System.Int32,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            构造一个新的封装类
+            </summary>
+            <param name="floor">楼层</param>
+            <param name="desiredAvatars">期望角色，按期望顺序排序</param>
+        </member>
+        <member name="P:Snap.HutaoAPI.Controllers.Statistics2Controller.DesiredInfo.Floor">
+            <summary>
+            层
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Controllers.Statistics2Controller.DesiredInfo.DesiredAvatars">
+            <summary>
+            期望角色
+            </summary>
+        </member>
         <member name="T:Snap.HutaoAPI.Controllers.StatisticsController">
             <summary>
             统计数据控制器
@@ -194,17 +260,17 @@
             </summary>
             <param name="statisticsProvider">统计提供器</param>
         </member>
-        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetAvatarParticipation">
-            <summary>
-            获取角色出场数据
-            </summary>
-            <returns>角色出场数据</returns>
-        </member>
         <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetOverviewData">
             <summary>
             获取总览数据
             </summary>
             <returns>总览数据</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetAvatarParticipation">
+            <summary>
+            获取角色出场数据
+            </summary>
+            <returns>角色出场数据</returns>
         </member>
         <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetAvatarReliquaryUsage">
             <summary>
@@ -218,7 +284,7 @@
             </summary>
             <returns>角色搭配数据</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetWeaponUsage">
+        <member name="M:Snap.HutaoAPI.Controllers.StatisticsController.GetAvatarWeaponUsage">
             <summary>
             获取武器使用数据
             </summary>
@@ -235,6 +301,31 @@
             获取队伍出场数据
             </summary>
             <returns>队伍出场数据</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Controllers.TestController">
+            <summary>
+            测试控制器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.TestController.#ctor(Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Controllers.TestController},Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.GenshinStatisticsService)">
+            <summary>
+            测试控制器
+            </summary>
+            <param name="logger">日志器</param>
+            <param name="dbContext">数据库上下文</param>
+            <param name="statisticsService">统计服务</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.TestController.RefreshStatistics">
+            <summary>
+            刷新数据
+            </summary>
+            <returns>任务</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.TestController.ClearStatistics">
+            <summary>
+            删除当期统计数据
+            </summary>
+            <returns>任务</returns>
         </member>
         <member name="T:Snap.HutaoAPI.Entities.ApplicationDbContext">
             <summary>
@@ -346,7 +437,12 @@
             玩家实体
             </summary>
         </member>
-        <member name="M:Snap.HutaoAPI.Entities.Player.#ctor(System.String,System.Collections.Generic.IList{Snap.HutaoAPI.Entities.Record.DetailedAvatarInfo})">
+        <member name="M:Snap.HutaoAPI.Entities.Player.#ctor">
+            <summary>
+            为了EFC
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Entities.Player.#ctor(System.String,System.Collections.Generic.List{Snap.HutaoAPI.Entities.Record.DetailedAvatarInfo})">
             <summary>
             构造一个新的玩家
             </summary>
@@ -451,12 +547,12 @@
         </member>
         <member name="P:Snap.HutaoAPI.Entities.Record.DetailedBattleInfo.AbyssLevel">
             <summary>
-            外键
+            深渊层数
             </summary>
         </member>
         <member name="P:Snap.HutaoAPI.Entities.Record.DetailedBattleInfo.SpiralAbyssLevelId">
             <summary>
-            外键 深渊层数
+            深渊层数外键
             </summary>
         </member>
         <member name="T:Snap.HutaoAPI.Entities.Record.DetailedLevelInfo">
@@ -549,11 +645,10 @@
             装备该套装的数量
             </summary>
         </member>
-        <member name="M:Snap.HutaoAPI.Entities.Record.DetailedReliquarySetInfo.GetUnionId">
+        <member name="P:Snap.HutaoAPI.Entities.Record.DetailedReliquarySetInfo.UnionId">
             <summary>
             格式：{Id}-{Count}
             </summary>
-            <returns>联合id</returns>
         </member>
         <member name="P:Snap.HutaoAPI.Entities.Record.DetailedReliquarySetInfo.AvatarInfo">
             <summary>
@@ -564,6 +659,12 @@
             <summary>
             外键 对应的角色id
             </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Entities.Record.DetailedReliquarySetInfo.GetUnionId">
+            <summary>
+            格式：{Id}-{Count}
+            </summary>
+            <returns>联合id</returns>
         </member>
         <member name="T:Snap.HutaoAPI.Entities.Record.SpiralAbyssAvatar">
             <summary>
@@ -729,6 +830,18 @@
             <param name="action">执行的规约操作</param>
             <returns>规约的结果</returns>
         </member>
+        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelToMap``3(System.Collections.Generic.IEnumerable{``0},System.Func{System.Collections.Concurrent.ConcurrentDictionary{``1,``2}},System.Action{``0,System.Collections.Concurrent.ConcurrentDictionary{``1,``2}})">
+            <summary>
+            规约到映射
+            </summary>
+            <typeparam name="TInput">输入的类型</typeparam>
+            <typeparam name="TOutputKey">输出键的类型</typeparam>
+            <typeparam name="TOutputValue">输出值的类型</typeparam>
+            <param name="inputData">输入数据</param>
+            <param name="dictionaryFactory">字典构造器</param>
+            <param name="action">执行的规约操作</param>
+            <returns>规约的结果</returns>
+        </member>
         <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelToAggregateMap``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             规约到计数映射
@@ -737,7 +850,16 @@
             <param name="inputData">输入数据</param>
             <returns>规约的结果</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelToAggregateMap``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelToAggregateMap``1(System.Collections.Generic.IEnumerable{``0},System.Func{System.Collections.Concurrent.ConcurrentDictionary{``0,System.Int32}})">
+            <summary>
+            规约到计数映射
+            </summary>
+            <typeparam name="TInput">输入的类型</typeparam>
+            <param name="inputData">输入数据</param>
+            <param name="mapFactory">构造一个新的字典</param>
+            <returns>规约的结果</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelCountBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
             <summary>
             规约到计数映射
             </summary>
@@ -757,7 +879,7 @@
             <param name="keySelector">键选择器</param>
             <returns>规约的结果</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelToMappedBag``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``2})">
+        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.ParallelGroupBy``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``2})">
             <summary>
             规约到包的映射
             </summary>
@@ -791,6 +913,44 @@
             <param name="inputData">输入数据</param>
             <param name="valueSelector">值选择器</param>
             <returns>规约的结果</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Extension.ParallelExtensions.NotNull``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            非空
+            </summary>
+            <typeparam name="T">源类型</typeparam>
+            <param name="source">源</param>
+            <returns>非空的源</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Job.StatisticsClearJob">
+            <summary>
+            刷新统计数据任务
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Job.StatisticsClearJob.#ctor(Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Job.StatisticsClearJob},Snap.HutaoAPI.Entities.ApplicationDbContext)">
+            <summary>
+            构造一个新的刷新统计数据任务
+            </summary>
+            <param name="logger">日志器</param>
+            <param name="dbContext">数据库上下文</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Job.StatisticsClearJob.Execute(Quartz.IJobExecutionContext)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Snap.HutaoAPI.Job.StatisticsRefreshJob">
+            <summary>
+            刷新统计数据任务
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Job.StatisticsRefreshJob.#ctor(Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Job.StatisticsRefreshJob},Snap.HutaoAPI.Services.GenshinStatisticsService)">
+            <summary>
+            构造一个新的刷新统计数据任务
+            </summary>
+            <param name="logger">日志器</param>
+            <param name="statisticsService">统计服务</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Job.StatisticsRefreshJob.Execute(Quartz.IJobExecutionContext)">
+            <inheritdoc/>
         </member>
         <member name="T:Snap.HutaoAPI.Models.ApiCode">
             <summary>
@@ -1017,6 +1177,32 @@
             角色圣遗物使用率
             </summary>
         </member>
+        <member name="T:Snap.HutaoAPI.Models.Statistics.FloorLevelTeamUsage">
+            <summary>
+            层间队伍使用
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Models.Statistics.FloorLevelTeamUsage.ReduceTeamsTo(System.Int32)">
+            <summary>
+            减少队伍个数
+            限制到x个内
+            </summary>
+            <param name="count">限制的个数</param>
+            <returns>限制后的队伍使用率</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Statistics.FloorTeamUsage">
+            <summary>
+            层队伍使用
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Models.Statistics.FloorTeamUsage.ReduceTeamsTo(System.Int32)">
+            <summary>
+            减少队伍个数
+            限制到x个内
+            </summary>
+            <param name="count">限制的个数</param>
+            <returns>限制后的队伍使用率</returns>
+        </member>
         <member name="T:Snap.HutaoAPI.Models.Statistics.OverviewData">
             <summary>
             总览数据
@@ -1043,23 +1229,12 @@
             </summary>
             <typeparam name="T">Id的类型</typeparam>
         </member>
-        <member name="M:Snap.HutaoAPI.Models.Statistics.Rate`1.#ctor">
-            <summary>
-            构造一个新的比率
-            </summary>
-        </member>
         <member name="M:Snap.HutaoAPI.Models.Statistics.Rate`1.#ctor(`0,System.Decimal)">
             <summary>
             构造一个新的比率
             </summary>
             <param name="id">id</param>
             <param name="value">值</param>
-        </member>
-        <member name="M:Snap.HutaoAPI.Models.Statistics.Rate`1.#ctor(System.Collections.Generic.KeyValuePair{`0,System.Decimal})">
-            <summary>
-            构造一个新的比率
-            </summary>
-            <param name="keyValuePair">键值对</param>
         </member>
         <member name="M:Snap.HutaoAPI.Models.Statistics.Rate`1.#ctor(System.Collections.Generic.KeyValuePair{`0,System.Int32})">
             <summary>
@@ -1076,13 +1251,6 @@
             <summary>
             值
             </summary>
-        </member>
-        <member name="M:Snap.HutaoAPI.Models.Statistics.Team.#ctor(System.Collections.Generic.IList{Snap.HutaoAPI.Entities.Record.SpiralAbyssAvatar},System.Collections.Generic.IList{Snap.HutaoAPI.Entities.Record.SpiralAbyssAvatar})">
-            <summary>
-            构造一个新的队伍
-            </summary>
-            <param name="upHalfAvatars">上半</param>
-            <param name="downHalfAvatars">下半</param>
         </member>
         <member name="M:Snap.HutaoAPI.Models.Statistics.Team.#ctor(System.String,System.String)">
             <summary>
@@ -1101,6 +1269,20 @@
             下半
             </summary>
         </member>
+        <member name="M:Snap.HutaoAPI.Models.Statistics.Team.FromBattleInfo(System.Collections.Generic.IEnumerable{Snap.HutaoAPI.Entities.Record.DetailedBattleInfo})">
+            <summary>
+            将 <see cref="T:Snap.HutaoAPI.Entities.Record.DetailedBattleInfo"/> 转化到 <see cref="T:Snap.HutaoAPI.Models.Statistics.Team"/>
+            </summary>
+            <param name="battleInfos">战斗信息</param>
+            <returns>队伍，当上下半不完整时可能为空</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Models.Statistics.Team.Contains(System.String)">
+            <summary>
+            检查队伍是否包含某个角色
+            </summary>
+            <param name="avatar">角色id</param>
+            <returns>是否包含</returns>
+        </member>
         <member name="M:Snap.HutaoAPI.Models.Statistics.Team.Validate">
             <summary>
             验证该队伍是否有效
@@ -1110,11 +1292,6 @@
         <member name="T:Snap.HutaoAPI.Models.Statistics.TeamCollocation">
             <summary>
             组队数据
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Models.Statistics.TeamCollocation.Avater">
-            <summary>
-            角色Id
             </summary>
         </member>
         <member name="P:Snap.HutaoAPI.Models.Statistics.TeamCollocation.Avatar">
@@ -1424,19 +1601,34 @@
         <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCollocationCalculator.Calculate">
             <inheritdoc/>
         </member>
-        <member name="T:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationCalculator">
+        <member name="T:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationForFloorAndLevelCalculator">
             <summary>
             队伍出场计算器
             </summary>
         </member>
-        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.Abstraction.IStatisticsProvider)">
+        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationForFloorAndLevelCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.Abstraction.IStatisticsProvider)">
             <summary>
             构造一个新的队伍出场计算器
             </summary>
             <param name="dbContext">数据库上下文</param>
             <param name="statisticsProvider">统计提供器</param>
         </member>
-        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationCalculator.Calculate">
+        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationForFloorAndLevelCalculator.Calculate">
+            <inheritdoc/>
+        </member>
+        <member name="T:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationForFloorCalculator">
+            <summary>
+            队伍出场计算器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationForFloorCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.Abstraction.IStatisticsProvider)">
+            <summary>
+            构造一个新的队伍出场计算器
+            </summary>
+            <param name="dbContext">数据库上下文</param>
+            <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.TeamCombinationForFloorCalculator.Calculate">
             <inheritdoc/>
         </member>
         <member name="T:Snap.HutaoAPI.Services.ParallelCalculation.WeaponUsageCalculator">

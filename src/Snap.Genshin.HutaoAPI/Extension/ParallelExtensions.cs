@@ -71,6 +71,7 @@ public static class ParallelExtensions
     /// </summary>
     /// <typeparam name="TInput">输入的类型</typeparam>
     /// <param name="inputData">输入数据</param>
+    /// <param name="mapFactory">构造一个新的字典</param>
     /// <returns>规约的结果</returns>
     public static ConcurrentDictionary<TInput, int> ParallelToAggregateMap<TInput>(this IEnumerable<TInput> inputData, Func<ConcurrentDictionary<TInput, int>> mapFactory)
         where TInput : notnull
@@ -89,7 +90,7 @@ public static class ParallelExtensions
     /// <param name="inputData">输入数据</param>
     /// <param name="keySelector">键选择器</param>
     /// <returns>规约的结果</returns>
-    public static ConcurrentDictionary<TOutputKey, int> ParallelToAggregateMap<TInput, TOutputKey>(
+    public static ConcurrentDictionary<TOutputKey, int> ParallelCountBy<TInput, TOutputKey>(
         this IEnumerable<TInput> inputData,
         Func<TInput, TOutputKey> keySelector)
         where TInput : notnull
@@ -132,7 +133,7 @@ public static class ParallelExtensions
     /// <param name="keySelector">键选择器</param>
     /// <param name="valueSelector">值选择器</param>
     /// <returns>规约的结果</returns>
-    public static ConcurrentDictionary<TOutputKey, ConcurrentBag<TOutputValue>> ParallelToMappedBag<TInput, TOutputKey, TOutputValue>(
+    public static ConcurrentDictionary<TOutputKey, ConcurrentBag<TOutputValue>> ParallelGroupBy<TInput, TOutputKey, TOutputValue>(
         this IEnumerable<TInput> inputData,
         Func<TInput, TOutputKey> keySelector,
         Func<TInput, TOutputValue> valueSelector)

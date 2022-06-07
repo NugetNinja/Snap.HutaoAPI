@@ -13,7 +13,7 @@ namespace Snap.HutaoAPI.Services.ParallelCalculation;
 /// <summary>
 /// 队伍出场计算器
 /// </summary>
-public class TeamCombinationCalculator : StatisticCalculator<IEnumerable<LevelTeamUsage>>
+public class TeamCombinationForFloorAndLevelCalculator : StatisticCalculator<IEnumerable<FloorLevelTeamUsage>>
 {
     private readonly ApplicationDbContext dbContext;
 
@@ -22,14 +22,14 @@ public class TeamCombinationCalculator : StatisticCalculator<IEnumerable<LevelTe
     /// </summary>
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="statisticsProvider">统计提供器</param>
-    public TeamCombinationCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
+    public TeamCombinationForFloorAndLevelCalculator(ApplicationDbContext dbContext, IStatisticsProvider statisticsProvider)
         : base(statisticsProvider)
     {
         this.dbContext = dbContext;
     }
 
     /// <inheritdoc/>
-    public override IEnumerable<LevelTeamUsage> Calculate()
+    public override IEnumerable<FloorLevelTeamUsage> Calculate()
     {
         return dbContext.SpiralAbyssBattles
             .Where(battle => battle.AbyssLevel.FloorIndex >= 9)
@@ -47,7 +47,7 @@ public class TeamCombinationCalculator : StatisticCalculator<IEnumerable<LevelTe
                     .ParallelToAggregateMap()
                     .ParallelSelect(teamCount => new Rate<Team>(teamCount));
 
-                return new LevelTeamUsage(groupedIdBattle.Key, teamRate);
+                return new FloorLevelTeamUsage(groupedIdBattle.Key, teamRate);
             });
     }
 }

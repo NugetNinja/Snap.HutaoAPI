@@ -39,6 +39,11 @@ public class RecordController : ControllerBase
     [ApiExplorerSettings(GroupName = "v1")]
     public IActionResult CheckRecord([FromRoute] string uid)
     {
+        if (!int.TryParse(uid, out _) || uid.Length != 9)
+        {
+            return this.Fail($"{uid}不是合法的uid");
+        }
+
         IQueryable<Player> playerQuery = dbContext.Players
             .Where(player => player.Uid == uid);
 
@@ -46,15 +51,13 @@ public class RecordController : ControllerBase
         {
             return this.Success("查询成功", new UploadResult(false));
         }
-        else
-        {
-            // assumes only one uid
-            Player player = playerQuery.Single();
-            IQueryable<DetailedRecordInfo> recordQuery = dbContext.PlayerRecords
-                .Where(record => record.PlayerId == player.InnerId);
 
-            return this.Success("查询成功", new UploadResult(recordQuery.Any()));
-        }
+        // assumes only one uid
+        Player player = playerQuery.Single();
+        IQueryable<DetailedRecordInfo> recordQuery = dbContext.PlayerRecords
+            .Where(record => record.PlayerId == player.InnerId);
+
+        return this.Success("查询成功", new UploadResult(recordQuery.Any()));
     }
 
     /// <summary>

@@ -37,14 +37,14 @@ public class AvatarParticipationCalculator : StatisticCalculator<IEnumerable<Ava
             .ThenInclude(battle => battle.AbyssLevel)
             .AsNoTracking()
             .AsEnumerable()
-            .ParallelToMappedBag(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex, avatar => avatar) // 按楼层分组
-            .ParallelSelect(floorAvatarBarPair => new AvatarParticipation()
+            .ParallelGroupBy(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex, avatar => avatar) // 按楼层分组
+            .ParallelSelect(floorAvatarPair => new AvatarParticipation()
             {
-                Floor = floorAvatarBarPair.Key,
-                AvatarUsage = floorAvatarBarPair.Value
-                    .ParallelToAggregateMap(avatar => avatar.AvatarId) // 统计角色的出场次数
+                Floor = floorAvatarPair.Key,
+                AvatarUsage = floorAvatarPair.Value
+                    .ParallelCountBy(avatar => avatar.AvatarId) // 统计角色的出场次数
                     .OrderByDescending(counter => counter.Value)
-                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / floorAvatarBarPair.Value.Count)),
+                    .ParallelSelect(idCount => new Rate<int>(idCount.Key, (decimal)idCount.Value / floorAvatarPair.Value.Count)),
             });
     }
 }

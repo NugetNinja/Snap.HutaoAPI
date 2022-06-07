@@ -51,14 +51,14 @@ public class GenshinStatisticsService
 
         Stopwatch? stopWatch = new();
 
-        // every calculator should NOT start parallel cause dbcontext not thread safe
+        // every calculator should NOT start parallel cause dbcontext is not a thread safe class
         foreach (IStatisticPipeline pipeline in pipelines)
         {
             stopWatch.Restart();
             await pipeline.CalculateAndSaveAsync();
             stopWatch.Stop();
 
-            logger.LogInformation("计算: {type}完成，用时{time}ms。", pipeline.GetType().Name, stopWatch.Elapsed.TotalMilliseconds);
+            logger.LogInformation("计算: {type} 完成，用时 {time} ms。", pipeline.GetType().Name, stopWatch.Elapsed.TotalMilliseconds);
         }
 
         logger.LogInformation("统计数据计算完毕。");
