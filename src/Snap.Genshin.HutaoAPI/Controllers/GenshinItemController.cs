@@ -47,13 +47,18 @@ public class GenshinItemController : ControllerBase
     [ApiExplorerSettings(GroupName = "v3")]
     public async Task<IActionResult> Upload([FromBody] UploadItemWrapper request)
     {
-        AddItemToDb(request.Avatars.DistinctBy(item => item.Id), AvatarKey);
-        AddItemToDb(request.Weapons.DistinctBy(item => item.Id), WeaponKey);
-        AddItemToDb(request.Reliquaries.DistinctBy(item => item.Id), ReliquaryKey);
+        if (request.Validate())
+        {
+            AddItemToDb(request.Avatars.DistinctBy(item => item.Id), AvatarKey);
+            AddItemToDb(request.Weapons.DistinctBy(item => item.Id), WeaponKey);
+            AddItemToDb(request.Reliquaries.DistinctBy(item => item.Id), ReliquaryKey);
 
-        await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-        return this.Success("数据上传成功");
+            return this.Success("数据上传成功");
+        }
+
+        return this.Fail("数据包含无效的Id");
     }
 
     /// <summary>
@@ -146,7 +151,7 @@ public class GenshinItemController : ControllerBase
 
     /// <summary>
     /// 简单物品信息
-    /// record 允许此类存入<see cref="HashSet{T}"/>
+    /// record 允许此类存入 <see cref="HashSet{T}"/> 时互斥
     /// </summary>
     public record SimpleItemInfo
     {
@@ -227,5 +232,27 @@ public class GenshinItemController : ControllerBase
         /// 圣遗物
         /// </summary>
         public IEnumerable<SimpleItemInfo> Reliquaries { get; set; } = default!;
+
+        /// <summary>
+        /// 验证有效性
+        /// </summary>
+        /// <returns>是否有效</returns>
+        public bool Validate()
+        {
+            if (Avatars is null || Weapons is null || Reliquaries is null)
+            {
+                return false;
+            }
+
+            // 8 位 Id
+            if (Avatars.Any(x => x.Id.Place() != 8)
+                || Weapons.Any(x => x.Id.Place() != 5)
+                || Reliquaries.Any(x => x.Id.Place() != 7))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
