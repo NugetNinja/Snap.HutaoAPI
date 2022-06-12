@@ -117,6 +117,12 @@ services
             Title = "物品信息",
             Description = "提交与获取物品Id映射",
         });
+        c.SwaggerDoc("v5", new()
+        {
+            Version = "1.0.0.0",
+            Title = "角色展柜",
+            Description = "获取玩家角色展柜中的信息",
+        });
 
         // We only have one executable file so it's fine.
         string xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -161,6 +167,7 @@ app
         option.SwaggerEndpoint("/swagger/v2/swagger.json", "数据详情 API");
         option.SwaggerEndpoint("/swagger/v4/swagger.json", "数据详情2 API");
         option.SwaggerEndpoint("/swagger/v3/swagger.json", "物品信息 API");
+        option.SwaggerEndpoint("/swagger/v5/swagger.json", "角色展柜 API");
     })
     .UseAuthentication()
     .UseAuthorization();

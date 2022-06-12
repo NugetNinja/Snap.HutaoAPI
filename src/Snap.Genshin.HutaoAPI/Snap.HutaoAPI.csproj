@@ -45,5 +45,8 @@
   <ItemGroup>
     <DocFileItem Remove="Snap.HutaoAPI.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Showcase\" />
+  </ItemGroup>
 
 </Project>

@@ -118,7 +118,7 @@
         <member name="T:Snap.HutaoAPI.Controllers.GenshinItemController.SimpleItemInfo">
             <summary>
             简单物品信息
-            record 允许此类存入<see cref="T:System.Collections.Generic.HashSet`1"/>
+            record 允许此类存入 <see cref="T:System.Collections.Generic.HashSet`1"/> 时互斥
             </summary>
         </member>
         <member name="M:Snap.HutaoAPI.Controllers.GenshinItemController.SimpleItemInfo.#ctor(System.Int32,System.String,System.String)">
@@ -178,6 +178,12 @@
             圣遗物
             </summary>
         </member>
+        <member name="M:Snap.HutaoAPI.Controllers.GenshinItemController.UploadItemWrapper.Validate">
+            <summary>
+            验证有效性
+            </summary>
+            <returns>是否有效</returns>
+        </member>
         <member name="T:Snap.HutaoAPI.Controllers.RecordController">
             <summary>
             提交记录控制器
@@ -203,6 +209,30 @@
             <param name="record">记录</param>
             <returns>结果</returns>
         </member>
+        <member name="T:Snap.HutaoAPI.Controllers.ShowcaseController">
+            <summary>
+            角色展柜控制器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.ShowcaseController.Refresh(System.String)">
+            <summary>
+            刷新角色展柜数据
+            </summary>
+            <param name="uid">用户uid</param>
+            <returns>是否刷新成功</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.ShowcaseController.GetAvatars">
+            <summary>
+            刷新角色展柜数据
+            </summary>
+            <returns>是否刷新成功</returns>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.ShowcaseController.GetAvatarsDetail">
+            <summary>
+            刷新角色展柜数据
+            </summary>
+            <returns>是否刷新成功</returns>
+        </member>
         <member name="T:Snap.HutaoAPI.Controllers.Statistics2Controller">
             <summary>
             统计数据控制器2
@@ -222,7 +252,7 @@
         </member>
         <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.GetRecommandTeams(Snap.HutaoAPI.Controllers.Statistics2Controller.DesiredInfo)">
             <summary>
-            获取队伍出场数据
+            获取推荐的队伍
             </summary>
             <param name="desiredInfo">期望信息</param>
             <returns>队伍出场数据</returns>
@@ -301,31 +331,6 @@
             获取队伍出场数据
             </summary>
             <returns>队伍出场数据</returns>
-        </member>
-        <member name="T:Snap.HutaoAPI.Controllers.TestController">
-            <summary>
-            测试控制器
-            </summary>
-        </member>
-        <member name="M:Snap.HutaoAPI.Controllers.TestController.#ctor(Microsoft.Extensions.Logging.ILogger{Snap.HutaoAPI.Controllers.TestController},Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.GenshinStatisticsService)">
-            <summary>
-            测试控制器
-            </summary>
-            <param name="logger">日志器</param>
-            <param name="dbContext">数据库上下文</param>
-            <param name="statisticsService">统计服务</param>
-        </member>
-        <member name="M:Snap.HutaoAPI.Controllers.TestController.RefreshStatistics">
-            <summary>
-            刷新数据
-            </summary>
-            <returns>任务</returns>
-        </member>
-        <member name="M:Snap.HutaoAPI.Controllers.TestController.ClearStatistics">
-            <summary>
-            删除当期统计数据
-            </summary>
-            <returns>任务</returns>
         </member>
         <member name="T:Snap.HutaoAPI.Entities.ApplicationDbContext">
             <summary>
@@ -814,6 +819,18 @@
             <param name="key">键</param>
             <returns>是否定义了键</returns>
         </member>
+        <member name="T:Snap.HutaoAPI.Extension.IntegerExtensions">
+            <summary>
+            整形高性能扩展
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Extension.IntegerExtensions.Place(System.Int32)">
+            <summary>
+            计算给定整数的位数
+            </summary>
+            <param name="x">给定的整数</param>
+            <returns>位数</returns>
+        </member>
         <member name="T:Snap.HutaoAPI.Extension.ParallelExtensions">
             <summary>
             规约扩展方法
@@ -1019,12 +1036,12 @@
             数据
             </summary>
         </member>
-        <member name="T:Snap.HutaoAPI.Models.ControllerExtension">
+        <member name="T:Snap.HutaoAPI.Models.ControllerBaseExtension">
             <summary>
             extension for response
             </summary>
         </member>
-        <member name="M:Snap.HutaoAPI.Models.ControllerExtension.Success``1(Microsoft.AspNetCore.Mvc.ControllerBase,System.String,``0)">
+        <member name="M:Snap.HutaoAPI.Models.ControllerBaseExtension.Success``1(Microsoft.AspNetCore.Mvc.ControllerBase,System.String,``0)">
             <summary>
             成功
             </summary>
@@ -1034,7 +1051,7 @@
             <param name="data">返回的数据</param>
             <returns>操作结果</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Models.ControllerExtension.Success(Microsoft.AspNetCore.Mvc.ControllerBase,System.String)">
+        <member name="M:Snap.HutaoAPI.Models.ControllerBaseExtension.Success(Microsoft.AspNetCore.Mvc.ControllerBase,System.String)">
             <summary>
             成功
             </summary>
@@ -1042,7 +1059,7 @@
             <param name="msg">消息</param>
             <returns>操作结果</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Models.ControllerExtension.Fail(Microsoft.AspNetCore.Mvc.ControllerBase,System.String)">
+        <member name="M:Snap.HutaoAPI.Models.ControllerBaseExtension.Fail(Microsoft.AspNetCore.Mvc.ControllerBase,System.String)">
             <summary>
             失败
             </summary>
@@ -1050,7 +1067,7 @@
             <param name="msg">消息</param>
             <returns>操作结果</returns>
         </member>
-        <member name="M:Snap.HutaoAPI.Models.ControllerExtension.Fail(Microsoft.AspNetCore.Mvc.ControllerBase,Snap.HutaoAPI.Models.ApiCode,System.String)">
+        <member name="M:Snap.HutaoAPI.Models.ControllerBaseExtension.Fail(Microsoft.AspNetCore.Mvc.ControllerBase,Snap.HutaoAPI.Models.ApiCode,System.String)">
             <summary>
             失败
             </summary>
@@ -1058,6 +1075,362 @@
             <param name="code">返回代码</param>
             <param name="msg">消息</param>
             <returns>操作结果</returns>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.EnkaResponse">
+            <summary>
+            Enka API 响应
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.EnkaResponse.PlayerInfo">
+            <summary>
+            玩家基础信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.EnkaResponse.AvatarInfoList">
+            <summary>
+            展示的角色详细信息列表
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.EnkaResponse.Ttl">
+            <summary>
+            刷新剩余秒数
+            生存时间值
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.AvatarInfo">
+            <summary>
+            角色信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.AvatarId">
+            <summary>
+            角色Id
+            Character ID
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.PropMap">
+            <summary>
+            基础属性
+            Character Info Properties List
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.FightPropMap">
+            <summary>
+            属性Map
+            Map of Character's Combat Properties.
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.SkillDepotId">
+            <summary>
+            技能组Id
+            Character Skill Set ID
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.InherentProudSkillList">
+            <summary>
+            List of Unlocked Skill Ids
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.SkillLevelMap">
+            <summary>
+            Map of Skill Levels
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.EquipList">
+            <summary>
+            装备列表
+            最后一个为武器
+            List of Equipments: Weapon, Ariftacts
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.FetterInfo">
+            <summary>
+            好感度信息
+            Character Friendship Level
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.AvatarInfo.CostumeId">
+            <summary>
+            皮肤Id
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.ShowAvatarInfo">
+            <summary>
+            角色列表信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ShowAvatarInfo.AvatarId">
+            <summary>
+            角色Id
+            Character ID
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ShowAvatarInfo.Level">
+            <summary>
+            角色等级
+            Character Level
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ShowAvatarInfo.CostumeId">
+            <summary>
+            可能的皮肤Id
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.ProfilePicture">
+            <summary>
+            档案头像
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ProfilePicture.AvatarId">
+            <summary>
+            使用的角色Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.TypeValue.Type">
+            <summary>
+            类型Id
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.Equip">
+            <summary>
+            装备
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Equip.ItemId">
+            <summary>
+            物品Id
+            Equipment ID
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Equip.Reliquary">
+            <summary>
+            圣遗物
+            Artifact Base Info
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Equip.Flat">
+            <summary>
+            Detailed Info of Equipment
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Equip.Weapon">
+            <summary>
+            武器
+            Weapon Base Info
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.FetterInfo">
+            <summary>
+            好感度信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.FetterInfo.ExpLevel">
+            <summary>
+            好感度等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Reliquary.Level">
+            <summary>
+            等级 +20 = 21
+            [1,21]
+            Artifact Level [1-21]
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Reliquary.MainPropId">
+            <summary>
+            主属性Id
+            Artifact Main Stat ID
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Reliquary.AppendPropIdList">
+            <summary>
+            强化属性Id
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.NameTextMapHash">
+            <summary>
+            名称
+            Hash for Equipment Name
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.SetNameTextMapHash">
+            <summary>
+            套装名称
+            Hash for Artifact Set Name
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.RankLevel">
+            <summary>
+            等级
+            Rarity Level of Equipment
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.ReliquaryMainstat">
+            <summary>
+            圣遗物主属性
+            Artifact Main Stat
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.ReliquarySubstats">
+            <summary>
+            圣遗物副属性
+            List of Artifact Substats
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.ItemType">
+            <summary>
+            物品类型
+            Equipment Type: Weapon or Artifact
+            ITEM_WEAPON
+            ITEM_RELIQUARY
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.Icon">
+            <summary>
+            图标
+            Equipment Icon Name
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.EquipType">
+            <summary>
+            圣遗物类型
+            Artifact Type
+            EQUIP_BRACER   Flower
+            EQUIP_NECKLACE Feather
+            EQUIP_SHOES    Sands
+            EQUIP_RING	   Goblet
+            EQUIP_DRESS    Circlet
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Flat.WeaponStats">
+            <summary>
+            武器主副属性
+            0 基础攻击力
+            1 主属性
+            List of Weapon Stat: Base ATK, Substat
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Weapon.Level">
+            <summary>
+            等级
+            Weapon Level
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Weapon.PromoteLevel">
+            <summary>
+            突破等级
+            Weapon Ascension Level
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.Weapon.AffixMap">
+            <summary>
+            精炼 相较于实际等级 -1
+            Weapon Refinement Level [0-4]
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ReliquaryMainstat.MainPropId">
+            <summary>
+            Equipment Append Property Name.
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ReliquaryMainstat.StatValue">
+            <summary>
+            Property Value
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.ReliquarySubstat.AppendPropId">
+            <summary>
+            Name                            Description
+            FIGHT_PROP_BASE_ATTACK[Weapon]  Base ATK
+            FIGHT_PROP_HP                   Flat HP
+            FIGHT_PROP_ATTACK               Flat ATK
+            FIGHT_PROP_DEFENSE              Flat DEF
+            FIGHT_PROP_HP_PERCENT           HP%
+            FIGHT_PROP_ATTACK_PERCENT       ATK%
+            FIGHT_PROP_DEFENSE_PERCENT      DEF%
+            FIGHT_PROP_CRITICAL             Crit RATE
+            FIGHT_PROP_CRITICAL_HURT        Crit DMG
+            FIGHT_PROP_CHARGE_EFFICIENCY    Energy Recharge
+            FIGHT_PROP_HEAL_ADD             Healing Bonus
+            FIGHT_PROP_ELEMENT_MASTERY      Elemental Mastery
+            FIGHT_PROP_PHYSICAL_ADD_HURT    Physical DMG Bonus
+            FIGHT_PROP_FIRE_ADD_HURT        Pyro DMG Bonus
+            FIGHT_PROP_ELEC_ADD_HURT        Electro DMG Bonus
+            FIGHT_PROP_WATER_ADD_HURT       Hydro DMG Bonus
+            FIGHT_PROP_WIND_ADD_HURT        Anemo DMG Bonus
+            FIGHT_PROP_ICE_ADD_HURT         Cryo DMG Bonus
+            FIGHT_PROP_ROCK_ADD_HURT        Geo DMG Bonus
+            </summary>
+        </member>
+        <member name="T:Snap.HutaoAPI.Models.Enka.PlayerInfo">
+            <summary>
+            玩家信息
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.Nickname">
+            <summary>
+            昵称
+            Player Nickname
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.Level">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.Signature">
+            <summary>
+            签名
+            Profile Signature
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.WorldLevel">
+            <summary>
+            世界等级
+            Player World Level
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.NameCardId">
+            <summary>
+            名片的Id
+            Profile Namecard ID
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.FinishAchievementNum">
+            <summary>
+            完成的成就个数
+            Number of Completed Achievements
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.TowerFloorIndex">
+            <summary>
+            深渊层数
+            Abyss Floor
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.TowerLevelIndex">
+            <summary>
+            深渊间数
+            Abyss Floor's Level
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.ShowAvatarInfoList">
+            <summary>
+            展示的角色信息
+            List of Character IDs and Levels
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.ShowNameCardIdList">
+            <summary>
+            展示的名片信息
+            List of Namecard IDs
+            </summary>
+        </member>
+        <member name="P:Snap.HutaoAPI.Models.Enka.PlayerInfo.ProfilePicture">
+            <summary>
+            头像信息
+            Character ID of Profile Picture
+            </summary>
         </member>
         <member name="T:Snap.HutaoAPI.Models.Identity.IdentityPolicyNames">
             <summary>

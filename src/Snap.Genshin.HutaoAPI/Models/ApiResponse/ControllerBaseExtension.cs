@@ -8,7 +8,7 @@ namespace Snap.HutaoAPI.Models
     /// <summary>
     /// extension for response
     /// </summary>
-    public static class ControllerExtension
+    public static class ControllerBaseExtension
     {
         /// <summary>
         /// 成功

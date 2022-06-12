@@ -19,6 +19,8 @@ namespace Snap.HutaoAPI.Controllers;
 [ApiController]
 public class RecordController : ControllerBase
 {
+    private readonly ApplicationDbContext dbContext;
+
     /// <summary>
     /// 构造一个新的提交记录控制器
     /// </summary>
@@ -28,8 +30,6 @@ public class RecordController : ControllerBase
         this.dbContext = dbContext;
     }
 
-    private readonly ApplicationDbContext dbContext;
-
     /// <summary>
     /// 检查用户是否上传了当期记录
     /// </summary>
@@ -38,7 +38,8 @@ public class RecordController : ControllerBase
     [HttpGet("[Action]/{uid}")]
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ApiExplorerSettings(GroupName = "v1")]
-    public IActionResult CheckRecord([FromRoute] string uid)
+    [ProducesResponseType(200, Type = typeof(ApiResponse<UploadResult>))]
+    public IActionResult CheckRecord([FromRoute] string? uid)
     {
         if (!int.TryParse(uid, out _) || uid.Length != 9)
         {
@@ -50,7 +51,7 @@ public class RecordController : ControllerBase
 
         if (!playerQuery.Any())
         {
-            return this.Success("查询成功", new UploadResult(false));
+            return this.Success("数据库中未找到该Uid", new UploadResult(false));
         }
 
         // assumes only one uid
