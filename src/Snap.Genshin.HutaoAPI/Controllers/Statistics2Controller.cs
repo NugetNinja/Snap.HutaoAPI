@@ -57,7 +57,7 @@ public class Statistics2Controller : ControllerBase
     [ApiExplorerSettings(GroupName = "v4")]
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ProducesResponseType(200, Type = typeof(ApiResponse<FloorTeamUsage>))]
-    public async Task<IActionResult> GetRecommandTeams([FromBody] DesiredInfo desiredInfo)
+    public async Task<IActionResult> GetRecommandedTeams([FromBody] DesiredInfo desiredInfo)
     {
         IEnumerable<FloorTeamUsage>? result = await statisticsProvider
             .ReadStatisticAsync<TeamCombinationForFloorCalculator, IEnumerable<FloorTeamUsage>>()
@@ -82,7 +82,7 @@ public class Statistics2Controller : ControllerBase
 
         foreach (string avatar in desiredInfo.DesiredAvatars)
         {
-            if (queriedFloor.Teams.Count() <= 4)
+            if (queriedFloor.Teams.Count() <= 8)
             {
                 break;
             }

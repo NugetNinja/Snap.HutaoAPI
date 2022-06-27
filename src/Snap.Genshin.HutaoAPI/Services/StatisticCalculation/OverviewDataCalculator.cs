@@ -36,8 +36,8 @@ namespace Snap.HutaoAPI.Services.StatisticCalculation
 
             // 满星玩家
             int fullStarPassedPlayerCount = dbContext.SpiralAbyssLevels
-                .Where(record => record.FloorIndex == 12)
-                .Where(record => record.Star == 3)
+                .Where(level => level.FloorIndex == 12)
+                .Where(level => level.Star == 3)
                 .Select(record => record.Record.PlayerId)
                 .Distinct()
                 .Count();

@@ -72,7 +72,11 @@ public class RecordController : ControllerBase
     [ApiExplorerSettings(GroupName = "v1")]
     public async Task<IActionResult> UploadRecord([FromBody] RecordInfo record)
     {
-        // TODO validate record.
+        if (!record.Validate())
+        {
+            return this.Fail($"数据包含无效的内容");
+        }
+
         Player? player = dbContext.Players
             .Where(player => player.Uid == record.Uid)
             .Include(player => player.Avatars)

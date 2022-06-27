@@ -25,5 +25,24 @@ namespace Snap.HutaoAPI.Models.Uploading
         /// 深渊信息
         /// </summary>
         public List<LevelInfo> PlayerSpiralAbyssesLevels { get; set; } = null!;
+
+        /// <summary>
+        /// 验证上传记录的有效性
+        /// </summary>
+        /// <returns>是否有效</returns>
+        public bool Validate()
+        {
+            if (Uid == null || Uid.Length != 10)
+            {
+                return false;
+            }
+
+            if (PlayerAvatars == null || PlayerAvatars.Count <= 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
