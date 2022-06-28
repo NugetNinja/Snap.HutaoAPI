@@ -33,7 +33,7 @@ namespace Snap.HutaoAPI.Services
         {
             int periodId = GetSpiralPeriodId(DateTime.UtcNow);
             string source = calculatorType.Name;
-            string dataKey = $"_STATISTICS_{source}_{periodId}_VALUE_";
+            string dataKey = $"_STATISTICS_{source}_VALUE_";
 
             // 新增或修改当期数据
             Statistics? data = dbContext.Statistics
@@ -72,7 +72,7 @@ namespace Snap.HutaoAPI.Services
             // 查询当期数据
             int periodId = GetSpiralPeriodId(DateTime.UtcNow);
 
-            string dataKey = $"_STATISTICS_{source}_{periodId}_VALUE_";
+            string dataKey = $"_STATISTICS_{source}_VALUE_";
 
             // 获取缓存中数据
             bool isCache = cache.TryGetValue(dataKey, out Statistics? data);
