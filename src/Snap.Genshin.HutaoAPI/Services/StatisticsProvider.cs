@@ -33,6 +33,7 @@ namespace Snap.HutaoAPI.Services
         {
             int periodId = GetSpiralPeriodId(DateTime.UtcNow);
             string source = calculatorType.Name;
+            string dataKey = $"_STATISTICS_{source}_{periodId}_VALUE_";
 
             // 新增或修改当期数据
             Statistics? data = dbContext.Statistics
@@ -49,6 +50,7 @@ namespace Snap.HutaoAPI.Services
             data.Period = periodId;
             data.Source = source;
             data.Value = JsonSerializer.Serialize(dataObject);
+            cache.Set(dataKey, data);
 
             await dbContext.SaveChangesAsync()
                 .ConfigureAwait(false);
