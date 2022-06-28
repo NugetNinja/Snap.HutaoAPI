@@ -69,10 +69,20 @@ namespace Snap.HutaoAPI.Services
 
             // 查询当期数据
             int periodId = GetSpiralPeriodId(DateTime.UtcNow);
-            Statistics? data = await dbContext.Statistics
+
+            string dataKey = $"_STATISTICS_{source}_{periodId}_VALUE_";
+
+            // 获取缓存中数据
+            bool isCache = cache.TryGetValue(dataKey, out Statistics? data);
+
+            if (isCache is not true)
+            {
+                data = await dbContext.Statistics
                 .Where(s => s.Source == source)
                 .Where(s => s.Period == periodId)
                 .SingleOrDefaultAsync();
+                cache.Set(dataKey, data);
+            }
 
             return data is null
                 ? default
