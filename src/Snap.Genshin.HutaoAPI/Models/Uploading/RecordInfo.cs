@@ -32,7 +32,7 @@ namespace Snap.HutaoAPI.Models.Uploading
         /// <returns>是否有效</returns>
         public bool Validate()
         {
-            if (Uid == null || Uid.Length != 10)
+            if (Uid == null || Uid.Length != 9)
             {
                 return false;
             }
