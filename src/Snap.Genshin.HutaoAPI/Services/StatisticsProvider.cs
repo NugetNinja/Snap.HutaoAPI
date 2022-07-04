@@ -36,10 +36,10 @@ namespace Snap.HutaoAPI.Services
             string dataKey = $"_STATISTICS_{source}_VALUE_";
 
             // 新增或修改当期数据
-            Statistics? data = dbContext.Statistics
+            Statistics? data = await dbContext.Statistics
                 .Where(s => s.Source == source)
                 .Where(s => s.Period == periodId)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
 
             if (data is null)
             {
@@ -49,6 +49,8 @@ namespace Snap.HutaoAPI.Services
 
             data.Period = periodId;
             data.Source = source;
+
+            // update it's value
             data.Value = JsonSerializer.Serialize(dataObject);
             cache.Set(dataKey, data);
 
@@ -75,14 +77,12 @@ namespace Snap.HutaoAPI.Services
             string dataKey = $"_STATISTICS_{source}_VALUE_";
 
             // 获取缓存中数据
-            bool isCache = cache.TryGetValue(dataKey, out Statistics? data);
-
-            if (isCache is not true)
+            if (!cache.TryGetValue(dataKey, out Statistics? data))
             {
                 data = await dbContext.Statistics
-                .Where(s => s.Source == source)
-                .Where(s => s.Period == periodId)
-                .SingleOrDefaultAsync();
+                    .Where(s => s.Source == source)
+                    .Where(s => s.Period == periodId)
+                    .SingleOrDefaultAsync();
                 cache.Set(dataKey, data);
             }
 
