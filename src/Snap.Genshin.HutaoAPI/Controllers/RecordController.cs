@@ -71,15 +71,15 @@ public class RecordController : ControllerBase
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ApiExplorerSettings(GroupName = "v1")]
     [ProducesResponseType(200, Type = typeof(ApiResponse<RankResult>))]
-    public async Task<IActionResult> Rank([FromRoute] string? uid)
+    public IActionResult Rank([FromRoute] string? uid)
     {
         if (!int.TryParse(uid, out _) || uid.Length != 9)
         {
             return this.Fail($"{uid}不是合法的uid");
         }
 
-        SimpleRank? damage = await GetRankAsync(uid, RankType.Damage);
-        SimpleRank? takeDamage = await GetRankAsync(uid, RankType.TakeDamage);
+        SimpleRank? damage = GetRank(uid, RankType.Damage);
+        SimpleRank? takeDamage = GetRank(uid, RankType.TakeDamage);
 
         RankResult result = new()
         {
@@ -90,15 +90,16 @@ public class RecordController : ControllerBase
         return this.Success("获取排行数据成功", result);
     }
 
-    private async Task<SimpleRank?> GetRankAsync(string uid, RankType rankType)
+    private SimpleRank? GetRank(string uid, RankType rankType)
     {
-        IQueryable<IndexedRankInfo>? damageRanks = dbContext.Ranks
+        IEnumerable<IndexedRankInfo> damageRanks = dbContext.Ranks
             .Include(rank => rank.Player)
             .Where(rank => rank.Type == rankType)
             .OrderByDescending(rank => rank.Value)
+            .AsEnumerable()
             .Select((rank, index) => new IndexedRankInfo(index, rank));
 
-        int damageCount = await damageRanks.CountAsync();
+        int damageCount = damageRanks.Count();
 
         SimpleRank? simpleDamage = null;
         IndexedRankInfo? damageRank = damageRanks.SingleOrDefault(rank => rank.RankInfo.Player.Uid == uid);
