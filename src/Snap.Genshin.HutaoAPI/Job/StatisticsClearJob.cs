@@ -1,6 +1,8 @@
-﻿using Quartz;
+﻿// Copyright (c) DGP Studio. All rights reserved.
+// Licensed under the MIT license.
+
+using Quartz;
 using Snap.HutaoAPI.Entities;
-using Snap.HutaoAPI.Services;
 
 namespace Snap.HutaoAPI.Job;
 
@@ -30,6 +32,7 @@ public class StatisticsClearJob : IJob
 
         // TODO 旧记录存档
         dbContext.PlayerRecords.RemoveRange(dbContext.PlayerRecords);
+        dbContext.Ranks.RemoveRange(dbContext.Ranks);
 
         await dbContext
             .SaveChangesAsync()
