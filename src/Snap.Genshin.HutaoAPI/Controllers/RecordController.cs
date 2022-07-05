@@ -62,7 +62,12 @@ public class RecordController : ControllerBase
         return this.Success("查询成功", new UploadResult(recordQuery.Any()));
     }
 
-    [HttpGet("[Action]/Rank/{uid}")]
+    /// <summary>
+    /// 获取排行信息
+    /// </summary>
+    /// <param name="uid">uid</param>
+    /// <returns>排行</returns>
+    [HttpGet("[Action]/{uid}")]
     [Authorize(IdentityPolicyNames.CommonUser)]
     [ApiExplorerSettings(GroupName = "v1")]
     [ProducesResponseType(200, Type = typeof(ApiResponse<RankResult>))]
