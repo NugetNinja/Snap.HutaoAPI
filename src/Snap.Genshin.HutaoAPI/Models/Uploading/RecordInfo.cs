@@ -13,7 +13,7 @@ namespace Snap.HutaoAPI.Models.Uploading
         /// <summary>
         /// 玩家Uid
         /// </summary>
-        [MaxLength(10)]
+        [MaxLength(9)]
         public string Uid { get; set; } = null!;
 
         /// <summary>
@@ -25,6 +25,16 @@ namespace Snap.HutaoAPI.Models.Uploading
         /// 深渊信息
         /// </summary>
         public List<LevelInfo> PlayerSpiralAbyssesLevels { get; set; } = null!;
+
+        /// <summary>
+        /// 造成最多伤害
+        /// </summary>
+        public RankInfo? DamageMost { get; set; }
+
+        /// <summary>
+        /// 承受最多伤害
+        /// </summary>
+        public RankInfo? TakeDamageMost { get; set; }
 
         /// <summary>
         /// 验证上传记录的有效性

@@ -68,6 +68,11 @@ public class ApplicationDbContext : DbContext
     public DbSet<ItemInfo> GenshinItems { get; set; } = null!;
 
     /// <summary>
+    /// 数值排行榜
+    /// </summary>
+    public DbSet<DetailedRankInfo> Ranks { get; set; } = null!;
+
+    /// <summary>
     /// 用户
     /// </summary>
     public DbSet<User.User> Users { get; set; } = null!;
@@ -81,10 +86,4 @@ public class ApplicationDbContext : DbContext
     /// 用户Secrets
     /// </summary>
     public DbSet<UserSecret> UsersSecrets { get; set; } = null!;
-
-    /// <inheritdoc/>
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-    }
 }

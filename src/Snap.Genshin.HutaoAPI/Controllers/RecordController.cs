@@ -62,6 +62,51 @@ public class RecordController : ControllerBase
         return this.Success("查询成功", new UploadResult(recordQuery.Any()));
     }
 
+    [HttpGet("[Action]/Rank/{uid}")]
+    [Authorize(IdentityPolicyNames.CommonUser)]
+    [ApiExplorerSettings(GroupName = "v1")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<RankResult>))]
+    public async Task<IActionResult> Rank([FromRoute] string? uid)
+    {
+        if (!int.TryParse(uid, out _) || uid.Length != 9)
+        {
+            return this.Fail($"{uid}不是合法的uid");
+        }
+
+        SimpleRank? damage = await GetRankAsync(uid, RankType.Damage);
+        SimpleRank? takeDamage = await GetRankAsync(uid, RankType.TakeDamage);
+
+        RankResult result = new()
+        {
+            Damage = damage,
+            TakeDamage = takeDamage,
+        };
+
+        return this.Success("获取排行数据成功", result);
+    }
+
+    private async Task<SimpleRank?> GetRankAsync(string uid, RankType rankType)
+    {
+        IQueryable<IndexedRankInfo>? damageRanks = dbContext.Ranks
+            .Include(rank => rank.Player)
+            .Where(rank => rank.Type == rankType)
+            .OrderByDescending(rank => rank.Value)
+            .Select((rank, index) => new IndexedRankInfo(index, rank));
+
+        int damageCount = await damageRanks.CountAsync();
+
+        SimpleRank? simpleDamage = null;
+        IndexedRankInfo? damageRank = damageRanks.SingleOrDefault(rank => rank.RankInfo.Player.Uid == uid);
+        if (damageRank != null)
+        {
+            int uidDamageRank = damageRank.Index + 1;
+            double damagePercent = (double)uidDamageRank / damageCount;
+            simpleDamage = SimpleRank.Create(damageRank.RankInfo, damagePercent);
+        }
+
+        return simpleDamage;
+    }
+
     /// <summary>
     /// 上传记录
     /// </summary>
@@ -82,15 +127,54 @@ public class RecordController : ControllerBase
             .Include(player => player.Avatars)
             .SingleOrDefault();
 
+        player = await SavePlayerAsync(record, player).ConfigureAwait(false);
+        await SaveRecordInfoAsync(record, player).ConfigureAwait(false);
+        await SaveRankInfoAsync(record, player).ConfigureAwait(false);
+
+        return this.Success($"UID : {record.Uid}的数据上传成功");
+    }
+
+    private async Task SaveRankInfoAsync(RecordInfo record, Player player)
+    {
+        if (record.DamageMost != null && record.TakeDamageMost != null)
+        {
+            IQueryable<DetailedRankInfo> oldRankInfos = dbContext.Ranks
+                .Where(ranks => ranks.PlayerId == player.InnerId);
+
+            dbContext.Ranks.RemoveRange(oldRankInfos);
+
+            List<DetailedRankInfo> newRankInfos = new(2)
+            {
+                new()
+                {
+                    PlayerId = player.InnerId,
+                    AvatarId = record.DamageMost.AvatarId,
+                    Value = record.DamageMost.Value,
+                    Type = RankType.Damage,
+                },
+                new()
+                {
+                    PlayerId = player.InnerId,
+                    AvatarId = record.TakeDamageMost.AvatarId,
+                    Value = record.TakeDamageMost.Value,
+                    Type = RankType.TakeDamage,
+                },
+            };
+
+            dbContext.Ranks.AddRange(newRankInfos);
+
+            await dbContext
+                .SaveChangesAsync()
+                .ConfigureAwait(false);
+        }
+    }
+
+    private async Task<Player> SavePlayerAsync(RecordInfo record, Player? player)
+    {
         if (player is null)
         {
             player = new Player(record.Uid, new());
             dbContext.Players.Add(player);
-        }
-        else
-        {
-            // clear last time uploaded avatars
-            player.Avatars.Clear();
         }
 
         player.Avatars = record.PlayerAvatars
@@ -100,7 +184,11 @@ public class RecordController : ControllerBase
         await dbContext
             .SaveChangesAsync()
             .ConfigureAwait(false);
+        return player;
+    }
 
+    private async Task SaveRecordInfoAsync(RecordInfo record, Player player)
+    {
         DetailedRecordInfo? oldPlayerRecord = await dbContext.PlayerRecords
             .Where(record => record.PlayerId == player.InnerId)
             .FirstOrDefaultAsync();
@@ -123,8 +211,6 @@ public class RecordController : ControllerBase
         await dbContext
             .SaveChangesAsync()
             .ConfigureAwait(false);
-
-        return this.Success($"UID : {record.Uid}的数据上传成功");
     }
 
     private class UploadResult
@@ -135,5 +221,44 @@ public class RecordController : ControllerBase
         }
 
         public bool PeriodUploaded { get; }
+    }
+
+    private class IndexedRankInfo
+    {
+        public IndexedRankInfo(int index, DetailedRankInfo rankInfo)
+        {
+            Index = index;
+            RankInfo = rankInfo;
+        }
+
+        public int Index { get; set; }
+
+        public DetailedRankInfo RankInfo { get; set; }
+    }
+
+    private class RankResult
+    {
+        public SimpleRank? Damage { get; set; }
+
+        public SimpleRank? TakeDamage { get; set; }
+    }
+
+    private class SimpleRank
+    {
+        public int AvatarId { get; set; }
+
+        public int Value { get; set; }
+
+        public double Precent { get; set; }
+
+        public static SimpleRank Create(DetailedRankInfo rankInfo, double percent)
+        {
+            return new()
+            {
+                AvatarId = rankInfo.AvatarId,
+                Value = rankInfo.Value,
+                Precent = percent,
+            };
+        }
     }
 }
