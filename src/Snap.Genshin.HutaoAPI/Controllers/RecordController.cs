@@ -92,22 +92,25 @@ public class RecordController : ControllerBase
 
     private SimpleRank? GetRank(string uid, RankType rankType)
     {
+        // 筛选对应的榜单的全部角色伤害
         IEnumerable<DetailedRankInfo> damageRanks = dbContext.Ranks
             .Include(rank => rank.Player)
             .Where(rank => rank.Type == rankType)
-            .OrderByDescending(rank => rank.Value)
+            .OrderBy(rank => rank.Value)
             .AsEnumerable();
 
+        // 挑选出uid对应的伤害
         DetailedRankInfo? damageRank = damageRanks.SingleOrDefault(rank => rank.Player.Uid == uid);
 
         if (damageRank != null)
         {
             IEnumerable<IndexedRankInfo> indexedDamageRanks = damageRanks
                 .Where(rank => rank.AvatarId == damageRank.AvatarId)
-                .OrderByDescending(rank => rank.Value)
+                .OrderBy(rank => rank.Value)
                 .Select((rank, index) => new IndexedRankInfo(index, rank));
 
-            IndexedRankInfo? indexRank = indexedDamageRanks.Single(rank => rank.RankInfo.Player.Uid == uid);
+            IndexedRankInfo? indexRank = indexedDamageRanks
+                .Single(rank => rank.RankInfo.Player.Uid == uid);
 
             int damageCount = indexedDamageRanks.Count();
 
