@@ -259,7 +259,7 @@ public class RecordController : ControllerBase
 
         public int Value { get; set; }
 
-        public double Precent { get; set; }
+        public double Percent { get; set; }
 
         public static SimpleRank Create(DetailedRankInfo rankInfo, double percent)
         {
@@ -267,7 +267,7 @@ public class RecordController : ControllerBase
             {
                 AvatarId = rankInfo.AvatarId,
                 Value = rankInfo.Value,
-                Precent = percent,
+                Percent = percent,
             };
         }
     }
