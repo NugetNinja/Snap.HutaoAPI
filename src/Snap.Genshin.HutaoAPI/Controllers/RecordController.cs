@@ -92,26 +92,28 @@ public class RecordController : ControllerBase
 
     private SimpleRank? GetRank(string uid, RankType rankType)
     {
-        IEnumerable<IndexedRankInfo> damageRanks = dbContext.Ranks
+        IEnumerable<DetailedRankInfo> damageRanks = dbContext.Ranks
             .Include(rank => rank.Player)
             .Where(rank => rank.Type == rankType)
             .OrderByDescending(rank => rank.Value)
-            .AsEnumerable()
-            .Select((rank, index) => new IndexedRankInfo(index, rank));
+            .AsEnumerable();
 
-        IndexedRankInfo? damageRank = damageRanks.SingleOrDefault(rank => rank.RankInfo.Player.Uid == uid);
+        DetailedRankInfo? damageRank = damageRanks.SingleOrDefault(rank => rank.Player.Uid == uid);
 
         if (damageRank != null)
         {
-            damageRanks = damageRanks
-                .Where(rank => rank.RankInfo.AvatarId == damageRank.RankInfo.AvatarId)
-                .OrderByDescending(rank => rank.RankInfo.Value);
+            IEnumerable<IndexedRankInfo> indexedDamageRanks = damageRanks
+                .Where(rank => rank.AvatarId == damageRank.AvatarId)
+                .OrderByDescending(rank => rank.Value)
+                .Select((rank, index) => new IndexedRankInfo(index, rank));
 
-            int damageCount = damageRanks.Count();
+            IndexedRankInfo? indexRank = indexedDamageRanks.Single(rank => rank.RankInfo.Player.Uid == uid);
 
-            int uidDamageRank = damageRank.Index + 1;
+            int damageCount = indexedDamageRanks.Count();
+
+            int uidDamageRank = indexRank.Index + 1;
             double damagePercent = (double)uidDamageRank / damageCount;
-            return SimpleRank.Create(damageRank.RankInfo, damagePercent);
+            return SimpleRank.Create(indexRank.RankInfo, damagePercent);
         }
 
         return null;
