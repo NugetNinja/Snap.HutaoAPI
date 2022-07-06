@@ -1,11 +1,8 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Snap.HutaoAPI.Models.Uploading
 {
-
     /// <summary>
     /// 排行信息
     /// </summary>

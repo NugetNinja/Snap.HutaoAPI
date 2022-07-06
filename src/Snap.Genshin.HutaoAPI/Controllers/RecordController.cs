@@ -99,18 +99,22 @@ public class RecordController : ControllerBase
             .AsEnumerable()
             .Select((rank, index) => new IndexedRankInfo(index, rank));
 
-        int damageCount = damageRanks.Count();
-
-        SimpleRank? simpleDamage = null;
         IndexedRankInfo? damageRank = damageRanks.SingleOrDefault(rank => rank.RankInfo.Player.Uid == uid);
+
         if (damageRank != null)
         {
+            damageRanks = damageRanks
+                .Where(rank => rank.RankInfo.AvatarId == damageRank.RankInfo.AvatarId)
+                .OrderByDescending(rank => rank.RankInfo.Value);
+
+            int damageCount = damageRanks.Count();
+
             int uidDamageRank = damageRank.Index + 1;
             double damagePercent = (double)uidDamageRank / damageCount;
-            simpleDamage = SimpleRank.Create(damageRank.RankInfo, damagePercent);
+            return SimpleRank.Create(damageRank.RankInfo, damagePercent);
         }
 
-        return simpleDamage;
+        return null;
     }
 
     /// <summary>
