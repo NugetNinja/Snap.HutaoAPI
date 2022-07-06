@@ -155,7 +155,17 @@ services
     .AddQuartzServer(options =>
     {
         options.WaitForJobsToComplete = true;
-    });
+    })
+
+    // CORS Policy
+    .AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            .AllowCredentials();
+    }));
 
 WebApplication app = builder.Build();
 
