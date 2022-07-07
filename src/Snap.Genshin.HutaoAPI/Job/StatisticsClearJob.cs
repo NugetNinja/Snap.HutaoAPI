@@ -35,10 +35,15 @@ public class StatisticsClearJob : IJob
 
         DateTime now = DateTime.Now;
         TimeSpan threshold = TimeSpan.FromDays(45);
+
         dbContext.Players.RemoveRange(dbContext.PlayerRecords
             .Include(record => record.Player)
             .Where(record => now - record.UploadTime > threshold)
             .Select(record => record.Player));
+
+        await dbContext
+            .SaveChangesAsync()
+            .ConfigureAwait(false);
 
         dbContext.PlayerRecords.RemoveRange(dbContext.PlayerRecords);
         await dbContext
