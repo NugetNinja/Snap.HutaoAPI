@@ -30,6 +30,25 @@ public class Statistics2Controller : ControllerBase
     }
 
     /// <summary>
+    /// 获取角色出场数据
+    /// </summary>
+    /// <returns>角色出场数据</returns>
+    [HttpGet("AvatarParticipation")]
+    [ApiExplorerSettings(GroupName = "v4")]
+    [Authorize(IdentityPolicyNames.CommonUser)]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<IEnumerable<AvatarParticipation>>))]
+    public async Task<IActionResult> GetAvatarParticipation()
+    {
+        IEnumerable<AvatarParticipation>? result = await statisticsProvider
+            .ReadStatisticAsync<AvatarParticipation2Calculator, IEnumerable<AvatarParticipation>>()
+            .ConfigureAwait(false);
+
+        return result is null
+            ? this.Fail(ApiCode.ServiceConflict, "服务冲突")
+            : this.Success("使用率数据获取成功", result);
+    }
+
+    /// <summary>
     /// 获取队伍出场数据
     /// </summary>
     /// <returns>队伍出场数据</returns>

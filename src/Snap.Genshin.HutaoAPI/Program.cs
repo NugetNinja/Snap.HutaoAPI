@@ -40,16 +40,16 @@ services
                 (CoreEventId.ContextInitialized, LogLevel.Debug)));
     })
     .AddScoped<IStatisticsProvider, StatisticsProvider>()
-    .AddGenshinStatistics(config =>
-        config
-            .AddCalculator<OverviewDataCalculator>()
-            .AddCalculator<AvatarParticipationCalculator>()
-            .AddCalculator<TeamCollocationCalculator>()
-            .AddCalculator<WeaponUsageCalculator>()
-            .AddCalculator<AvatarReliquaryUsageCalculator>()
-            .AddCalculator<ActivedConstellationNumCalculator>()
-            .AddCalculator<TeamCombinationForFloorAndLevelCalculator>()
-            .AddCalculator<TeamCombinationForFloorCalculator>())
+    .AddGenshinStatistics(config => config
+        .AddCalculator<OverviewDataCalculator>()
+        .AddCalculator<AvatarParticipationCalculator>()
+        .AddCalculator<AvatarParticipation2Calculator>()
+        .AddCalculator<TeamCollocationCalculator>()
+        .AddCalculator<WeaponUsageCalculator>()
+        .AddCalculator<AvatarReliquaryUsageCalculator>()
+        .AddCalculator<ActivedConstellationNumCalculator>()
+        .AddCalculator<TeamCombinationForFloorAndLevelCalculator>()
+        .AddCalculator<TeamCombinationForFloorCalculator>())
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

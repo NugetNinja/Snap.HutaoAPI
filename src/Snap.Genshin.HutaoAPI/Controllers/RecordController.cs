@@ -90,6 +90,33 @@ public class RecordController : ControllerBase
         return this.Success("获取排行数据成功", result);
     }
 
+    /// <summary>
+    /// 上传记录
+    /// </summary>
+    /// <param name="record">记录</param>
+    /// <returns>结果</returns>
+    [HttpPost("Upload")]
+    [Authorize(IdentityPolicyNames.CommonUser)]
+    [ApiExplorerSettings(GroupName = "v1")]
+    public async Task<IActionResult> UploadRecord([FromBody] RecordInfo record)
+    {
+        if (!record.Validate())
+        {
+            return this.Fail($"数据包含无效的内容");
+        }
+
+        Player? player = dbContext.Players
+            .Where(player => player.Uid == record.Uid)
+            .Include(player => player.Avatars)
+            .SingleOrDefault();
+
+        player = await SavePlayerAsync(record, player).ConfigureAwait(false);
+        await SaveRecordInfoAsync(record, player).ConfigureAwait(false);
+        await SaveRankInfoAsync(record, player).ConfigureAwait(false);
+
+        return this.Success($"UID : {record.Uid}的数据上传成功");
+    }
+
     private SimpleRank? GetRank(string uid, RankType rankType)
     {
         // 筛选对应的榜单的全部角色伤害
@@ -120,33 +147,6 @@ public class RecordController : ControllerBase
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// 上传记录
-    /// </summary>
-    /// <param name="record">记录</param>
-    /// <returns>结果</returns>
-    [HttpPost("Upload")]
-    [Authorize(IdentityPolicyNames.CommonUser)]
-    [ApiExplorerSettings(GroupName = "v1")]
-    public async Task<IActionResult> UploadRecord([FromBody] RecordInfo record)
-    {
-        if (!record.Validate())
-        {
-            return this.Fail($"数据包含无效的内容");
-        }
-
-        Player? player = dbContext.Players
-            .Where(player => player.Uid == record.Uid)
-            .Include(player => player.Avatars)
-            .SingleOrDefault();
-
-        player = await SavePlayerAsync(record, player).ConfigureAwait(false);
-        await SaveRecordInfoAsync(record, player).ConfigureAwait(false);
-        await SaveRankInfoAsync(record, player).ConfigureAwait(false);
-
-        return this.Success($"UID : {record.Uid}的数据上传成功");
     }
 
     private async Task SaveRankInfoAsync(RecordInfo record, Player player)

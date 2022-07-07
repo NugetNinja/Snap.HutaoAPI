@@ -1,6 +1,7 @@
 ﻿// Copyright (c) DGP Studio. All rights reserved.
 // Licensed under the MIT license.
 
+using Microsoft.EntityFrameworkCore;
 using Quartz;
 using Snap.HutaoAPI.Entities;
 
@@ -30,10 +31,16 @@ public class StatisticsClearJob : IJob
     {
         logger.LogInformation("已触发数据清理...");
 
-        // TODO 旧记录存档
-        dbContext.PlayerRecords.RemoveRange(dbContext.PlayerRecords);
         dbContext.Ranks.RemoveRange(dbContext.Ranks);
 
+        DateTime now = DateTime.Now;
+        TimeSpan threshold = TimeSpan.FromDays(45);
+        dbContext.Players.RemoveRange(dbContext.PlayerRecords
+            .Include(record => record.Player)
+            .Where(record => now - record.UploadTime > threshold)
+            .Select(record => record.Player));
+
+        dbContext.PlayerRecords.RemoveRange(dbContext.PlayerRecords);
         await dbContext
             .SaveChangesAsync()
             .ConfigureAwait(false);
