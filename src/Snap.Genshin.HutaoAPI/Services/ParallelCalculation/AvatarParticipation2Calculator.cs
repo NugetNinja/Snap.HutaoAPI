@@ -47,16 +47,16 @@ public class AvatarParticipation2Calculator : StatisticCalculator<IEnumerable<Av
             .ThenInclude(level => level.Record)
             .AsNoTracking()
             .AsEnumerable()
-            .ParallelGroupBy(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex)
+            .ParallelGroupBy(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex) // 按层分组
             .ParallelSelect(avatars => new AvatarParticipation()
             {
                 Floor = avatars.Key,
                 AvatarUsage = avatars.Value
-                    .DistinctBy(a => new LevelAvater(a.SpiralAbyssBattle.SpiralAbyssLevelId, a.AvatarId)) // 同层内仅统计1次
+                    .DistinctBy(a => new LevelAvater(a.SpiralAbyssBattle.AbyssLevel.RecordId, a.AvatarId)) // 同记录内仅统计1次
                     .ParallelCountBy(a => a.AvatarId)
                     .Select(avatarCount => new Rate<int>(avatarCount.Key, (decimal)avatarCount.Value / avatarHoldCounter[avatarCount.Key])),
             });
     }
 
-    private record LevelAvater(long LevelId,int AvatarId);
+    private record LevelAvater(long LevelId, int AvatarId);
 }
