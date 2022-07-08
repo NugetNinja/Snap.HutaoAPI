@@ -39,7 +39,7 @@ public class AvatarParticipation2Calculator : StatisticCalculator<IEnumerable<Av
             .SelectMany(r => r.Player.Avatars)
             .ParallelCountBy(a => a.AvatarId);
 
-        var avatars = dbContext.SpiralAbyssAvatars
+        return dbContext.SpiralAbyssAvatars
             .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex >= 9) // 忽略九层以下数据
             .Where(avatar => avatar.SpiralAbyssBattle.AbyssLevel.Star == 3) // 忽略非满星数据
             .Include(avatar => avatar.SpiralAbyssBattle)
@@ -47,9 +47,6 @@ public class AvatarParticipation2Calculator : StatisticCalculator<IEnumerable<Av
             .ThenInclude(level => level.Record)
             .AsNoTracking()
             .AsEnumerable()
-            .DistinctBy(a=>);
-
-        return avatars
             .ParallelGroupBy(avatar => avatar.SpiralAbyssBattle.AbyssLevel.FloorIndex)
             .ParallelSelect(avatars => new AvatarParticipation()
             {
