@@ -132,18 +132,26 @@ public class RecordController : ControllerBase
         if (damageRank != null)
         {
             IEnumerable<IndexedRankInfo> indexedDamageRanks = damageRanks
-                .Where(rank => rank.AvatarId == damageRank.AvatarId)
                 .OrderBy(rank => rank.Value)
                 .Select((rank, index) => new IndexedRankInfo(index, rank));
 
             IndexedRankInfo? indexRank = indexedDamageRanks
                 .Single(rank => rank.RankInfo.Player.Uid == uid);
-
-            int damageCount = indexedDamageRanks.Count();
-
             int uidDamageRank = indexRank.Index + 1;
-            double damagePercent = (double)uidDamageRank / damageCount;
-            return SimpleRank.Create(indexRank.RankInfo, damagePercent);
+
+            IEnumerable<IndexedRankInfo> indexedAvatarDamageRanks = damageRanks
+                .Where(rank => rank.AvatarId == damageRank.AvatarId)
+                .OrderBy(rank => rank.Value)
+                .Select((rank, index) => new IndexedRankInfo(index, rank));
+
+            IndexedRankInfo? indexAvatarRank = indexedAvatarDamageRanks
+                .Single(rank => rank.RankInfo.Player.Uid == uid);
+            int uidAvatarDamageRank = indexAvatarRank.Index + 1;
+
+            double damagePercent = (double)uidAvatarDamageRank / indexedAvatarDamageRanks.Count();
+            double damagePercentTotal = (double)uidDamageRank / damageRanks.Count();
+
+            return SimpleRank.Create(indexAvatarRank.RankInfo, damagePercent, damagePercentTotal);
         }
 
         return null;
@@ -266,13 +274,16 @@ public class RecordController : ControllerBase
 
         public double Percent { get; set; }
 
-        public static SimpleRank Create(DetailedRankInfo rankInfo, double percent)
+        public double PercentTotal { get; set; }
+
+        public static SimpleRank Create(DetailedRankInfo rankInfo, double percent, double percentTotal)
         {
             return new()
             {
                 AvatarId = rankInfo.AvatarId,
                 Value = rankInfo.Value,
                 Percent = percent,
+                PercentTotal = percentTotal,
             };
         }
     }
