@@ -74,4 +74,19 @@ public class TestController : ControllerBase
 
         return this.Success("执行完成");
     }
+
+    [HttpGet("[Action]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<IActionResult> Remove()
+    {
+        logger.LogInformation("[{time}] 已触发完全清除...", DateTime.Now);
+
+        dbContext.Players.RemoveRange(dbContext.Players);
+
+        await dbContext
+            .SaveChangesAsync()
+            .ConfigureAwait(false);
+
+        return this.Success("执行完成");
+    }
 }
