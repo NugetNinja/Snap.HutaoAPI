@@ -35,10 +35,11 @@ public class TestController : ControllerBase
 
         DateTime now = DateTime.Now;
         TimeSpan threshold = TimeSpan.FromDays(45);
+        DateTime lastAllowed = now - threshold;
 
         dbContext.Players.RemoveRange(dbContext.PlayerRecords
             .Include(record => record.Player)
-            .Where(record => now - record.UploadTime > threshold)
+            .Where(record => record.UploadTime < lastAllowed)
             .Select(record => record.Player));
 
         await dbContext
