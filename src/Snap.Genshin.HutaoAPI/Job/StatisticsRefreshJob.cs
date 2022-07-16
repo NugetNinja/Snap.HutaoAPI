@@ -25,7 +25,7 @@ public class StatisticsRefreshJob : IJob
     /// <inheritdoc/>
     public async Task Execute(IJobExecutionContext context)
     {
-        logger.LogInformation("已触发数据更新...");
+        logger.LogInformation("[{time}] 已触发数据更新...", DateTime.Now);
 
         // 计算数据
         await statisticsService

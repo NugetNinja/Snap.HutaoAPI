@@ -29,8 +29,7 @@ public class StatisticsClearJob : IJob
     /// <inheritdoc/>
     public async Task Execute(IJobExecutionContext context)
     {
-        logger.LogInformation("已触发数据清理...");
-
+        logger.LogInformation("[{time}] 已触发数据清理...", DateTime.Now);
         dbContext.Ranks.RemoveRange(dbContext.Ranks);
 
         DateTime now = DateTime.Now;
