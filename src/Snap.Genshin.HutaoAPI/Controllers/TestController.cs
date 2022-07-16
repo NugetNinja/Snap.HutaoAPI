@@ -37,6 +37,13 @@ public class TestController : ControllerBase
         TimeSpan threshold = TimeSpan.FromDays(45);
         DateTime lastAllowed = now - threshold;
 
+        int count = dbContext.PlayerRecords
+            .Include(record => record.Player)
+            .Where(record => record.UploadTime < lastAllowed)
+            .Select(record => record.Player)
+            .Count();
+        logger.LogInformation("{count} 个玩家应当移除...", count);
+
         dbContext.Players.RemoveRange(dbContext.PlayerRecords
             .Include(record => record.Player)
             .Where(record => record.UploadTime < lastAllowed)

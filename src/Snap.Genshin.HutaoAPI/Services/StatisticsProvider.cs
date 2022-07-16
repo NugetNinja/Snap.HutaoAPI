@@ -31,7 +31,7 @@ namespace Snap.HutaoAPI.Services
         /// <inheritdoc/>
         public async Task SaveStatisticAsync(Type calculatorType, object dataObject)
         {
-            int periodId = GetSpiralPeriodId(DateTime.UtcNow);
+            int periodId = GetSpiralPeriodId(DateTime.Now);
             string source = calculatorType.Name;
             string dataKey = $"_STATISTICS_{source}_VALUE_";
 
@@ -100,14 +100,16 @@ namespace Snap.HutaoAPI.Services
         {
             int periodNum = (((time.Year - 2000) * 12) + time.Month) * 2;
 
+            TimeSpan fourHours = TimeSpan.FromHours(4);
+
             // 上半月
-            if (time.Day < 16 || (time.Day == 16 && (time - time.Date).TotalMinutes < 240))
+            if (time.Day < 16 || (time.Day == 16 && ((time - time.Date) < fourHours)))
             {
                 periodNum--;
             }
 
             // 上个月
-            if (time.Day == 1 && (time - time.Date).TotalMinutes < 240)
+            if (time.Day == 1 && ((time - time.Date) < fourHours))
             {
                 periodNum--;
             }
