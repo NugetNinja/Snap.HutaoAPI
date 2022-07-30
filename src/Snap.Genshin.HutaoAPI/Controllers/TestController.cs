@@ -11,8 +11,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace Snap.HutaoAPI.Controllers;
 
 [SuppressMessage("", "SA1600")]
-[Route("[controller]")]
-[ApiController]
+
+// [Route("[controller]")]
+// [ApiController]
 public class TestController : ControllerBase
 {
     private readonly ILogger<TestController> logger;
@@ -24,6 +25,8 @@ public class TestController : ControllerBase
         this.logger = logger;
         this.dbContext = dbContext;
         this.statisticsService = statisticsService;
+
+        Must.NeverHappen();
     }
 
     [HttpGet("[Action]")]

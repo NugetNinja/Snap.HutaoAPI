@@ -72,7 +72,7 @@ namespace Snap.HutaoAPI.Services
             string? source = typeof(TCalculator).Name;
 
             // 查询当期数据
-            int periodId = GetSpiralPeriodId(DateTime.UtcNow);
+            int periodId = GetSpiralPeriodId(DateTime.Now);
 
             string dataKey = $"_STATISTICS_{source}_VALUE_";
 
