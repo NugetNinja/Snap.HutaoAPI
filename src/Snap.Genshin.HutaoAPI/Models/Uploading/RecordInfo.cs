@@ -52,14 +52,7 @@ namespace Snap.HutaoAPI.Models.Uploading
                 return false;
             }
 
-            bool hasBoy = PlayerAvatars.Any(a => a.Id == 10000005);
-            bool hasGirl = PlayerAvatars.Any(a => a.Id == 10000007);
-            if (!(hasBoy || hasGirl))
-            {
-                return false;
-            }
-
-            return true;
+            return PlayerAvatars.Any(a => a.Id is 10000005 or 10000007);
         }
     }
 }
