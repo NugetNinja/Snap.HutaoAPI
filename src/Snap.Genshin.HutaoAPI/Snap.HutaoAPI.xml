@@ -202,6 +202,13 @@
             <param name="uid">用户uid</param>
             <returns>结果</returns>
         </member>
+        <member name="M:Snap.HutaoAPI.Controllers.RecordController.Rank(System.String)">
+            <summary>
+            获取排行信息
+            </summary>
+            <param name="uid">uid</param>
+            <returns>排行</returns>
+        </member>
         <member name="M:Snap.HutaoAPI.Controllers.RecordController.UploadRecord(Snap.HutaoAPI.Models.Uploading.RecordInfo)">
             <summary>
             上传记录
@@ -243,6 +250,12 @@
             构造一个新的统计数据控制器
             </summary>
             <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.GetAvatarParticipation">
+            <summary>
+            获取角色出场数据
+            </summary>
+            <returns>角色出场数据</returns>
         </member>
         <member name="M:Snap.HutaoAPI.Controllers.Statistics2Controller.GetTeamCombination">
             <summary>
@@ -392,21 +405,6 @@
         <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.Ranks">
             <summary>
             数值排行榜
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.Users">
-            <summary>
-            用户
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.UsersClaims">
-            <summary>
-            用户Claims
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.ApplicationDbContext.UsersSecrets">
-            <summary>
-            用户Secrets
             </summary>
         </member>
         <member name="T:Snap.HutaoAPI.Entities.ItemInfo">
@@ -780,89 +778,6 @@
             深渊期数
             </summary>
         </member>
-        <member name="T:Snap.HutaoAPI.Entities.User.User">
-            <summary>
-            API调用者
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.User.UniqueUserId">
-            <summary>
-            UUID
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.User.AppId">
-            <summary>
-            AppId
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.User.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="M:Snap.HutaoAPI.Entities.User.User.GetUserInfo">
-            <inheritdoc/>
-        </member>
-        <member name="T:Snap.HutaoAPI.Entities.User.UserClaim">
-            <summary>
-            用户Cliam
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserClaim.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserClaim.ClaimType">
-            <summary>
-            类型
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserClaim.ClaimValue">
-            <summary>
-            值
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserClaim.User">
-            <summary>
-            用户
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserClaim.UserId">
-            <summary>
-            用户Id
-            </summary>
-        </member>
-        <member name="T:Snap.HutaoAPI.Entities.User.UserSecret">
-            <summary>
-            用户Secret
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserSecret.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserSecret.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserSecret.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserSecret.User">
-            <summary>
-            用户
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Entities.User.UserSecret.UserId">
-            <summary>
-            用户Id
-            </summary>
-        </member>
         <member name="T:Snap.HutaoAPI.Extension.IMemoryCacheExtensions">
             <summary>
             内存缓存扩展
@@ -1152,47 +1067,6 @@
             <summary>
             刷新令牌
             </summary>
-        </member>
-        <member name="T:Snap.HutaoAPI.Models.Identity.IMail">
-            <summary>
-            邮件
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Models.Identity.IMail.Title">
-            <summary>
-            邮件标题
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Models.Identity.IMail.Content">
-            <summary>
-            邮件内容
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Models.Identity.IMail.Destination">
-            <summary>
-            收件人
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Models.Identity.IMail.Sender">
-            <summary>
-            发件人
-            </summary>
-        </member>
-        <member name="T:Snap.HutaoAPI.Models.Identity.IUser">
-            <summary>
-            用户
-            </summary>
-        </member>
-        <member name="P:Snap.HutaoAPI.Models.Identity.IUser.UniqueUserId">
-            <summary>
-            UUID
-            </summary>
-        </member>
-        <member name="M:Snap.HutaoAPI.Models.Identity.IUser.GetUserInfo">
-            <summary>
-            获取用户信息
-            </summary>
-            <returns>用户信息表单</returns>
         </member>
         <member name="T:Snap.HutaoAPI.Models.Statistics.AvatarConstellationInfo">
             <summary>
@@ -1569,11 +1443,6 @@
             精炼
             </summary>
         </member>
-        <member name="T:Snap.HutaoAPI.Services.Abstraction.IMailService">
-            <summary>
-            Mail service
-            </summary>
-        </member>
         <member name="T:Snap.HutaoAPI.Services.Abstraction.IStatisticPipeline">
             <summary>
             统计管线
@@ -1661,14 +1530,29 @@
         <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.ActivedConstellationNumCalculator.Calculate">
             <inheritdoc/>
         </member>
+        <member name="T:Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipation2Calculator">
+            <summary>
+            角色使用率计算器
+            </summary>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipation2Calculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.Abstraction.IStatisticsProvider)">
+            <summary>
+            构造一个新的角色使用率计算器
+            </summary>
+            <param name="dbContext">数据库上下文</param>
+            <param name="statisticsProvider">统计提供器</param>
+        </member>
+        <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipation2Calculator.Calculate">
+            <inheritdoc/>
+        </member>
         <member name="T:Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipationCalculator">
             <summary>
-            角色搭配计算器
+            角色出场率计算器
             </summary>
         </member>
         <member name="M:Snap.HutaoAPI.Services.ParallelCalculation.AvatarParticipationCalculator.#ctor(Snap.HutaoAPI.Entities.ApplicationDbContext,Snap.HutaoAPI.Services.Abstraction.IStatisticsProvider)">
             <summary>
-            构造一个新的角色搭配计算器
+            构造一个新的角色出场率计算器
             </summary>
             <param name="dbContext">数据库上下文</param>
             <param name="statisticsProvider">统计提供器</param>

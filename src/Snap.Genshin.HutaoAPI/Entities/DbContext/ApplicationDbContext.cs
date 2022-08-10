@@ -3,7 +3,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Snap.HutaoAPI.Entities.Record;
-using Snap.HutaoAPI.Entities.User;
 
 namespace Snap.HutaoAPI.Entities;
 
@@ -71,19 +70,4 @@ public class ApplicationDbContext : DbContext
     /// 数值排行榜
     /// </summary>
     public DbSet<DetailedRankInfo> Ranks { get; set; } = null!;
-
-    /// <summary>
-    /// 用户
-    /// </summary>
-    public DbSet<User.User> Users { get; set; } = null!;
-
-    /// <summary>
-    /// 用户Claims
-    /// </summary>
-    public DbSet<UserClaim> UsersClaims { get; set; } = null!;
-
-    /// <summary>
-    /// 用户Secrets
-    /// </summary>
-    public DbSet<UserSecret> UsersSecrets { get; set; } = null!;
 }

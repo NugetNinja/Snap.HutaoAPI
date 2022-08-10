@@ -68,9 +68,6 @@ services
     })
     .Services
 
-    // TODO 此为测试用服务
-    .AddScoped<IMailService, TestMailSender>()
-
     // 鉴权策略
     .AddAuthorization(options =>
     {
