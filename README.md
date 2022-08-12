@@ -22,3 +22,5 @@ DGP Studio and any contributors:
 DGP Studio 和任何贡献者
 * 根据 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 授予您在此库中收集和计算的数据的许可
 * 并根据 MIT 许可证授予您对库中任何代码的许可。
+
+![Alt](https://repobeats.axiom.co/api/embed/7ac1301437955ffcfa41a9b6b6fc9a7c6442ee04.svg "Repobeats analytics image")
