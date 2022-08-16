@@ -9,6 +9,7 @@ using Snap.HutaoAPI.Entities.Record;
 using Snap.HutaoAPI.Models;
 using Snap.HutaoAPI.Models.Identity;
 using Snap.HutaoAPI.Models.Uploading;
+using System.Collections.Concurrent;
 
 namespace Snap.HutaoAPI.Controllers;
 
@@ -20,6 +21,7 @@ namespace Snap.HutaoAPI.Controllers;
 public class RecordController : ControllerBase
 {
     private readonly ApplicationDbContext dbContext;
+    private readonly ConcurrentDictionary<string, object> uidUploading;
 
     /// <summary>
     /// 构造一个新的提交记录控制器
@@ -105,16 +107,37 @@ public class RecordController : ControllerBase
             return this.Fail($"数据包含无效的内容");
         }
 
-        Player? player = dbContext.Players
-            .Where(player => player.Uid == record.Uid)
-            .Include(player => player.Avatars)
-            .SingleOrDefault();
+        if(uidUploading.TryGetValue(record.Uid, out _))
+        {
+            return this.Fail($"上个请求仍未结束");
+        }
+        else
+        {
+            if(uidUploading.TryAdd(record.Uid, new()))
+            {
+                Player? player = dbContext.Players
+                    .Where(player => player.Uid == record.Uid)
+                    .Include(player => player.Avatars)
+                    .SingleOrDefault();
 
-        player = await SavePlayerAsync(record, player).ConfigureAwait(false);
-        await SaveRecordInfoAsync(record, player).ConfigureAwait(false);
-        await SaveRankInfoAsync(record, player).ConfigureAwait(false);
+                player = await SavePlayerAsync(record, player).ConfigureAwait(false);
+                await SaveRecordInfoAsync(record, player).ConfigureAwait(false);
+                await SaveRankInfoAsync(record, player).ConfigureAwait(false);
 
-        return this.Success($"UID : {record.Uid}的数据上传成功");
+                if(uidUploading.TryRemove(record.Uid, out _))
+                {
+                    return this.Success($"UID : {record.Uid}的数据上传成功");
+                }
+                else
+                {
+                    return this.Fail($"请求状态异常");
+                }
+            }
+            else
+            {
+                return this.Fail($"请求状态异常");
+            }
+        }
     }
 
     private SimpleRank? GetRank(string uid, RankType rankType)
