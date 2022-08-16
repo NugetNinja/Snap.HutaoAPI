@@ -21,7 +21,7 @@ namespace Snap.HutaoAPI.Controllers;
 public class RecordController : ControllerBase
 {
     private readonly ApplicationDbContext dbContext;
-    private readonly ConcurrentDictionary<string, object> uidUploading;
+    private readonly ConcurrentDictionary<string, object> uidUploading = new();
 
     /// <summary>
     /// 构造一个新的提交记录控制器
